@@ -49,12 +49,6 @@
       "dva/fetch"
     ]
   },
-  "theme": "./src/theme.js"/*,
-  "proxy": {
-    "/api/files": {
-      "target": "http://adop.dev.zhihu.com",
-      "changeOrigin": true
-    }
-  }
-  */
+  "theme": "./src/theme.js",
+  "proxy": {}
 }
