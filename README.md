@@ -28,7 +28,7 @@ yarn start
 
 URL                               |  route组件                  | 描述 
 :-------------------------------- |----------------------------|-----------------
-` /talents`                      | `src/routes/talents/index.js` |发现人才首页
+` /talents`                      | `src/routes/talents/index.js` |搜索人才首页
 ` /resumes`               | `src/routes/resumes/index.js` |筛选简历首页
 
 ### 公用业务组件
@@ -39,7 +39,7 @@ name                             | Components                 | 描述
 ---------------------------------|----------------------------|------------
 `TalentBasicInfo` | `/Common/TalentBasicInfo.js` | 人才卡片中，人才基本信息显示
 `TalentCard` | `Common/TalentCard.js` | 人才卡片
-`Chatting` | `Common/Chatting.js` | 联系人才/回复消息公用对话组件
+`Chatting` | `Common/Chatting.js` | 联系人才/回复申请公用对话组件
 
 ### 配置代理
 项目默认使用本地 mock 数据，mock 数据位于 mock 目录下

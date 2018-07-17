@@ -4,7 +4,6 @@ import {connect} from 'dva'
 import * as R from 'ramda'
 import TalentCard from 'components/Common/TalentCard'
 import Chatting from 'components/Common/Chatting'
-
 import {
   RESUME_STATE_MAP,
   COMMON_INIT_MESSAGE,
@@ -13,7 +12,10 @@ import {
 
 import styles from './index.less'
 
-class Talents extends React.Component {
+@connect(state => ({
+  loading: state.loading.models.talents,
+}))
+export default class Talents extends React.Component {
   state = {
     data: [],
     page: 1,
@@ -25,6 +27,7 @@ class Talents extends React.Component {
     chattingInitMessage: '',
     currentChattingTalents: [],
     batch: false,
+    chattingAction: '',
   }
 
   componentWillMount() {
@@ -36,7 +39,6 @@ class Talents extends React.Component {
     const callback = () => {
       const {bottom} = this.container.getBoundingClientRect()
       const windowHeight = window.innerHeight
-
       if (bottom && bottom < windowHeight && !this.props.loading) {
         this.loadMore()
       }
@@ -49,42 +51,38 @@ class Talents extends React.Component {
 
   getAllIds = () => this.state.data.map(R.prop('id'))
 
-  fetchJobs = () => {
-    return this.props
+  fetchJobs = () =>
+    this.props
       .dispatch({
         type: 'global/fetchJos',
       })
       .then(data => {
         this.setState({allJobs: R.propOr([], 'jobs', data)})
       })
-  }
 
-  loadMore = () => {
+  loadMore = () =>
     this.setState(
       {
         page: this.state.page + 1,
       },
       this.appendData
     )
-  }
 
-  refreshData = () => {
+  refreshData = () =>
     this.loadData().then(data => {
       this.setState({
         data: data.contacts,
         remain: data.remain,
       })
     })
-  }
 
-  appendData = () => {
+  appendData = () =>
     this.loadData().then(data => {
       this.setState({
         data: [...this.state.data, ...data.contacts],
         remain: data.remain,
       })
     })
-  }
 
   loadData = () =>
     this.props.dispatch({
@@ -92,18 +90,16 @@ class Talents extends React.Component {
       payload: R.pickAll(['page', 'jid', 'state'], this.state),
     })
 
-  loadMore = () => {
+  loadMore = () =>
     this.setState(
       {
         page: this.state.page + 1,
       },
       this.appendData
     )
-  }
 
-  handleChangeJob = jid => {
+  handleChangeJob = jid =>
     this.setState({jid, selectedIds: []}, this.refreshData)
-  }
 
   handleChangeState = e =>
     this.setState({state: e.target.value, selectedIds: []}, this.loadData)
@@ -121,11 +117,10 @@ class Talents extends React.Component {
     }
   }
 
-  handleSelectAll = e => {
+  handleSelectAll = e =>
     this.setState({
       selectedIds: e.target.checked ? this.getAllIds() : [],
     })
-  }
 
   handleBatchLink = () => {
     const {selectedIds, data} = this.state
@@ -136,23 +131,21 @@ class Talents extends React.Component {
     })
   }
 
-  handleComplete = id => () => {
+  handleComplete = id => () =>
     this.props.dispatch({
       type: 'resumes/complete',
       payload: {
         to_uid: id,
       },
     })
-  }
 
-  handleElimination = id => () => {
+  handleElimination = id => () =>
     this.props.dispatch({
       type: 'resumes/elimination',
       payload: {
         to_uid: id,
       },
     })
-  }
 
   handleSendMessage = content => {
     const {currentChattingTalents} = this.state
@@ -163,6 +156,17 @@ class Talents extends React.Component {
       this.sendBatchMessage(currentChattingTalents, content)
     }
   }
+
+  handleApplyMessage = content =>
+    this.props
+      .dispatch({
+        type: 'resumes/applyMessage',
+        payload: {
+          to_uid: this.state.currentChattingTalents[0].id,
+          content,
+        },
+      })
+      .then(this.handleCancelChatting)
 
   sendSingleMessage = (talent, content) =>
     this.props
@@ -186,20 +190,19 @@ class Talents extends React.Component {
       })
       .then(this.handleCancelChatting)
 
-  handleShowChatting = talent => () => {
+  handleShowChatting = (talent, action) => () =>
     this.setState({
       currentChattingTalents: [talent],
       showChatting: true,
       chattingInitMessage: COMMON_INIT_MESSAGE,
+      chattingAction: action,
     })
-  }
 
-  handleCancelChatting = () => {
+  handleCancelChatting = () =>
     this.setState({
       currentChattingTalents: [],
       showChatting: false,
     })
-  }
 
   renderSearch = () => {
     const jobOptions = this.state.allJobs.map(item => (
@@ -264,12 +267,18 @@ class Talents extends React.Component {
           <p className={styles.operationLine}>
             <span className={styles.operation}>
               {source === 0 && (
-                <Button type="primary" onClick={this.handleShowChatting(item)}>
+                <Button
+                  type="primary"
+                  onClick={this.handleShowChatting(item, 'contact')}
+                >
                   联系人才
                 </Button>
               )}
               {source === 1 && (
-                <Button type="primary" onClick={this.handleShowChatting(item)}>
+                <Button
+                  type="primary"
+                  onClick={this.handleShowChatting(item, 'apply')}
+                >
                   回复申请
                 </Button>
               )}
@@ -298,26 +307,19 @@ class Talents extends React.Component {
     )
   }
 
-  renderList = () => {
-    const {data} = this.state
-    return <div>{data.map(this.renderTalentItem)}</div>
-  }
+  renderList = () => <div>{this.state.data.map(this.renderTalentItem)}</div>
 
-  renderEmpty = () => {
-    return <h3 className={styles.emptyTip}>没有搜索结果</h3>
-  }
+  renderEmpty = () => <h3 className={styles.emptyTip}>没有搜索结果</h3>
 
-  renderLoading = () => {
-    return (
-      <div>
-        <Icon type="loading" />正在加载数据...
-      </div>
-    )
-  }
+  renderLoading = () => (
+    <div>
+      <Icon type="loading" />正在加载数据...
+    </div>
+  )
 
-  renderMore = () => {
-    return <div>{this.state.remain ? '加载更多' : '没有更多数据'}</div>
-  }
+  renderMore = () => (
+    <div>{this.state.remain ? '加载更多' : '没有更多数据'}</div>
+  )
 
   renderBatchOperation = () => {
     const {selectedIds} = this.state
@@ -360,7 +362,7 @@ class Talents extends React.Component {
 
   render() {
     const {loading} = this.props
-    const {data, currentChattingTalents} = this.state
+    const {data, currentChattingTalents, chattingAction} = this.state
 
     return (
       <div
@@ -379,7 +381,11 @@ class Talents extends React.Component {
             show={this.state.showChatting}
             initMessage={this.state.chattingInitMessage}
             talents={this.state.currentChattingTalents}
-            onSend={this.handleSendMessage}
+            onSend={
+              chattingAction === 'contact'
+                ? this.handleSendMessage
+                : this.handleApplyMessage
+            }
             onCancel={this.handleCancelChatting}
           />
         )}
@@ -387,9 +393,3 @@ class Talents extends React.Component {
     )
   }
 }
-
-const mapStateToProps = state => ({
-  loading: state.loading.models.talents,
-})
-
-export default connect(mapStateToProps)(Talents)

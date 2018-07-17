@@ -40,9 +40,19 @@ export function complete(body) {
   })
 }
 
-// 归档
+// 淘汰
 export function elimination(payload) {
   return request('/api/find/recruit/v1/elimination', {
+    method: 'POST',
+    query: {
+      uid: 37642309,
+    },
+    body: payload,
+  })
+}
+
+export function applyMessage(payload) {
+  return request('/api/recruit/v1/reply', {
     method: 'POST',
     query: {
       uid: 37642309,

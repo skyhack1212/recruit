@@ -29,5 +29,9 @@ export default {
       const data = yield call(resumes.elimination, payload)
       return data.data
     },
+    *applyMessage({payload}, {call}) {
+      const data = yield call(resumes.applyMessage, payload)
+      return data.data
+    },
   },
 }
