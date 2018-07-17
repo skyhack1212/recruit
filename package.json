@@ -2,7 +2,7 @@
   "name": "doctor-strange",
   "private": true,
   "scripts": {
-    "start": "CLEAR_CONSOLE=none roadhog server",
+    "start": "CLEAR_CONSOLE=none PORT=80 roadhog server",
     "build": "roadhog build",
     "build:dll": "roadhog buildDll",
     "test": "jest --coverage",
