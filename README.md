@@ -5,14 +5,14 @@
 
 ### 运行项目
 
-**克隆**
+- **克隆**
 
 ```bash
 git clone https://github.com/aiqinhaian/recruit.git
 cd recruit
 ```
 
-**安装依赖并启动项目**
+- **安装依赖并启动项目**
 
 ```bash
 npm install yarn -g
@@ -20,7 +20,7 @@ yarn
 yarn start
 ```
 
-**开启项目**
+- **访问项目**
 
 浏览器访问 http://127.0.0.1:8000/
 
@@ -35,7 +35,7 @@ URL                               |  route组件                  | 描述
 
 > /src/components 目录下的组件
 
-name                             | Components                 | 描述
+name                             | Components                 | 描述
 ---------------------------------|----------------------------|------------
 `TalentBasicInfo` | `/Common/TalentBasicInfo.js` | 人才卡片中，人才基本信息显示
 `TalentCard` | `Common/TalentCard.js` | 人才卡片
