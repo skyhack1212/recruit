@@ -17,7 +17,7 @@ cd recruit
 ```bash
 npm install yarn -g
 yarn
-yarn start
+sudo yarn start
 ```
 
 - **访问项目**
