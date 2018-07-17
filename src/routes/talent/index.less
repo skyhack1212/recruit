@@ -1,0 +1,130 @@
+@blue: #0f74df;
+
+.content {
+  padding: 20px 30px;
+}
+
+.search {
+  :global {
+    .ant-input-group-addon:last-child {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      margin-left: -100px;
+      color: #fff;
+      background: #eee;
+      vertical-align: middle;
+      font-weight: 200;
+      font-size: 18px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+}
+
+.emptyTip {
+  width: 100%;
+  height: 100%;
+  margin-top: 100px;
+  text-align: center;
+}
+
+.operationPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+}
+
+.operationLine {
+  display: flex;
+}
+
+.operationLine::before {
+  flex: 1;
+  content: "";
+}
+
+.operation {
+  display: inline-block;
+  width: 130px;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #fff;
+  background: @blue;
+}
+
+.operationIcon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.batchOperation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.previewBatch {
+  color: #aaa;
+  cursor: pointer;
+}
+
+.previewBatchIcon {
+  margin-right: 10px;
+}
+
+.archiveJobItem {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px;
+}
+
+.archiveJobItemName {
+  display: inline-block;
+  flex: 1;
+  padding-right: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.archiveButton {
+  padding: 0 100px;
+  background: @blue;
+}
+
+.more {
+  color: #ccc;
+  text-align: center;
+}
+
+.centerTip {
+  margin-top: 10px;
+  color: #aaa;
+  font-size: 16px;
+  text-align: center;
+}
+
+.defaultTip {
+  margin-top: 200px;
+}
+
+:global {
+  .ant-modal-footer {
+    border-top: none;
+    text-align: center;
+  }
+
+  .ant-modal-header {
+    border-bottom: none;
+  }
+}

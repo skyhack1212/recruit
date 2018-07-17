@@ -1,0 +1,60 @@
+{
+  "entry": "src/index.js",
+  "output": {
+    "path": "dist",
+    "filename": "[name].js",
+    "publicPath": "/crm-v2/",
+    "libraryTarget": "var",
+    "chunkFilename": "[name]-[chunkhash:8].js"
+  },
+  "hash": true,
+  "disableCSSModules": false,
+  "publicPath": "/doctor-strange",
+  "autoprefixer": null,
+  "extraBabelPlugins": [
+    "transform-runtime",
+    "transform-decorators-legacy",
+    ["import", { "libraryName": "antd", "style": true }],
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "assets": "./src/assets",
+        "common": "./src/common",
+        "components": "./src/components",
+        "constants": "./src/constants",
+        "layouts": "./src/layouts",
+        "models": "./src/models",
+        "routes": "./src/routes",
+        "services": "./src/services",
+        "utils": "./src/utils",
+        "indexStyle": "./src/index.less",
+        "images": "./src/images"
+      }
+    }]
+  ],
+  "env": {
+    "development": {
+      "extraBabelPlugins": [
+        "dva-hmr"
+      ]
+    }
+  },
+  "xdllPlugin": {
+    "exclude": [
+      "babel-runtime"
+    ],
+    "include": [
+      "dva/router",
+      "dva/saga",
+      "dva/fetch"
+    ]
+  },
+  "theme": "./src/theme.js"/*,
+  "proxy": {
+    "/api/files": {
+      "target": "http://adop.dev.zhihu.com",
+      "changeOrigin": true
+    }
+  }
+  */
+}

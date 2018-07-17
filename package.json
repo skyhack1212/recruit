@@ -1,0 +1,98 @@
+{
+  "name": "doctor-strange",
+  "private": true,
+  "scripts": {
+    "start": "CLEAR_CONSOLE=none roadhog server",
+    "build": "roadhog build",
+    "build:dll": "roadhog buildDll",
+    "test": "jest --coverage",
+    "precommit": "lint-staged",
+    "eslint": "eslint --ext .js src test --fix",
+    "eslint:precommit": "eslint --fix",
+    "prettier": "prettier --write '{src,test}/**/*.js'",
+    "prettier:precommit": "prettier --write",
+    "stylelint": "stylelint '{src,public}/**/*.{css,less}' --fix",
+    "stylelint:precommit": "stylelint --fix",
+    "deploy": "shipit office deploy"
+  },
+  "dependencies": {
+    "antd": "^3.5.1",
+    "babel-jest": "^23.0.1",
+    "babel-preset-env": "^1.7.0",
+    "dom-scroll-into-view": "^1.2.1",
+    "dva": "^2.0.4",
+    "dva-loading": "^1.0.3",
+    "history": "^4.7.2",
+    "jest": "^22.4.3",
+    "moment": "^2.22.2",
+    "prop-types": "^15.6.0",
+    "query-string": "^5.0.1",
+    "ramda": "^0.25.0",
+    "react": "^16.0.0",
+    "react-container-query": "^0.9.1",
+    "react-document-title": "^2.0.3",
+    "react-dom": "^16.0.0",
+    "react-router": "^4.2.0",
+    "test": "^0.6.0",
+    "zhihu-layouts": "1.0.9-beta13"
+  },
+  "devDependencies": {
+    "babel-eslint": "8.0.1",
+    "babel-plugin-dva-hmr": "^0.3.2",
+    "babel-plugin-import": "^1.7.0",
+    "babel-plugin-module-resolver": "^3.0.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-runtime": "^6.26.0",
+    "commander": "^2.12.2",
+    "eslint": "4.10.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-react": "^7.4.0",
+    "expect": "^21.2.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^5.0.0",
+    "prettier": "1.8.2",
+    "redbox-react": "^1.5.0",
+    "roadhog": "^1.3.1",
+    "shipit-cli": "^3.0.0",
+    "shipit-deploy": "^2.5.1",
+    "stylelint": "^8.2.0",
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-order": "^0.7.0"
+  },
+  "jest": {
+    "coverageReporters": [
+      "json",
+      "text",
+      "cobertura"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/*"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleNameMapper": {
+      "^component/(.*)": "<rootDir>/src/components/$1",
+      "^constants/(.*)": "<rootDir>/src/constants/$1",
+      "^models/(.*)": "<rootDir>/src/models/$1",
+      "^utils/(.*)": "<rootDir>/src/utils/$1",
+      "^services/(.*)": "<rootDir>/src/services/$1"
+    },
+    "collectCoverage": true,
+    "testMatch": [
+      "**/__tests__/**/*.js?(x)"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
+  }
+}
