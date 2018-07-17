@@ -24,7 +24,7 @@ export default {
       total: 1000, // 可拉数据的总数
     })
   },
-  'GET /api/find/recruit/v1/list': (req, res) => {
+  'GET /api/recruit/v1/list': (req, res) => {
     const {query: {page = 1}} = req
     const list = R.range(1, 20).map(id => ({
       ...talent,
@@ -33,13 +33,13 @@ export default {
     res.json({
       count: 20, // 返回的数量
       total_max: 1769, // 实际总数
-      contacts: list,
+      list,
       remain: 1, // 是否还有数据
       result: 'ok',
       total: 1000, // 可拉数据的总数
     })
   },
-  'POST /api/find/recruit/v1/archive': (req, res) => {
+  'POST /api/recruit/v1/archive': (req, res) => {
     res.json({
       code: 0,
     })
@@ -49,22 +49,22 @@ export default {
       jobs,
     })
   },
-  'POST /api/find/recruit/v1/batch_send': (req, res) => {
+  'POST /api/recruit/v1/batch_send': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  'POST /api/find/recruit/v1/send': (req, res) => {
+  'POST /api/recruit/v1/send': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  'POST /api/find/recruit/v1/elimination': (req, res) => {
+  'POST /api/recruit/v1/elimination': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  'POST /api/find/recruit/v1/complete': (req, res) => {
+  'POST /api/recruit/v1/complete': (req, res) => {
     res.json({
       code: 0,
     })

@@ -71,7 +71,7 @@ export default class Talents extends React.Component {
   refreshData = () =>
     this.loadData().then(data => {
       this.setState({
-        data: data.contacts,
+        data: data.list,
         remain: data.remain,
       })
     })
@@ -79,7 +79,7 @@ export default class Talents extends React.Component {
   appendData = () =>
     this.loadData().then(data => {
       this.setState({
-        data: [...this.state.data, ...data.contacts],
+        data: [...this.state.data, ...data.list],
         remain: data.remain,
       })
     })
@@ -252,7 +252,7 @@ export default class Talents extends React.Component {
   }
 
   renderTalentItem = item => {
-    const {selectedIds} = this.state
+    const {selectedIds, state} = this.state
     const {id, source} = item
     return (
       <TalentCard
@@ -263,46 +263,49 @@ export default class Talents extends React.Component {
         showPhone
         showResume
       >
-        <div className={styles.operationPanel}>
-          <p className={styles.operationLine}>
-            <span className={styles.operation}>
-              {source === 0 && (
-                <Button
-                  type="primary"
-                  onClick={this.handleShowChatting(item, 'contact')}
-                >
-                  联系人才
-                </Button>
-              )}
-              {source === 1 && (
-                <Button
-                  type="primary"
-                  onClick={this.handleShowChatting(item, 'apply')}
-                >
-                  回复申请
-                </Button>
-              )}
-              <span className={styles.operateButtonPanel}>
-                <Button
-                  type="primary"
-                  onClick={this.handleComplete(item.id)}
-                  className={styles.operateButton}
-                  ghost
-                >
-                  完成
-                </Button>
-                <Button
-                  type="primary"
-                  onClick={this.handleElimination(item.id)}
-                  className={styles.operateButton}
-                  ghost
-                >
-                  淘汰
-                </Button>
-              </span>
-            </span>
-          </p>
-        </div>
+        {state !== 'complete' &&
+          state !== 'elimination' && (
+            <div className={styles.operationPanel}>
+              <p className={styles.operationLine}>
+                <span className={styles.operation}>
+                  {source === 0 && (
+                    <Button
+                      type="primary"
+                      onClick={this.handleShowChatting(item, 'contact')}
+                    >
+                      联系人才
+                    </Button>
+                  )}
+                  {source === 1 && (
+                    <Button
+                      type="primary"
+                      onClick={this.handleShowChatting(item, 'apply')}
+                    >
+                      回复申请
+                    </Button>
+                  )}
+                  <span className={styles.operateButtonPanel}>
+                    <Button
+                      type="primary"
+                      onClick={this.handleComplete(item.id)}
+                      className={styles.operateButton}
+                      ghost
+                    >
+                      完成
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={this.handleElimination(item.id)}
+                      className={styles.operateButton}
+                      ghost
+                    >
+                      淘汰
+                    </Button>
+                  </span>
+                </span>
+              </p>
+            </div>
+          )}
       </TalentCard>
     )
   }
@@ -322,7 +325,7 @@ export default class Talents extends React.Component {
   )
 
   renderBatchOperation = () => {
-    const {selectedIds} = this.state
+    const {selectedIds, state} = this.state
     const allIds = this.getAllIds()
     const allSelected =
       selectedIds.length > 0 && selectedIds.length === allIds.length
@@ -342,20 +345,22 @@ export default class Talents extends React.Component {
             全选 [已选中 {selectedIds.length} 项]
           </Checkbox>
         </span>
-        <span className={styles.previewBatch}>
-          {batchButtons.map(item => (
-            <Button
-              type="primary"
-              key={item.key || item.text}
-              onClick={item.op}
-              className={styles.batchOperateButton}
-              disabled={selectedIds.length === 0}
-              ghost
-            >
-              {item.text}
-            </Button>
-          ))}
-        </span>
+        {state === 'todo' && (
+          <span className={styles.previewBatch}>
+            {batchButtons.map(item => (
+              <Button
+                type="primary"
+                key={item.key || item.text}
+                onClick={item.op}
+                className={styles.batchOperateButton}
+                disabled={selectedIds.length === 0}
+                ghost
+              >
+                {item.text}
+              </Button>
+            ))}
+          </span>
+        )}
       </div>
     )
   }
@@ -363,7 +368,6 @@ export default class Talents extends React.Component {
   render() {
     const {loading} = this.props
     const {data, currentChattingTalents, chattingAction} = this.state
-
     return (
       <div
         className={styles.content}
