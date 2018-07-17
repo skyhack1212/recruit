@@ -69,4 +69,9 @@ export default {
       code: 0,
     })
   },
+  'POST /api/recruit/v1/reply': (req, res) => {
+    res.json({
+      code: 0,
+    })
+  },
 }
