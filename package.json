@@ -33,8 +33,7 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
-    "test": "^0.6.0",
-    "zhihu-layouts": "1.0.9-beta13"
+    "test": "^0.6.0"
   },
   "devDependencies": {
     "babel-eslint": "8.0.1",
