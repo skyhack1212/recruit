@@ -288,7 +288,7 @@ class Talents extends React.Component {
           <span className={styles.archiveJobItemName}>{position}</span>
           <Checkbox
             onClick={this.handleSelectJob(jid)}
-            id={item.id}
+            id={jid}
             checked={this.state.selectedJob === jid}
           />
         </label>

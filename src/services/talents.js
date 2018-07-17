@@ -16,6 +16,7 @@ export function archive(payload) {
     method: 'POST',
     query: {
       uid: 37642309,
+      ...payload,
     },
     body: payload,
   })

@@ -59,8 +59,8 @@ class TalentBasicInfo extends React.Component {
 
     return [
       <img src={avatar} alt="avatar" className={styles.avatar} key="avatar" />,
-      <div key="info">
-        <p>
+      <div key="info" className={styles.info}>
+        <div>
           <span className={styles.title}>{name}</span>
           {major}
           <Icon
@@ -72,11 +72,13 @@ class TalentBasicInfo extends React.Component {
           {showResume && resumeUrl
             ? this.renderResume(resumeUrl, resumeName)
             : null}
-        </p>
-        <p>{`${province} - ${city}/${gender}/${sdegree}/${worktime}`}</p>
-        <p>曾任职于：{company}</p>
-        <p>曾就读于：{school}</p>
-        <p>技能标签：{tags}</p>
+        </div>
+        <div className={styles.infoLine}>
+          {`${province} - ${city}/${gender}/${sdegree}/${worktime}`}
+        </div>
+        <div className={styles.infoLine}>曾任职于：{company}</div>
+        <div className={styles.infoLine}>曾就读于：{school}</div>
+        <div className={styles.infoLine}> 技能标签：{tags}</div>
       </div>,
     ]
   }

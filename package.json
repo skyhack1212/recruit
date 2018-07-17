@@ -16,7 +16,7 @@
     "deploy": "shipit office deploy"
   },
   "dependencies": {
-    "antd": "^3.5.1",
+    "antd": "3.5.1",
     "babel-jest": "^23.0.1",
     "babel-preset-env": "^1.7.0",
     "dom-scroll-into-view": "^1.2.1",

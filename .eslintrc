@@ -48,8 +48,13 @@
     "react/display-name": 0,
     "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
     "react/forbid-prop-types": [1, { "forbid": [], "checkContextTypes": false, "checkChildContextTypes": false }],
-    "react/prop-types": 0
+    "react/prop-types": 0,
     // "react/prefer-stateless-function": 0,
     // "react/require-default-props": 0,
+    "jsx-a11y/label-has-for": [2, {
+      "required": {
+         "every": [ "id" ]
+      }
+    }]
   }
 }
