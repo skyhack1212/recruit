@@ -6,17 +6,21 @@ export function fetch(query) {
       ...query,
       uid: 37642309,
       brief: 0,
+      channel: 'www',
+      version: '1.0.0',
     },
   })
 }
 
 // 归档
 export function archive(payload) {
-  return request('/api/find/recruit/v1/archive', {
+  return request('/api/recruit/v1/archive', {
     method: 'POST',
     query: {
       uid: 37642309,
       ...payload,
+      channel: 'www',
+      version: '1.0.0',
     },
     body: payload,
   })

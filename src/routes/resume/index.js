@@ -1,24 +1,23 @@
 import React from 'react'
-import {Icon, Checkbox, Select, Radio, Button} from 'antd'
+import {Checkbox, Button, message} from 'antd'
 import {connect} from 'dva'
 import * as R from 'ramda'
 import TalentCard from 'components/Common/TalentCard'
+import List from 'components/Common/List'
 import Chatting from 'components/Common/Chatting'
-import {
-  RESUME_STATE_MAP,
-  COMMON_INIT_MESSAGE,
-  DEFAULT_STATE,
-} from 'constants/resume'
+import JobSelect from 'components/Resume/JobSelect'
+import StateSelect from 'components/Resume/StateSelect'
+import {COMMON_INIT_MESSAGE, DEFAULT_STATE} from 'constants/resume'
 
 import styles from './index.less'
 
 @connect(state => ({
-  loading: state.loading.models.talents,
+  loading: state.loading.models.resumes,
 }))
 export default class Talents extends React.Component {
   state = {
     data: [],
-    page: 1,
+    page: 0,
     jid: '',
     state: DEFAULT_STATE,
     selectedIds: [],
@@ -33,20 +32,6 @@ export default class Talents extends React.Component {
   componentWillMount() {
     this.refreshData()
     this.fetchJobs()
-  }
-
-  componentDidMount() {
-    const callback = () => {
-      const {bottom} = this.container.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-      if (bottom && bottom < windowHeight && !this.props.loading) {
-        this.loadMore()
-      }
-    }
-
-    document
-      .getElementById('content')
-      .addEventListener('scroll', callback, false)
   }
 
   getAllIds = () => this.state.data.map(R.prop('id'))
@@ -84,37 +69,33 @@ export default class Talents extends React.Component {
       })
     })
 
-  loadData = () =>
-    this.props.dispatch({
+  loadData = () => {
+    const jidParam = this.state.jid ? {jid: this.state.jid} : {}
+    return this.props.dispatch({
       type: 'resumes/fetch',
-      payload: R.pickAll(['page', 'jid', 'state'], this.state),
-    })
-
-  loadMore = () =>
-    this.setState(
-      {
-        page: this.state.page + 1,
+      payload: {
+        ...R.pickAll(['page', 'state'], this.state),
+        ...jidParam,
       },
-      this.appendData
-    )
+    })
+  }
 
   handleChangeJob = jid =>
-    this.setState({jid, selectedIds: []}, this.refreshData)
+    this.setState({jid, selectedIds: [], page: 0, data: []}, this.refreshData)
 
   handleChangeState = e =>
-    this.setState({state: e.target.value, selectedIds: []}, this.loadData)
+    this.setState(
+      {state: e.target.value, selectedIds: [], page: 0, data: []},
+      this.refreshData
+    )
 
   handleSelect = id => selected => {
     const {selectedIds} = this.state
-    if (selected) {
-      this.setState({
-        selectedIds: [...selectedIds, id],
-      })
-    } else {
-      this.setState({
-        selectedIds: R.without([id], selectedIds),
-      })
-    }
+    this.setState({
+      selectedIds: selected
+        ? [...selectedIds, id]
+        : R.without([id], selectedIds),
+    })
   }
 
   handleSelectAll = e =>
@@ -122,7 +103,7 @@ export default class Talents extends React.Component {
       selectedIds: e.target.checked ? this.getAllIds() : [],
     })
 
-  handleBatchLink = () => {
+  handleBatchContact = () => {
     const {selectedIds, data} = this.state
     this.setState({
       showChatting: true,
@@ -132,20 +113,30 @@ export default class Talents extends React.Component {
   }
 
   handleComplete = id => () =>
-    this.props.dispatch({
-      type: 'resumes/complete',
-      payload: {
-        to_uid: id,
-      },
-    })
+    this.props
+      .dispatch({
+        type: 'resumes/complete',
+        payload: {
+          to_uid: id,
+        },
+      })
+      .then(() => {
+        message.success('操作成功')
+        this.refreshData()
+      })
 
   handleElimination = id => () =>
-    this.props.dispatch({
-      type: 'resumes/elimination',
-      payload: {
-        to_uid: id,
-      },
-    })
+    this.props
+      .dispatch({
+        type: 'resumes/elimination',
+        payload: {
+          to_uid: id,
+        },
+      })
+      .then(() => {
+        message.success('操作成功')
+        this.refreshData()
+      })
 
   handleSendMessage = content => {
     const {currentChattingTalents} = this.state
@@ -166,7 +157,7 @@ export default class Talents extends React.Component {
           content,
         },
       })
-      .then(this.handleCancelChatting)
+      .then(this.showMessageSuccess)
 
   sendSingleMessage = (talent, content) =>
     this.props
@@ -177,7 +168,7 @@ export default class Talents extends React.Component {
           content,
         },
       })
-      .then(this.handleCancelChatting)
+      .then(this.showMessageSuccess)
 
   sendBatchMessage = (talents, content) =>
     this.props
@@ -188,7 +179,13 @@ export default class Talents extends React.Component {
           content,
         },
       })
-      .then(this.handleCancelChatting)
+      .then(this.showMessageSuccess)
+
+  showMessageSuccess = () => {
+    this.handleCancelChatting()
+    this.refreshData()
+    message.success('消息发送成功')
+  }
 
   handleShowChatting = (talent, action) => () =>
     this.setState({
@@ -205,48 +202,20 @@ export default class Talents extends React.Component {
     })
 
   renderSearch = () => {
-    const jobOptions = this.state.allJobs.map(item => (
-      <Select.Option key={item.jid} value={item.jid}>
-        {item.position}
-      </Select.Option>
-    ))
-
-    const searchJob = (
-      <Select
-        showSearch
-        allowClear
-        style={{width: 200}}
-        placeholder="请选择职位"
-        optionFilterProp="children"
-        value={this.state.jid}
-        onChange={this.handleChangeJob}
-        filterOption={(input, option) =>
-          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        {jobOptions}
-      </Select>
-    )
-
-    const searchState = (
-      <Radio.Group value={this.state.state} onChange={this.handleChangeState}>
-        {R.values(
-          R.mapObjIndexed(
-            (text, key) => (
-              <Radio.Button value={key} key={key}>
-                {text}
-              </Radio.Button>
-            ),
-            RESUME_STATE_MAP
-          )
-        )}
-      </Radio.Group>
-    )
-
     return (
       <div className={styles.search}>
-        <span className={styles.searchPosition}>{searchJob}</span>
-        <span className={styles.searchState}>{searchState}</span>
+        <span className={styles.searchPosition}>
+          <JobSelect
+            data={this.state.allJobs}
+            onChange={this.handleChangeJob}
+          />
+        </span>
+        <span className={styles.searchState}>
+          <StateSelect
+            value={this.state.state}
+            onChange={this.handleChangeState}
+          />
+        </span>
       </div>
     )
   }
@@ -254,6 +223,7 @@ export default class Talents extends React.Component {
   renderTalentItem = item => {
     const {selectedIds, state} = this.state
     const {id, source} = item
+    const showOperate = !['complete', 'elimination'].includes(state)
     return (
       <TalentCard
         data={item}
@@ -263,69 +233,56 @@ export default class Talents extends React.Component {
         showPhone
         showResume
       >
-        {state !== 'complete' &&
-          state !== 'elimination' && (
-            <div className={styles.operationPanel}>
-              <p className={styles.operationLine}>
-                <span className={styles.operation}>
-                  {source === 0 && (
-                    <Button
-                      type="primary"
-                      onClick={this.handleShowChatting(item, 'contact')}
-                    >
-                      联系人才
-                    </Button>
-                  )}
-                  {source === 1 && (
-                    <Button
-                      type="primary"
-                      onClick={this.handleShowChatting(item, 'apply')}
-                    >
-                      回复申请
-                    </Button>
-                  )}
-                  <span className={styles.operateButtonPanel}>
-                    <Button
-                      type="primary"
-                      onClick={this.handleComplete(item.id)}
-                      className={styles.operateButton}
-                      ghost
-                    >
-                      完成
-                    </Button>
-                    <Button
-                      type="primary"
-                      onClick={this.handleElimination(item.id)}
-                      className={styles.operateButton}
-                      ghost
-                    >
-                      淘汰
-                    </Button>
-                  </span>
+        {showOperate && (
+          <div className={styles.operationPanel}>
+            <p className={styles.operationLine}>
+              <span className={styles.operation}>
+                {source === 1 && (
+                  <Button
+                    type="primary"
+                    onClick={this.handleShowChatting(item, 'contact')}
+                  >
+                    联系人才
+                  </Button>
+                )}
+                {source === 2 && (
+                  <Button
+                    type="primary"
+                    onClick={this.handleShowChatting(item, 'apply')}
+                  >
+                    回复申请
+                  </Button>
+                )}
+                <span className={styles.operateButtonPanel}>
+                  <Button
+                    type="primary"
+                    onClick={this.handleComplete(item.id)}
+                    className={styles.operateButton}
+                    ghost
+                  >
+                    完成
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={this.handleElimination(item.id)}
+                    className={styles.operateButton}
+                    ghost
+                  >
+                    淘汰
+                  </Button>
                 </span>
-              </p>
-            </div>
-          )}
+              </span>
+            </p>
+          </div>
+        )}
       </TalentCard>
     )
   }
 
   renderList = () => <div>{this.state.data.map(this.renderTalentItem)}</div>
 
-  renderEmpty = () => <h3 className={styles.emptyTip}>没有搜索结果</h3>
-
-  renderLoading = () => (
-    <div>
-      <Icon type="loading" />正在加载数据...
-    </div>
-  )
-
-  renderMore = () => (
-    <div>{this.state.remain ? '加载更多' : '没有更多数据'}</div>
-  )
-
   renderBatchOperation = () => {
-    const {selectedIds, state} = this.state
+    const {selectedIds, state, data} = this.state
     const allIds = this.getAllIds()
     const allSelected =
       selectedIds.length > 0 && selectedIds.length === allIds.length
@@ -333,67 +290,74 @@ export default class Talents extends React.Component {
     const batchButtons = [
       {
         text: '批量联系',
-        op: this.handleBatchLink,
+        op: this.handleBatchContact,
       },
       // finish: '批量完成',
       // fail: '批量淘汰',
     ]
     return (
-      <div className={styles.batchOperation}>
-        <span className={styles.checkAll}>
-          <Checkbox checked={allSelected} onChange={this.handleSelectAll}>
-            全选 [已选中 {selectedIds.length} 项]
-          </Checkbox>
-        </span>
-        {state === 'todo' && (
-          <span className={styles.previewBatch}>
-            {batchButtons.map(item => (
-              <Button
-                type="primary"
-                key={item.key || item.text}
-                onClick={item.op}
-                className={styles.batchOperateButton}
-                disabled={selectedIds.length === 0}
-                ghost
-              >
-                {item.text}
-              </Button>
-            ))}
+      data.length > 0 && (
+        <div className={styles.batchOperation}>
+          <span className={styles.checkAll}>
+            <Checkbox checked={allSelected} onChange={this.handleSelectAll}>
+              全选 [已选中 {selectedIds.length} 项]
+            </Checkbox>
           </span>
-        )}
-      </div>
+          {state === 'todo' && (
+            <span className={styles.previewBatch}>
+              {batchButtons.map(item => (
+                <Button
+                  type="primary"
+                  key={item.key || item.text}
+                  onClick={item.op}
+                  className={styles.batchOperateButton}
+                  disabled={selectedIds.length === 0}
+                  ghost
+                >
+                  {item.text}
+                </Button>
+              ))}
+            </span>
+          )}
+        </div>
+      )
     )
   }
 
   render() {
-    const {loading} = this.props
-    const {data, currentChattingTalents, chattingAction} = this.state
-    return (
-      <div
-        className={styles.content}
-        ref={dom => {
-          this.container = dom
-        }}
-      >
-        {this.renderSearch()}
-        {this.renderBatchOperation()}
-        {data.length === 0 ? this.renderEmpty() : this.renderList()}
-        {loading && this.renderLoading()}
-        {!loading && this.renderMore()}
-        {currentChattingTalents.length > 0 && (
-          <Chatting
-            show={this.state.showChatting}
-            initMessage={this.state.chattingInitMessage}
-            talents={this.state.currentChattingTalents}
-            onSend={
-              chattingAction === 'contact'
-                ? this.handleSendMessage
-                : this.handleApplyMessage
-            }
-            onCancel={this.handleCancelChatting}
-          />
-        )}
-      </div>
-    )
+    const {loading = false} = this.props
+    const {
+      data,
+      remain,
+      state,
+      currentChattingTalents,
+      chattingAction,
+    } = this.state
+    return [
+      <List
+        renderList={this.renderList}
+        loadMore={this.loadMore}
+        loading={loading}
+        renderSearch={this.renderSearch}
+        renderBatchOperation={this.renderBatchOperation}
+        dataLength={data.length}
+        remain={remain}
+        key="list"
+        search={state}
+      />,
+      currentChattingTalents.length > 0 && (
+        <Chatting
+          show={this.state.showChatting}
+          initMessage={this.state.chattingInitMessage}
+          talents={this.state.currentChattingTalents}
+          onSend={
+            chattingAction === 'contact'
+              ? this.handleSendMessage
+              : this.handleApplyMessage
+          }
+          onCancel={this.handleCancelChatting}
+        />
+      ),
+    ]
   }
 }

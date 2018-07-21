@@ -52,7 +52,7 @@
   "theme": "./src/theme.js",
   "proxy": {
     "/api": {
-      "target": "http://fred41:8106/",
+      "target": "https://open.taou.com/maimai/ent/",
       "changeOrigin": true,
       "pathRewrite": {
         "^/api" : ""

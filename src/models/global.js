@@ -1,4 +1,4 @@
-import fetchJobs from 'services/global'
+import * as global from 'services/global'
 
 export default {
   namespace: 'global',
@@ -10,7 +10,15 @@ export default {
 
   effects: {
     *fetchJos(action, {call}) {
-      const {data} = yield call(fetchJobs, {})
+      const {data} = yield call(global.fetchJobs, {})
+      return data
+    },
+    *addStar({payload}, {call}) {
+      const {data} = yield call(global.addStar, payload)
+      return data
+    },
+    *cancelStar({payload}, {call}) {
+      const {data} = yield call(global.cancelStar, payload)
       return data
     },
   },
