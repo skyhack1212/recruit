@@ -1,7 +1,26 @@
 html,
-body,
-.ant-layout,
-:global(#root) {
+body {
   height: 100%;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, 'Microsoft YaHei', sans-serif;
+}
+
+:global {
+  .ant-layout {
+    flex: 1;
+    min-height: 100%;
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+
+  .ant-message-notice:first-child {
+    margin-top: 53px;
+  }
+}
+
+body {
+  padding-top: 64px;
 }

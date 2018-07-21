@@ -6,6 +6,8 @@ export function fetch(query) {
       ...query,
       uid: 37642309,
       brief: 0,
+      channel: 'www',
+      version: '1.0.0',
     },
   })
 }
@@ -16,6 +18,8 @@ export function sendMessage(body) {
     query: {
       uid: 37642309,
       ...body,
+      channel: 'www',
+      version: '1.0.0',
     },
     body,
   })
@@ -27,6 +31,8 @@ export function batchSendMessage(body) {
     query: {
       uid: 37642309,
       ...body,
+      channel: 'www',
+      version: '1.0.0',
     },
     body,
   })
@@ -38,6 +44,8 @@ export function complete(body) {
     query: {
       uid: 37642309,
       ...body,
+      channel: 'www',
+      version: '1.0.0',
     },
     body,
   })
@@ -50,6 +58,8 @@ export function elimination(body) {
     query: {
       uid: 37642309,
       ...body,
+      channel: 'www',
+      version: '1.0.0',
     },
     body,
   })
@@ -61,6 +71,8 @@ export function applyMessage(body) {
     query: {
       uid: 37642309,
       ...body,
+      channel: 'www',
+      version: '1.0.0',
     },
     body,
   })

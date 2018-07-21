@@ -1,6 +1,7 @@
 import React from 'react'
 import {Icon, Popover} from 'antd'
 import PropTypes from 'prop-types'
+import {connect} from 'dva'
 
 import styles from './TalentBasicInfo.less'
 
@@ -16,20 +17,43 @@ class TalentBasicInfo extends React.Component {
     showResume: false,
   }
 
-  handleStarChange = () => {
-    // const {data: {id}} = this.props
+  constructor(props) {
+    super(props)
+    this.state = {
+      isStar: props.star,
+    }
+  }
+
+  handleStarChange = (isStar, uid) => () => {
+    const type = isStar ? 'global/addStar' : 'global/cancelStar'
+    this.props
+      .dispatch({
+        type,
+        payload: {
+          to_uid: uid,
+        },
+      })
+      .then(() => {
+        this.setState({
+          isStar,
+        })
+      })
   }
 
   renderPhone = phone => (
-    <Popover content={phone} trigger="click">
+    <Popover content={phone} trigger="hover">
       <Icon type="phone" className={styles.phoneIcon} />
     </Popover>
   )
 
   renderResume = (resumeUrl, resumeName) => (
     <Popover
-      content={<a href={resumeUrl}>{resumeName || '点击下载简历'}</a>}
-      trigger="click"
+      content={
+        <a href={resumeUrl} name="download">
+          {resumeName || '点击下载简历'}
+        </a>
+      }
+      trigger="hover"
     >
       <Icon type="file-text" className={styles.resumeIcon} />
     </Popover>
@@ -38,6 +62,7 @@ class TalentBasicInfo extends React.Component {
   render() {
     const {data, showPhone, showResume} = this.props
     const {
+      id,
       name,
       gender_str: gender,
       major,
@@ -49,13 +74,13 @@ class TalentBasicInfo extends React.Component {
       avatar,
       sdegree,
       school,
-      mobile = '13811104415',
-      resume_url: resumeUrl = 'http://www.baidu.com',
+      mobile,
+      resume_url: resumeUrl,
       resume_name: resumeName,
-      star,
     } = data
+    const {isStar} = this.state
 
-    const starType = star ? 'star' : 'star-o'
+    const starType = isStar ? 'star' : 'star-o'
 
     return [
       <img src={avatar} alt="avatar" className={styles.avatar} key="avatar" />,
@@ -65,8 +90,9 @@ class TalentBasicInfo extends React.Component {
           {major}
           <Icon
             type={starType}
-            onClick={this.handleStarChange}
+            onClick={this.handleStarChange(!isStar, id)}
             className={styles.starIcon}
+            name="star"
           />
           {showPhone && mobile ? this.renderPhone(mobile) : null}
           {showResume && resumeUrl
@@ -84,4 +110,4 @@ class TalentBasicInfo extends React.Component {
   }
 }
 
-export default TalentBasicInfo
+export default connect()(TalentBasicInfo)

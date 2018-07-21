@@ -32,7 +32,7 @@ const parseError = async (status, data) => {
     if (data.redirectUrl) {
       window.location = data.redirectUrl
     } else {
-      throw data
+      throw new Error('没有找到对应接口')
     }
   } else if (status === 401) {
     window.location = SIGN_IN_URL

@@ -4,56 +4,34 @@ import {connect} from 'dva'
 import * as R from 'ramda'
 
 import TalentCard from 'components/Common/TalentCard'
-import defaultImgUrl from 'images/default.png'
+import List from 'components/Common/List'
 
 import styles from './index.less'
 
 class Talents extends React.Component {
   state = {
     data: [],
-    page: 1,
+    page: 0,
     search: '',
+    currentSearch: '',
     selectedIds: [],
     selectedJob: '',
     showArchiveModal: false,
     currentArchiveTalent: '',
-    allJobs: [{id: 1, name: '前端工程师'}, {id: 2, name: 'python 工程师'}],
+    allJobs: [],
     remain: 0,
-    haveSearched: false,
   }
 
   componentWillMount() {
     this.fetchJobs()
   }
 
-  componentDidMount() {
-    const callback = () => {
-      const {bottom} = this.container.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-
-      if (bottom && bottom < windowHeight) {
-        // 当 wrapper 已经被滚动到页面可视范围之内触发
-        if (!this.props.loading) {
-          this.loadMore()
-        }
-      }
-    }
-
-    document.getElementById('content').addEventListener(
-      'scroll',
-      () => {
-        callback()
-      },
-      false
-    )
-  }
-
   setSearch = e => {
     const {value} = e.target
-    if (!value) {
-      this.setState({data: [], remain: 0, haveSearched: false})
+    if (R.trim(value) === '') {
+      this.setState({data: [], remain: 0, currentSearch: ''})
     }
-    this.setState({search: value})
+    this.setState({search: R.trim(value)})
   }
 
   getAllIds = () => this.state.data.map(R.prop('id'))
@@ -86,16 +64,14 @@ class Talents extends React.Component {
     })
   }
 
-  loadData = () => {
-    const param = {
-      page: this.state.page,
-      keyword: this.state.search,
-    }
-    return this.props.dispatch({
+  loadData = () =>
+    this.props.dispatch({
       type: 'talents/fetch',
-      payload: param,
+      payload: {
+        page: this.state.page,
+        keyword: this.state.currentSearch,
+      },
     })
-  }
 
   loadMore = () => {
     this.setState(
@@ -107,32 +83,45 @@ class Talents extends React.Component {
   }
 
   previewBatch = () => {
-    // console.log('preview')
+    const {selectedIds, data} = this.state
+    const selectedItems = data.filter(item => selectedIds.includes(item.id))
+    const openDetail = item => {
+      window.open(item.detail_url, '_blank')
+    }
+    R.forEach(openDetail, selectedItems)
+
+    // window.open('http://www.baidu.com', 'name1')
+    // window.open('http://www.zhihu.com', 'name2')
   }
 
-  handlePageChange = () => {
-    this.setState({page: this.state.page + 1}, this.appendData)
+  handleSearch = currentSearch => {
+    const {currentSearch: lastSearch} = this.state
+    if (currentSearch === lastSearch) {
+      return
+    }
+    this.setState(
+      {
+        currentSearch,
+        selectedIds: [],
+        page: 0,
+      },
+      this.refreshData
+    )
   }
 
-  handleSaearch = () => {
-    this.setState({selectedIds: [], haveSearched: true}, this.refreshData)
-  }
+  handleBlurSearch = e => this.handleSearch(e.target.value)
 
   handleClearSearch = () => {
-    this.setState({search: '', haveSearched: false}, this.refreshData)
+    this.setState({search: '', page: 0, currentSearch: ''}, this.refreshData)
   }
 
   handleSelect = id => selected => {
     const {selectedIds} = this.state
-    if (selected) {
-      this.setState({
-        selectedIds: [...selectedIds, id],
-      })
-    } else {
-      this.setState({
-        selectedIds: R.without([id], selectedIds),
-      })
-    }
+    this.setState({
+      selectedIds: selected
+        ? [...selectedIds, id]
+        : R.without([id], selectedIds),
+    })
   }
 
   handleSelectAll = e => {
@@ -188,9 +177,10 @@ class Talents extends React.Component {
           enterButton="搜索"
           size="large"
           value={this.state.search}
-          onSearch={this.handleSaearch}
+          onSearch={this.handleSearch}
           addonAfter={clearButton}
           onChange={this.setSearch}
+          onBlur={this.handleBlurSearch}
         />
       </div>
     )
@@ -224,37 +214,6 @@ class Talents extends React.Component {
     return <div>{data.map(this.renderTalentItem)}</div>
   }
 
-  renderEmpty = () => {
-    return <div className={styles.centerTip}>没有搜索结果</div>
-  }
-
-  renderLoading = () => {
-    return (
-      <div className={styles.centerTip}>
-        <Icon type="loading" /> 正在努力加载数据！
-      </div>
-    )
-  }
-
-  renderDefaultTip = () => {
-    return (
-      <div className={`${styles.centerTip} ${styles.defaultTip}`}>
-        <img src={defaultImgUrl} alt="defaultImg" />请输入查询关键词!
-      </div>
-    )
-  }
-
-  renderMore = () => {
-    return (
-      <div
-        className={`${styles.centerTip} ${styles.more}`}
-        onClick={this.loadMore}
-      >
-        {this.state.ramain ? '加载更多...' : '没有更多数据'}
-      </div>
-    )
-  }
-
   renderBatchOperation = () => {
     const {selectedIds} = this.state
     const allIds = this.getAllIds()
@@ -267,12 +226,8 @@ class Talents extends React.Component {
             全选 [已选中 {selectedIds.length} 项]
           </Checkbox>
         </span>
-        <span className={styles.previewBatch}>
-          <Icon
-            type="copy"
-            className={styles.previewBatchIcon}
-            onClick={this.previewBatch}
-          />
+        <span className={styles.previewBatch} onClick={this.previewBatch}>
+          <Icon type="copy" className={styles.previewBatchIcon} />
           批量查看
         </span>
       </div>
@@ -283,12 +238,13 @@ class Talents extends React.Component {
     const {loading} = this.props
     const renderItem = item => {
       const {jid, position} = item
+      const key = `position${jid}`
       return (
-        <label className={styles.archiveJobItem} key={jid} htmlFor={jid}>
+        <label className={styles.archiveJobItem} key={key} htmlFor={key}>
           <span className={styles.archiveJobItemName}>{position}</span>
           <Checkbox
             onClick={this.handleSelectJob(jid)}
-            id={jid}
+            id={key}
             checked={this.state.selectedJob === jid}
           />
         </label>
@@ -314,6 +270,7 @@ class Talents extends React.Component {
         title="归档"
         onCancel={this.handleCancelArchive}
         footer={footer}
+        key="archiveModal"
       >
         {this.state.allJobs.map(renderItem)}
       </Modal>
@@ -321,27 +278,22 @@ class Talents extends React.Component {
   }
 
   render() {
-    const {loading} = this.props
-    const {data, remain, search, haveSearched} = this.state
-    return (
-      <div
-        className={styles.content}
-        ref={dom => {
-          this.container = dom
-        }}
-      >
-        {this.renderSearch()}
-        {data.length > 0 && this.renderBatchOperation()}
-        {data.length > 0 && this.renderList()}
-        {this.renderArchiveModal()}
-        {remain && !loading ? this.renderMore() : null}
-        {loading && this.renderLoading()}
-        {!loading && search && data.length === 0 && haveSearched
-          ? this.renderEmpty()
-          : null}
-        {!haveSearched && this.renderDefaultTip()}
-      </div>
-    )
+    const {loading = false} = this.props
+    const {data, remain, currentSearch} = this.state
+    return [
+      <List
+        renderList={this.renderList}
+        loadMore={this.loadMore}
+        loading={loading}
+        renderSearch={this.renderSearch}
+        renderBatchOperation={this.renderBatchOperation}
+        dataLength={data.length}
+        remain={remain}
+        key="list"
+        search={currentSearch}
+      />,
+      this.renderArchiveModal(),
+    ]
   }
 }
 

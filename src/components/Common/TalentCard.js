@@ -23,9 +23,11 @@ class TalentCard extends React.Component {
 
   state = {}
 
-  redirectToDetail = () => {
-    // this.props.history.push(this.props.data.detail_url)
-    // console.log('redirect')
+  redirectToDetail = e => {
+    const omitTargets = ['download', 'star']
+    if (!omitTargets.includes(e.target.getAttribute('name'))) {
+      window.open(this.props.data.detail_url, '_blank')
+    }
   }
 
   handleCheck = e => {

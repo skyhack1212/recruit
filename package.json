@@ -33,6 +33,7 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
+    "subscribe-ui-event": "^2.0.3",
     "test": "^0.6.0"
   },
   "devDependencies": {

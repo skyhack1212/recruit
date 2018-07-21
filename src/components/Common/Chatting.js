@@ -71,6 +71,7 @@ class Chatting extends React.Component {
             type="primary"
             onClick={this.handleSend}
             disabled={!this.state.message}
+            className={styles.sendButton}
           >
             发送
           </Button>
