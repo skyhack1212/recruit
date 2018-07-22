@@ -20,9 +20,17 @@ yarn
 sudo yarn start
 ```
 
-- **访问项目**
+- **登录**
+打开 http://maimai.cn
+点击登录，登录相应账号
 
-浏览器访问 http://127.0.0.1:8000/
+- **配置 hosts**
+```bash
+echo '127.0.0.1 maimai.cn' >> /etc/hosts
+```
+
+- **访问项目**
+http://maimai.cn
 
 ### 路由
 
