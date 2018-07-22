@@ -24,8 +24,7 @@ class TalentCard extends React.Component {
   state = {}
 
   redirectToDetail = e => {
-    const omitTargets = ['download', 'star']
-    if (!omitTargets.includes(e.target.getAttribute('name'))) {
+    if (e.target.getAttribute('name') === 'infoLine') {
       window.open(this.props.data.detail_url, '_blank')
     }
   }
@@ -43,7 +42,11 @@ class TalentCard extends React.Component {
           onChange={this.handleCheck}
           className={styles.checkbox}
         />
-        <div className={styles.basicInfo} onClick={this.redirectToDetail}>
+        <div
+          className={styles.basicInfo}
+          onClick={this.redirectToDetail}
+          name="talentCard"
+        >
           <TalentBasicInfo
             data={this.props.data}
             showPhone={this.props.showPhone}

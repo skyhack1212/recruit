@@ -4,13 +4,16 @@ export default {
   namespace: 'global',
 
   state: {
-    dictionary: {},
-    contentContainer: '',
+    jobs: [],
   },
 
   effects: {
-    *fetchJos(action, {call}) {
+    *fetchJos(action, {call, put}) {
       const {data} = yield call(global.fetchJobs, {})
+      yield put({
+        type: 'setJobs',
+        payload: data,
+      })
       return data
     },
     *addStar({payload}, {call}) {
@@ -23,7 +26,14 @@ export default {
     },
   },
 
-  reducers: {},
+  reducers: {
+    setJobs(state, {payload: {jobs}}) {
+      return {
+        ...state,
+        jobs,
+      }
+    },
+  },
 
   subscriptions: {
     setup({history}) {

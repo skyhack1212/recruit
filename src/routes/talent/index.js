@@ -1,10 +1,11 @@
 import React from 'react'
-import {Input, Icon, Checkbox, Modal, Button, message} from 'antd'
+import {Input, Icon, Checkbox, message, Popover} from 'antd'
 import {connect} from 'dva'
 import * as R from 'ramda'
 
 import TalentCard from 'components/Common/TalentCard'
 import List from 'components/Common/List'
+import ArchiveModal from 'components/Talent/ArchiveModal'
 
 import styles from './index.less'
 
@@ -15,10 +16,8 @@ class Talents extends React.Component {
     search: '',
     currentSearch: '',
     selectedIds: [],
-    selectedJob: '',
     showArchiveModal: false,
     currentArchiveTalent: '',
-    allJobs: [],
     remain: 0,
   }
 
@@ -37,13 +36,9 @@ class Talents extends React.Component {
   getAllIds = () => this.state.data.map(R.prop('id'))
 
   fetchJobs = () => {
-    return this.props
-      .dispatch({
-        type: 'global/fetchJos',
-      })
-      .then(data => {
-        this.setState({allJobs: R.propOr([], 'jobs', data)})
-      })
+    return this.props.dispatch({
+      type: 'global/fetchJos',
+    })
   }
 
   refreshData = () => {
@@ -58,7 +53,7 @@ class Talents extends React.Component {
   appendData = () => {
     this.loadData().then(data => {
       this.setState({
-        data: [...this.state.data, ...data.contacts],
+        data: R.uniqBy(R.prop('id'), [...this.state.data, ...data.contacts]),
         remain: data.remain,
       })
     })
@@ -84,14 +79,16 @@ class Talents extends React.Component {
 
   previewBatch = () => {
     const {selectedIds, data} = this.state
+
+    if (selectedIds.length === 0) {
+      message.warn('没有选中项')
+    }
+
     const selectedItems = data.filter(item => selectedIds.includes(item.id))
     const openDetail = item => {
       window.open(item.detail_url, '_blank')
     }
     R.forEach(openDetail, selectedItems)
-
-    // window.open('http://www.baidu.com', 'name1')
-    // window.open('http://www.zhihu.com', 'name2')
   }
 
   handleSearch = currentSearch => {
@@ -130,12 +127,6 @@ class Talents extends React.Component {
     })
   }
 
-  handleSelectJob = jobId => e => {
-    this.setState({
-      selectedJob: e.target.checked ? jobId : '',
-    })
-  }
-
   handleShowArchiveModal = talentId => () =>
     this.setState({
       currentArchiveTalent: talentId,
@@ -146,20 +137,19 @@ class Talents extends React.Component {
     this.setState({
       currentArchiveTalent: '',
       showArchiveModal: false,
-      selectedJob: '',
     })
 
-  handleArchive = e => {
-    if (this.state.allJobs.length === 0) {
+  handleArchive = jid => {
+    if (this.props.jobs.length === 0) {
       message.warning('当前您没有发布职位，不能归档!')
     }
-    e.preventDefault()
+
     this.props
       .dispatch({
         type: 'talents/archive',
         payload: {
           to_uid: this.state.currentArchiveTalent,
-          jid: this.state.selectedJob,
+          jid,
         },
       })
       .then(() => {
@@ -226,60 +216,22 @@ class Talents extends React.Component {
             全选 [已选中 {selectedIds.length} 项]
           </Checkbox>
         </span>
-        <span className={styles.previewBatch} onClick={this.previewBatch}>
-          <Icon type="copy" className={styles.previewBatchIcon} />
-          批量查看
-        </span>
+        <Popover
+          content="使用该功能，需要允许浏览器同时打开过个标签页，如有问题，请联系管理员！"
+          trigger="hover"
+        >
+          <span className={styles.previewBatch} onClick={this.previewBatch}>
+            <Icon type="copy" className={styles.previewBatchIcon} />
+            批量查看
+          </span>
+        </Popover>
       </div>
     )
   }
 
-  renderArchiveModal = () => {
-    const {loading} = this.props
-    const renderItem = item => {
-      const {jid, position} = item
-      const key = `position${jid}`
-      return (
-        <label className={styles.archiveJobItem} key={key} htmlFor={key}>
-          <span className={styles.archiveJobItemName}>{position}</span>
-          <Checkbox
-            onClick={this.handleSelectJob(jid)}
-            id={key}
-            checked={this.state.selectedJob === jid}
-          />
-        </label>
-      )
-    }
-
-    const footer = [
-      <Button
-        type="primary"
-        key="archiveButton"
-        loading={loading}
-        onClick={this.handleArchive}
-        className={styles.archiveButton}
-        disabled={!this.state.selectedJob}
-      >
-        归档
-      </Button>,
-    ]
-
-    return (
-      <Modal
-        visible={this.state.showArchiveModal}
-        title="归档"
-        onCancel={this.handleCancelArchive}
-        footer={footer}
-        key="archiveModal"
-      >
-        {this.state.allJobs.map(renderItem)}
-      </Modal>
-    )
-  }
-
   render() {
-    const {loading = false} = this.props
-    const {data, remain, currentSearch} = this.state
+    const {loading = false, jobs} = this.props
+    const {data, remain, currentSearch, showArchiveModal} = this.state
     return [
       <List
         renderList={this.renderList}
@@ -292,13 +244,21 @@ class Talents extends React.Component {
         key="list"
         search={currentSearch}
       />,
-      this.renderArchiveModal(),
+      <ArchiveModal
+        loading={loading}
+        jobs={jobs}
+        onCancel={this.handleCancelArchive}
+        onSubmit={this.handleArchive}
+        show={showArchiveModal}
+        key="archiveModal"
+      />,
     ]
   }
 }
 
 const mapStateToProps = state => ({
   loading: state.loading.models.talents,
+  jobs: state.global.jobs,
 })
 
 export default connect(mapStateToProps)(Talents)

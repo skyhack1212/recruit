@@ -13,20 +13,21 @@ import styles from './index.less'
 
 @connect(state => ({
   loading: state.loading.models.resumes,
+  jobs: state.global.jobs,
 }))
-export default class Talents extends React.Component {
+export default class Resume extends React.Component {
   state = {
     data: [],
+    remain: 0,
     page: 0,
     jid: '',
     state: DEFAULT_STATE,
     selectedIds: [],
-    allJobs: [],
     showChatting: false,
     chattingInitMessage: '',
-    currentChattingTalents: [],
-    batch: false,
-    chattingAction: '',
+    currentTalent: '',
+    chattingAction: 'empty',
+    chattingTalents: [],
   }
 
   componentWillMount() {
@@ -36,14 +37,19 @@ export default class Talents extends React.Component {
 
   getAllIds = () => this.state.data.map(R.prop('id'))
 
+  getChattingTalents = ids => {
+    const selectedIds = ids || this.state.selectedIds
+    return this.state.data.filter(
+      item => selectedIds.includes(item.id) && item.source === 1
+    )
+  }
+
+  empty = () => {}
+
   fetchJobs = () =>
-    this.props
-      .dispatch({
-        type: 'global/fetchJos',
-      })
-      .then(data => {
-        this.setState({allJobs: R.propOr([], 'jobs', data)})
-      })
+    this.props.dispatch({
+      type: 'global/fetchJos',
+    })
 
   loadMore = () =>
     this.setState(
@@ -64,7 +70,7 @@ export default class Talents extends React.Component {
   appendData = () =>
     this.loadData().then(data => {
       this.setState({
-        data: [...this.state.data, ...data.list],
+        data: R.uniqBy(R.prop('id'), [...this.state.data, ...data.list]),
         remain: data.remain,
       })
     })
@@ -80,6 +86,50 @@ export default class Talents extends React.Component {
     })
   }
 
+  showOperateSuccess = () => {
+    message.success('操作成功')
+    this.refreshData()
+  }
+
+  showSendMessageSuccess = () => {
+    this.handleCancelChatting()
+    this.refreshData()
+    message.success('消息发送成功')
+  }
+
+  replyMessage = content =>
+    this.props
+      .dispatch({
+        type: 'resumes/applyMessage',
+        payload: {
+          to_uid: this.state.chattingTalents[0].id,
+          content,
+        },
+      })
+      .then(this.showSendMessageSuccess)
+
+  sendMessage = content =>
+    this.props
+      .dispatch({
+        type: 'resumes/sendMessage',
+        payload: {
+          to_uid: this.state.chattingTalents[0].id,
+          content,
+        },
+      })
+      .then(this.showSendMessageSuccess)
+
+  sendMessageBatch = content =>
+    this.props
+      .dispatch({
+        type: 'resumes/batchSendMessage',
+        payload: {
+          to_uids: this.state.chattingTalents.map(R.prop('id')).join(','),
+          content,
+        },
+      })
+      .then(this.showSendMessageSuccess)
+
   handleChangeJob = jid =>
     this.setState({jid, selectedIds: [], page: 0, data: []}, this.refreshData)
 
@@ -91,24 +141,19 @@ export default class Talents extends React.Component {
 
   handleSelect = id => selected => {
     const {selectedIds} = this.state
+    const result = selected
+      ? [...selectedIds, id]
+      : R.without([id], selectedIds)
+
     this.setState({
-      selectedIds: selected
-        ? [...selectedIds, id]
-        : R.without([id], selectedIds),
+      selectedIds: result,
     })
   }
 
-  handleSelectAll = e =>
+  handleSelectAll = e => {
+    const selectedIds = e.target.checked ? this.getAllIds() : []
     this.setState({
-      selectedIds: e.target.checked ? this.getAllIds() : [],
-    })
-
-  handleBatchContact = () => {
-    const {selectedIds, data} = this.state
-    this.setState({
-      showChatting: true,
-      currentChattingTalents: data.filter(({id}) => selectedIds.includes(id)),
-      chattingInitMessage: COMMON_INIT_MESSAGE,
+      selectedIds,
     })
   }
 
@@ -120,10 +165,7 @@ export default class Talents extends React.Component {
           to_uid: id,
         },
       })
-      .then(() => {
-        message.success('操作成功')
-        this.refreshData()
-      })
+      .then(this.showOperateSuccess)
 
   handleElimination = id => () =>
     this.props
@@ -133,71 +175,44 @@ export default class Talents extends React.Component {
           to_uid: id,
         },
       })
-      .then(() => {
-        message.success('操作成功')
-        this.refreshData()
-      })
+      .then(this.showOperateSuccess)
 
-  handleSendMessage = content => {
-    const {currentChattingTalents} = this.state
-    const {length} = currentChattingTalents
-    if (length === 1) {
-      this.sendSingleMessage(currentChattingTalents[0], content)
-    } else if (length > 1) {
-      this.sendBatchMessage(currentChattingTalents, content)
-    }
-  }
-
-  handleApplyMessage = content =>
-    this.props
-      .dispatch({
-        type: 'resumes/applyMessage',
-        payload: {
-          to_uid: this.state.currentChattingTalents[0].id,
-          content,
-        },
-      })
-      .then(this.showMessageSuccess)
-
-  sendSingleMessage = (talent, content) =>
-    this.props
-      .dispatch({
-        type: 'resumes/sendMessage',
-        payload: {
-          to_uid: talent.id,
-          content,
-        },
-      })
-      .then(this.showMessageSuccess)
-
-  sendBatchMessage = (talents, content) =>
-    this.props
-      .dispatch({
-        type: 'resumes/batchSendMessage',
-        payload: {
-          to_uid: talents.map(R.prop('id')).join(','),
-          content,
-        },
-      })
-      .then(this.showMessageSuccess)
-
-  showMessageSuccess = () => {
-    this.handleCancelChatting()
-    this.refreshData()
-    message.success('消息发送成功')
-  }
-
-  handleShowChatting = (talent, action) => () =>
+  handleContact = item => () => {
     this.setState({
-      currentChattingTalents: [talent],
       showChatting: true,
       chattingInitMessage: COMMON_INIT_MESSAGE,
-      chattingAction: action,
+      chattingAction: 'sendMessage',
+      chattingTalents: [item],
     })
+  }
+
+  handleContactBatch = () => {
+    const talents = this.getChattingTalents()
+    if (talents.length === 0) {
+      message.warn('选中项中没有可联系的人')
+      return
+    }
+
+    this.setState({
+      showChatting: true,
+      chattingInitMessage: COMMON_INIT_MESSAGE,
+      chattingAction: 'sendMessageBatch',
+      chattingTalents: talents,
+    })
+  }
+
+  handleReply = item => () => {
+    this.setState({
+      showChatting: true,
+      chattingInitMessage: COMMON_INIT_MESSAGE,
+      chattingAction: 'replyMessage',
+      chattingTalents: [item],
+    })
+  }
 
   handleCancelChatting = () =>
     this.setState({
-      currentChattingTalents: [],
+      chattingTalents: [],
       showChatting: false,
     })
 
@@ -205,10 +220,7 @@ export default class Talents extends React.Component {
     return (
       <div className={styles.search}>
         <span className={styles.searchPosition}>
-          <JobSelect
-            data={this.state.allJobs}
-            onChange={this.handleChangeJob}
-          />
+          <JobSelect data={this.props.jobs} onChange={this.handleChangeJob} />
         </span>
         <span className={styles.searchState}>
           <StateSelect
@@ -238,18 +250,12 @@ export default class Talents extends React.Component {
             <p className={styles.operationLine}>
               <span className={styles.operation}>
                 {source === 1 && (
-                  <Button
-                    type="primary"
-                    onClick={this.handleShowChatting(item, 'contact')}
-                  >
+                  <Button type="primary" onClick={this.handleContact(item)}>
                     联系人才
                   </Button>
                 )}
                 {source === 2 && (
-                  <Button
-                    type="primary"
-                    onClick={this.handleShowChatting(item, 'apply')}
-                  >
+                  <Button type="primary" onClick={this.handleReply(item)}>
                     回复申请
                   </Button>
                 )}
@@ -290,7 +296,7 @@ export default class Talents extends React.Component {
     const batchButtons = [
       {
         text: '批量联系',
-        op: this.handleBatchContact,
+        op: this.handleContactBatch,
       },
       // finish: '批量完成',
       // fail: '批量淘汰',
@@ -330,8 +336,10 @@ export default class Talents extends React.Component {
       data,
       remain,
       state,
-      currentChattingTalents,
+      showChatting,
+      chattingInitMessage,
       chattingAction,
+      chattingTalents,
     } = this.state
     return [
       <List
@@ -345,19 +353,14 @@ export default class Talents extends React.Component {
         key="list"
         search={state}
       />,
-      currentChattingTalents.length > 0 && (
-        <Chatting
-          show={this.state.showChatting}
-          initMessage={this.state.chattingInitMessage}
-          talents={this.state.currentChattingTalents}
-          onSend={
-            chattingAction === 'contact'
-              ? this.handleSendMessage
-              : this.handleApplyMessage
-          }
-          onCancel={this.handleCancelChatting}
-        />
-      ),
+      <Chatting
+        show={showChatting}
+        initMessage={chattingInitMessage}
+        talents={chattingTalents}
+        onSend={this[chattingAction]}
+        onCancel={this.handleCancelChatting}
+        key="chattingModal"
+      />,
     ]
   }
 }
