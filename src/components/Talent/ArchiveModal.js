@@ -1,6 +1,7 @@
 import React from 'react'
-import {Checkbox, Button, Modal} from 'antd'
+import {Checkbox, Button, Modal, Input} from 'antd'
 import PropTypes from 'prop-types'
+import * as R from 'ramda'
 
 import styles from './archiveModal.less'
 
@@ -17,8 +18,19 @@ export default class ArchiveModal extends React.Component {
     loading: false,
   }
 
-  state = {
-    value: '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: '',
+      jobs: props.jobs,
+      search: '',
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({
+      jobs: props.jobs,
+    })
   }
 
   handleChange = value => () => {
@@ -31,14 +43,34 @@ export default class ArchiveModal extends React.Component {
     this.props.onSubmit(this.state.value)
     this.setState({
       value: '',
+      search: '',
     })
   }
 
   handleCancel = () => {
     this.setState({
       value: '',
+      search: '',
     })
     this.props.onCancel()
+  }
+
+  handleSearch = value => {
+    this.setState({
+      jobs: this.props.jobs.filter(
+        item => R.toLower(item.position).indexOf(R.toLower(value)) !== -1
+      ),
+    })
+  }
+
+  handleBlurSearch = e => {
+    this.handleSearch(e.target.value)
+  }
+
+  handleSearchChange = e => {
+    this.setState({
+      search: e.target.value,
+    })
   }
 
   renderItem = item => {
@@ -80,7 +112,15 @@ export default class ArchiveModal extends React.Component {
         key="archiveModal"
         className={styles.archiveContainer}
       >
-        {this.props.jobs.map(this.renderItem)}
+        <Input.Search
+          onSearch={this.handleSearch}
+          onBlur={this.handleBlurSearch}
+          onChange={this.handleSearchChange}
+          className={styles.searchInput}
+          value={this.state.search}
+          placeholder="请输入搜索关键词"
+        />
+        {this.state.jobs.map(this.renderItem)}
       </Modal>
     )
   }
