@@ -27,6 +27,7 @@ class Chatting extends React.Component {
   }
 
   handleSend = () => {
+    this.setState({message: ''})
     this.props.onSend(this.state.message)
   }
 

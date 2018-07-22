@@ -20,7 +20,7 @@ class TalentBasicInfo extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isStar: props.star,
+      // isStar: props.star,
     }
   }
 
@@ -35,7 +35,7 @@ class TalentBasicInfo extends React.Component {
       })
       .then(() => {
         this.setState({
-          isStar,
+          // isStar,
         })
       })
   }
@@ -48,11 +48,7 @@ class TalentBasicInfo extends React.Component {
 
   renderResume = (resumeUrl, resumeName) => (
     <Popover
-      content={
-        <a href={resumeUrl} name="download">
-          {resumeName || '点击下载简历'}
-        </a>
-      }
+      content={<a href={resumeUrl}>{resumeName || '点击下载简历'}</a>}
       trigger="hover"
     >
       <Icon type="file-text" className={styles.resumeIcon} />
@@ -62,49 +58,55 @@ class TalentBasicInfo extends React.Component {
   render() {
     const {data, showPhone, showResume} = this.props
     const {
-      id,
+      // id,
       name,
       gender_str: gender,
-      major,
-      city,
-      large_comps: company,
-      worktime,
-      province,
-      tags,
+      major = '未知专业',
+      city = '未知城市',
+      large_comps: company = '未知公司',
+      worktime = '未知工作年限',
+      province = '未知省份',
+      tags = '未知标签',
       avatar,
-      sdegree,
-      school,
+      sdegree = '未知学历',
+      school = '未知学校',
       mobile,
       resume_url: resumeUrl,
       resume_name: resumeName,
     } = data
-    const {isStar} = this.state
+    // const {isStar} = this.state
 
-    const starType = isStar ? 'star' : 'star-o'
+    // const starType = isStar ? 'star' : 'star-o'
 
     return [
       <img src={avatar} alt="avatar" className={styles.avatar} key="avatar" />,
       <div key="info" className={styles.info}>
-        <div>
+        <div name="infoLine">
           <span className={styles.title}>{name}</span>
           {major}
-          <Icon
+          {/* <Icon
             type={starType}
             onClick={this.handleStarChange(!isStar, id)}
             className={styles.starIcon}
-            name="star"
-          />
+          /> */}
           {showPhone && mobile ? this.renderPhone(mobile) : null}
           {showResume && resumeUrl
             ? this.renderResume(resumeUrl, resumeName)
             : null}
         </div>
-        <div className={styles.infoLine}>
+        <div className={styles.infoLine} name="infoLine">
           {`${province} - ${city}/${gender}/${sdegree}/${worktime}`}
         </div>
-        <div className={styles.infoLine}>曾任职于：{company}</div>
-        <div className={styles.infoLine}>曾就读于：{school}</div>
-        <div className={styles.infoLine}> 技能标签：{tags}</div>
+        <div className={styles.infoLine} name="infoLine">
+          曾任职于：{company}
+        </div>
+        <div className={styles.infoLine} name="infoLine">
+          曾就读于：{school}
+        </div>
+        <div className={styles.infoLine} name="infoLine">
+          {' '}
+          技能标签：{tags}
+        </div>
       </div>,
     ]
   }
