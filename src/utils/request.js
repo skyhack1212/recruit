@@ -34,8 +34,9 @@ const parseError = async (status, data) => {
     } else {
       throw new Error('没有找到对应接口')
     }
-  } else if (status === 401) {
-    window.location = SIGN_IN_URL
+  } else if (status === 401 || status === 403) {
+    const currentUrl = window.location.href
+    window.location = `${SIGN_IN_URL}?to=${currentUrl}`
   } else if (status >= 400 && status < 500) {
     throw data
   } else if (status >= 300) {
