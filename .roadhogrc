@@ -9,7 +9,7 @@
   },
   "hash": true,
   "disableCSSModules": false,
-  "publicPath": "/dist",
+  "publicPath": "/ent",
   "autoprefixer": null,
   "extraBabelPlugins": [
     "transform-runtime",
