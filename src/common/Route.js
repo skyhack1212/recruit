@@ -10,6 +10,9 @@ const myRoute = () => {
       <Route path="/" exact component={Talents} />
       <Route path="/talents" exact component={Talents} />
       <Route path="/resumes" exact component={Resumes} />
+      <Route path="/ent" exact component={Talents} />
+      <Route path="/ent/talents" exact component={Talents} />
+      <Route path="/ent/resumes" exact component={Resumes} />
     </Switch>
   )
 }
