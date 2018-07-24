@@ -3,7 +3,7 @@ import talent from './data/talent'
 import jobs from './data/job'
 
 export default {
-  'GET /api/find/v1/search': (req, res) => {
+  'GET /api/ent/find/v1/search': (req, res) => {
     const {query: {page = 1, keyword}} = req
     if (!keyword) {
       res.json({
@@ -24,7 +24,7 @@ export default {
       total: 1000, // 可拉数据的总数
     })
   },
-  'GET /api/recruit/v1/list': (req, res) => {
+  'GET /api/ent/recruit/v1/list': (req, res) => {
     const {query: {page = 1}} = req
     const list = R.range(1, 20).map(id => ({
       ...talent,
@@ -39,37 +39,37 @@ export default {
       total: 1000, // 可拉数据的总数
     })
   },
-  'POST /api/recruit/v1/archive': (req, res) => {
+  'POST /api/ent/recruit/v1/archive': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  'GET /api/job/v1/namelist': (req, res) => {
+  'GET /api/ent/job/v1/namelist': (req, res) => {
     res.json({
       jobs,
     })
   },
-  'POST /api/recruit/v1/batch_send': (req, res) => {
+  'POST /api/ent/recruit/v1/batch_send': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  'POST /api/recruit/v1/send': (req, res) => {
+  'POST /api/ent/recruit/v1/send': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  'POST /api/recruit/v1/elimination': (req, res) => {
+  'POST /api/ent/recruit/v1/elimination': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  'POST /api/recruit/v1/complete': (req, res) => {
+  'POST /api/ent/recruit/v1/complete': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  'POST /api/recruit/v1/reply': (req, res) => {
+  'POST /api/ent/recruit/v1/reply': (req, res) => {
     res.json({
       code: 0,
     })
