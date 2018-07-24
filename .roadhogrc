@@ -51,12 +51,12 @@
   },
   "theme": "./src/theme.js",
   "proxy": {
-    "/api": {
-      "target": "https://open.taou.com/maimai/ent/",
-      "changeOrigin": true,
+    /*"/api/ent": {
+      "target": "https://maimai.cn",
+      "changeOrigin": true
       "pathRewrite": {
-        "^/api" : ""
+        "^/api/ent" : ""
       }
-    }
+    }*/
   }
 }

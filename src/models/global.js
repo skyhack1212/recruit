@@ -27,7 +27,7 @@ export default {
   },
 
   reducers: {
-    setJobs(state, {payload: {jobs}}) {
+    setJobs(state, {payload: {jobs = []}}) {
       return {
         ...state,
         jobs,

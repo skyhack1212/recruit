@@ -210,6 +210,10 @@ export default class Resume extends React.Component {
     })
   }
 
+  handleChatting = () => {
+    window.open('https://maimai.cn/im/', '脉脉聊天')
+  }
+
   handleCancelChatting = () =>
     this.setState({
       chattingTalents: [],
@@ -249,14 +253,22 @@ export default class Resume extends React.Component {
           <div className={styles.operationPanel}>
             <p className={styles.operationLine}>
               <span className={styles.operation}>
-                {source === 1 && (
-                  <Button type="primary" onClick={this.handleContact(item)}>
-                    联系人才
-                  </Button>
-                )}
-                {source === 2 && (
-                  <Button type="primary" onClick={this.handleReply(item)}>
-                    回复申请
+                {source === 1 &&
+                  state === 'todo' && (
+                    <Button type="primary" onClick={this.handleContact(item)}>
+                      联系人才
+                    </Button>
+                  )}
+                {source === 2 &&
+                  state === 'todo' && (
+                    <Button type="primary" onClick={this.handleReply(item)}>
+                      回复申请
+                    </Button>
+                  )}
+
+                {state === 'follow' && (
+                  <Button type="primary" onClick={this.handleChatting}>
+                    开始聊天
                   </Button>
                 )}
                 <span className={styles.operateButtonPanel}>
