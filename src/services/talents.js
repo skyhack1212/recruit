@@ -1,7 +1,7 @@
 import request from 'utils/request'
 
 export function fetch(query) {
-  return request(`/api/find/v1/search`, {
+  return request(`/api/ent/find/v1/search`, {
     query: {
       ...query,
       uid: 37642309,
@@ -14,7 +14,7 @@ export function fetch(query) {
 
 // 归档
 export function archive(payload) {
-  return request('/api/recruit/v1/archive', {
+  return request('/api/ent/recruit/v1/archive', {
     method: 'POST',
     query: {
       uid: 37642309,
