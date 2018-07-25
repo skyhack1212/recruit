@@ -30,7 +30,7 @@ class Talents extends React.Component {
     if (R.trim(value) === '') {
       this.setState({data: [], remain: 0, currentSearch: ''})
     }
-    this.setState({search: R.trim(value)})
+    this.setState({search: value})
   }
 
   getAllIds = () => this.state.data.map(R.prop('id'))
@@ -93,12 +93,12 @@ class Talents extends React.Component {
 
   handleSearch = currentSearch => {
     const {currentSearch: lastSearch} = this.state
-    if (currentSearch === lastSearch) {
+    if (R.trim(currentSearch) === lastSearch) {
       return
     }
     this.setState(
       {
-        currentSearch,
+        currentSearch: R.trim(currentSearch),
         selectedIds: [],
         page: 0,
       },
