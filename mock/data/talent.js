@@ -48,7 +48,8 @@ const talent = {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1IjozMjYzNTIwMCwibGV2ZWwiOjAsInQiOiJjdHQifQ.zyzEnqb_ooTBtiMzi39ntn7S_bf2VdSez-uc7JwPs4s',
   judge: 1,
   job_line: '',
-  tags: 'PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,',
+  tags:
+    'PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,',
   is_sh: false,
   qp: 2.109999895095825,
   name: '梅益城',
@@ -69,6 +70,7 @@ const talent = {
   resume_name: '梅益城的简历.pdf',
   resume_url: 'http://www.baidu.com',
   source: 0,
+  is_archive: false,
 }
 
 export default talent
