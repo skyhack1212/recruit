@@ -1,5 +1,6 @@
 import React from 'react'
 import {Input, Icon, Checkbox, message, Popover} from 'antd'
+import classnames from 'classnames'
 import {connect} from 'dva'
 import * as R from 'ramda'
 
@@ -188,10 +189,15 @@ class Talents extends React.Component {
         <div className={styles.operationPanel}>
           <p className={styles.operationLine}>
             <span
-              className={styles.operation}
-              onClick={this.handleShowArchiveModal(item.id)}
+              className={classnames(styles.operation, {
+                [styles.operationActive]: !item.is_archive,
+              })}
+              onClick={
+                item.is_archive ? null : this.handleShowArchiveModal(item.id)
+              }
             >
-              <Icon type="folder-open" className={styles.operationIcon} />收藏人才
+              <Icon type="folder-open" className={styles.operationIcon} />
+              {item.is_archive ? '人才已收藏' : '收藏人才'}
             </span>
           </p>
         </div>
