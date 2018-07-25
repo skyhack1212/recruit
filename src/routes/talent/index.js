@@ -217,7 +217,7 @@ class Talents extends React.Component {
           </Checkbox>
         </span>
         <Popover
-          content="使用该功能，需要允许浏览器同时打开过个标签页，如有问题，请联系管理员！"
+          content="使用本功能，需要将「脉脉」加入白名单，如有问题，请联系客服！"
           trigger="hover"
         >
           <span className={styles.previewBatch} onClick={this.previewBatch}>
