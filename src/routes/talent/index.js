@@ -100,6 +100,7 @@ class Talents extends React.Component {
     this.setState(
       {
         currentSearch: R.trim(currentSearch),
+        search: R.trim(currentSearch),
         selectedIds: [],
         page: 0,
       },
@@ -108,6 +109,8 @@ class Talents extends React.Component {
   }
 
   handleBlurSearch = e => this.handleSearch(e.target.value)
+
+  handleJobSearch = position => () => this.handleSearch(position)
 
   handleClearSearch = () => {
     this.setState({search: '', page: 0, currentSearch: ''}, this.refreshData)
@@ -162,7 +165,7 @@ class Talents extends React.Component {
   renderSearch = () => {
     const clearButton = <span onClick={this.handleClearSearch}>×</span>
     return (
-      <div className={styles.search}>
+      <div className={styles.search} key="search">
         <Input.Search
           placeholder="请输入搜索关键词"
           enterButton="搜索"
@@ -173,6 +176,26 @@ class Talents extends React.Component {
           onChange={this.setSearch}
           onBlur={this.handleBlurSearch}
         />
+      </div>
+    )
+  }
+
+  renderJobSearch = () => {
+    const {jobs} = this.props
+    const renderJob = job => (
+      <li key={job.jid}>
+        <span onClick={this.handleJobSearch(job.position)}>{job.position}</span>
+      </li>
+    )
+    return (
+      <div className={styles.jobSearchPanel} key="jobSearch">
+        <h3 className={styles.jobSearchTitle} key="title">
+          按 已发布职位 进行搜索{' '}
+          <span className={styles.jobSearchTip}>按职位快速搜索</span>
+        </h3>
+        <ul className={styles.jobSearchList} key="jobs">
+          {jobs.map(renderJob)}
+        </ul>
       </div>
     )
   }
@@ -226,8 +249,8 @@ class Talents extends React.Component {
           content="使用本功能，需要将「脉脉」加入白名单，如有问题，请联系客服！"
           trigger="hover"
         >
-          <span className={styles.previewBatch} onClick={this.previewBatch}>
-            <Icon type="copy" className={styles.previewBatchIcon} />
+          <span className={styles.batchPreview} onClick={this.previewBatch}>
+            <Icon type="copy" className={styles.batchPreviewIcon} />
             批量查看
           </span>
         </Popover>
@@ -238,12 +261,15 @@ class Talents extends React.Component {
   render() {
     const {loading = false, jobs} = this.props
     const {data, remain, currentSearch, showArchiveModal} = this.state
+
     return [
+      this.renderSearch(),
+      this.renderJobSearch(),
       <List
         renderList={this.renderList}
         loadMore={this.loadMore}
         loading={loading}
-        renderSearch={this.renderSearch}
+        // renderSearch={this.renderSearch}
         renderBatchOperation={this.renderBatchOperation}
         dataLength={data.length}
         remain={remain}

@@ -12,7 +12,7 @@ class List extends React.Component {
     renderList: PropTypes.func.isRequired,
     loadMore: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
-    renderSearch: PropTypes.func,
+    // renderSearch: PropTypes.func,
     renderBatchOperation: PropTypes.func,
     dataLength: PropTypes.number.isRequired,
     remain: PropTypes.number.isRequired,
@@ -21,7 +21,7 @@ class List extends React.Component {
 
   static defaultProps = {
     renderBatchOperation: () => null,
-    renderSearch: () => null,
+    // renderSearch: () => null,
   }
 
   // componentDidMount() {
@@ -77,7 +77,7 @@ class List extends React.Component {
   render() {
     const {
       loading,
-      renderSearch,
+      // renderSearch,
       renderList,
       renderBatchOperation,
       dataLength,
@@ -92,7 +92,9 @@ class List extends React.Component {
         target={target}
       >
         <div className={styles.content}>
-          {renderSearch ? renderSearch() : null}
+          {
+            // renderSearch ? renderSearch() : null
+          }
           {dataLength > 0 && renderBatchOperation
             ? renderBatchOperation()
             : null}
