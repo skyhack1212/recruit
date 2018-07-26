@@ -261,17 +261,18 @@ class Talents extends React.Component {
   render() {
     const {loading = false, jobs} = this.props
     const {data, remain, currentSearch, showArchiveModal} = this.state
+    const {length: dataLength} = data
 
     return [
       this.renderSearch(),
-      this.renderJobSearch(),
+      dataLength === 0 ? this.renderJobSearch() : null,
       <List
         renderList={this.renderList}
         loadMore={this.loadMore}
         loading={loading}
         // renderSearch={this.renderSearch}
         renderBatchOperation={this.renderBatchOperation}
-        dataLength={data.length}
+        dataLength={dataLength}
         remain={remain}
         key="list"
         search={currentSearch}
