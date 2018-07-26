@@ -282,7 +282,7 @@ export default class Resume extends React.Component {
                     className={styles.operateButton}
                     ghost
                   >
-                    完成
+                    合适
                   </Button>
                   <Button
                     type="primary"
@@ -290,7 +290,7 @@ export default class Resume extends React.Component {
                     className={styles.operateButton}
                     ghost
                   >
-                    淘汰
+                    不合适
                   </Button>
                 </span>
               </span>
@@ -311,7 +311,7 @@ export default class Resume extends React.Component {
 
     const batchButtons = [
       {
-        text: '批量联系',
+        text: '批量邀请',
         op: this.handleContactBatch,
       },
       // finish: '批量完成',
@@ -377,6 +377,7 @@ export default class Resume extends React.Component {
         onSend={this[chattingAction]}
         onCancel={this.handleCancelChatting}
         key="chattingModal"
+        titlePre={chattingAction === 'replyMessage' ? '回复' : '邀请'}
       />,
     ]
   }
