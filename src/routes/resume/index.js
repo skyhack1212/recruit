@@ -276,7 +276,7 @@ export default class Resume extends React.Component {
                     type="primary"
                     onClick={this.handleChatting(item.uid || item.id)}
                   >
-                    开始聊天
+                    开始沟通
                   </Button>
                 )}
                 <span className={styles.operateButtonPanel}>
