@@ -214,8 +214,8 @@ export default class Resume extends React.Component {
     })
   }
 
-  handleChatting = () => {
-    window.open('https://maimai.cn/im/', '脉脉聊天')
+  handleChatting = uid => () => {
+    window.open(`https://maimai.cn/im?target=${uid}`, '脉脉聊天')
   }
 
   handleCancelChatting = () =>
@@ -244,6 +244,7 @@ export default class Resume extends React.Component {
     const {selectedIds, state} = this.state
     const {id, source} = item
     const showOperate = !['complete', 'elimination'].includes(state)
+
     return (
       <TalentCard
         data={item}
@@ -271,7 +272,10 @@ export default class Resume extends React.Component {
                   )}
 
                 {state === 'follow' && (
-                  <Button type="primary" onClick={this.handleChatting}>
+                  <Button
+                    type="primary"
+                    onClick={this.handleChatting(item.uid || item.id)}
+                  >
                     开始聊天
                   </Button>
                 )}
