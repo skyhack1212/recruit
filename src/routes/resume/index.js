@@ -354,11 +354,12 @@ export default class Resume extends React.Component {
       chattingTalents,
     } = this.state
     return [
+      this.renderSearch(),
       <List
         renderList={this.renderList}
         loadMore={this.loadMore}
         loading={loading}
-        renderSearch={this.renderSearch}
+        // renderSearch={this.renderSearch}
         renderBatchOperation={this.renderBatchOperation}
         dataLength={data.length}
         remain={remain}
