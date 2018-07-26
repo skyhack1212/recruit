@@ -7,7 +7,11 @@ import List from 'components/Common/List'
 import Chatting from 'components/Common/Chatting'
 import JobSelect from 'components/Resume/JobSelect'
 import StateSelect from 'components/Resume/StateSelect'
-import {COMMON_INIT_MESSAGE, DEFAULT_STATE} from 'constants/resume'
+import {
+  COMMON_INIT_MESSAGE,
+  DEFAULT_STATE,
+  REPLY_INIT_MESSAGE,
+} from 'constants/resume'
 
 import styles from './index.less'
 
@@ -204,7 +208,7 @@ export default class Resume extends React.Component {
   handleReply = item => () => {
     this.setState({
       showChatting: true,
-      chattingInitMessage: COMMON_INIT_MESSAGE,
+      chattingInitMessage: REPLY_INIT_MESSAGE,
       chattingAction: 'replyMessage',
       chattingTalents: [item],
     })
@@ -256,7 +260,7 @@ export default class Resume extends React.Component {
                 {source === 1 &&
                   state === 'todo' && (
                     <Button type="primary" onClick={this.handleContact(item)}>
-                      联系人才
+                      发出邀请
                     </Button>
                   )}
                 {source === 2 &&

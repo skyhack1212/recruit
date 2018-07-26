@@ -69,7 +69,7 @@ const talent = {
   mobile: '13811100000',
   resume_name: '梅益城的简历.pdf',
   resume_url: 'http://www.baidu.com',
-  source: 0,
+  source: 2,
   is_archive: false,
 }
 
