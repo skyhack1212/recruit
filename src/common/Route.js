@@ -3,6 +3,7 @@ import {Route, Switch} from 'dva/router'
 
 import Talents from 'routes/talent'
 import Resumes from 'routes/resume'
+import Test from 'routes/test'
 
 const myRoute = () => {
   return (
@@ -13,6 +14,7 @@ const myRoute = () => {
       <Route path="/ent" exact component={Talents} />
       <Route path="/ent/talents" exact component={Talents} />
       <Route path="/ent/resumes" exact component={Resumes} />
+      <Route path="/ent/test" exact component={Test} />
     </Switch>
   )
 }
