@@ -10,6 +10,7 @@
   "hash": true,
   "disableCSSModules": false,
   "publicPath": "/ent",
+  "devtool": "source-map",
   "autoprefixer": null,
   "extraBabelPlugins": [
     "transform-runtime",
