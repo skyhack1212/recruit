@@ -5,7 +5,7 @@ export default function() {
   const back1 = () => {
     window.history.back()
   }
-  const back2 = (tips = '', flag = true) => {
+  const back2 = (tips = '', flag = true) => () => {
     if (window.parent.MaiMai_Native) {
       window.parent.MaiMai_Native.close_native(tips, flag)
     }
@@ -22,7 +22,7 @@ export default function() {
         <button onClick={back1} className={styles.button}>
           其他按钮
         </button>
-        <button onClick={back2} className={styles.button}>
+        <button onClick={back2()} className={styles.button}>
           退出
         </button>
       </div>
