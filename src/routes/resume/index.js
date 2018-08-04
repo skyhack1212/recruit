@@ -228,7 +228,11 @@ export default class Resume extends React.Component {
     return (
       <div className={styles.search}>
         <span className={styles.searchPosition}>
-          <JobSelect data={this.props.jobs} onChange={this.handleChangeJob} />
+          <JobSelect
+            data={this.props.jobs}
+            onChange={this.handleChangeJob}
+            value={this.state.jid}
+          />
         </span>
         <span className={styles.searchState}>
           <StateSelect
