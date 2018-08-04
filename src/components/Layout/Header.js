@@ -27,9 +27,19 @@ const MyHeader = props => {
             <img className={styles.logo} src={logoUrl} alt="logo" />
           </Link>
         </Menu.Item>
+        <Menu.Item key="jobs">
+          <Link to={`${prefix}/jobs`} activeclassname="active">
+            职位管理
+          </Link>
+        </Menu.Item>
         <Menu.Item key="talents">
           <Link to={`${prefix}/talents`} activeclassname="active">
-            搜索人才
+            人才搜索
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="recommends">
+          <Link to={`${prefix}/recommends`} activeclassname="active">
+            人才推荐
           </Link>
         </Menu.Item>
         <Menu.Item key="resumes">

@@ -48,8 +48,7 @@ const talent = {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1IjozMjYzNTIwMCwibGV2ZWwiOjAsInQiOiJjdHQifQ.zyzEnqb_ooTBtiMzi39ntn7S_bf2VdSez-uc7JwPs4s',
   judge: 1,
   job_line: '',
-  tags:
-    'PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,PYTHON,HADOOP,系统架构,LINUX,后端开发,',
+  tags: 'PYTHON,HADOOP,系统架构,LINUX,后端开发',
   is_sh: false,
   qp: 2.109999895095825,
   name: '梅益城',
@@ -71,6 +70,24 @@ const talent = {
   resume_url: 'http://www.baidu.com',
   source: 2,
   is_archive: false,
+  target: '考虑机会',
+  exp: [
+    {
+      company: '百度',
+      position: '高级Java研发工程师',
+      v: '2016-11至今',
+      description: '百度本地广告部结算中心',
+    },
+  ],
+  edu: [
+    {
+      school: '沈阳理工大学',
+      sdegree: '本科',
+      department: '测控技术与仪器',
+      v: '2005-9至2009-7',
+      description: '获得各种奖学金',
+    },
+  ],
 }
 
 export default talent

@@ -24,21 +24,6 @@ class List extends React.Component {
     // renderSearch: () => null,
   }
 
-  // componentDidMount() {
-  //   const {remain, loading, loadMore} = this.props
-  //   const callback = () => {
-  //     const {bottom} = this.container.getBoundingClientRect()
-  //     const windowHeight = window.innerHeight
-  //     if (remain && !loading && bottom && bottom < windowHeight) {
-  //       loadMore()
-  //     }
-  //   }
-
-  //   document
-  //     .getElementById('content')
-  //     .addEventListener('scroll', callback, false)
-  // }
-
   renderEmpty = () => {
     return <div className={styles.centerTip}>没有搜索结果</div>
   }
