@@ -189,26 +189,28 @@ export default class Preview extends React.Component {
           <p>以担保或任何理由索取财物，扣押证照，均涉嫌违法，请提高警惕！</p>
         </div>
 
-        <div className={styles.opButtons}>
-          <button
-            className={styles.opButtonsReject}
-            onClick={this.handleShowModal}
-          >
-            不感兴趣
-          </button>
-          <button
-            className={styles.opButtonsMai}
-            onClick={this.agreeConnect('i')}
-          >
-            脉信沟通
-          </button>
-          <button
-            className={styles.opButtonsPhone}
-            onClick={this.agreeConnect('iam')}
-          >
-            <span className={styles.opButtonsPhoneTip}>可以</span>电话沟通
-          </button>
-        </div>
+        {job.is_show && (
+          <div className={styles.opButtons}>
+            <button
+              className={styles.opButtonsReject}
+              onClick={this.handleShowModal}
+            >
+              不感兴趣
+            </button>
+            <button
+              className={styles.opButtonsMai}
+              onClick={this.agreeConnect('i')}
+            >
+              脉信沟通
+            </button>
+            <button
+              className={styles.opButtonsPhone}
+              onClick={this.agreeConnect('iam')}
+            >
+              <span className={styles.opButtonsPhoneTip}>可以</span>电话沟通
+            </button>
+          </div>
+        )}
         <Modal
           popup
           visible={showModal}
