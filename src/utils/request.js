@@ -2,6 +2,7 @@ import fetch from 'dva/fetch'
 import queryString from 'query-string'
 import urlParse from 'url'
 import * as R from 'ramda'
+import {isEmpty} from 'utils'
 
 import {SIGN_IN_URL} from 'constants'
 import {GUID} from './index'
@@ -52,6 +53,9 @@ const parseUrl = (url, options) => {
       ...urlObj.query,
       ...options.query,
     })
+    if (!isEmpty(urlObj.hostname)) {
+      return `${urlObj.protocol}//${urlObj.hostname}${urlObj.pathname}?${query}`
+    }
     return `${urlObj.pathname}?${query}`
   }
   return url
