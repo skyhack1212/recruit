@@ -119,6 +119,7 @@ export default class Resume extends React.Component {
         payload: {
           to_uid: this.state.chattingTalents[0].id,
           content,
+          jid: this.state.chattingTalents[0].jid,
         },
       })
       .then(this.showSendMessageSuccess)
@@ -128,7 +129,9 @@ export default class Resume extends React.Component {
       .dispatch({
         type: 'resumes/batchSendMessage',
         payload: {
-          to_uids: this.state.chattingTalents.map(R.prop('id')).join(','),
+          to_uids: this.state.chattingTalents
+            .map(item => `${R.prop('id', item)}|${R.prop('jid', item)}`)
+            .join(','),
           content,
         },
       })

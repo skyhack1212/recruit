@@ -1,5 +1,6 @@
 const talent = {
   status: 1,
+  jid: 1,
   major: '研发',
   line4: 'IT互联网 | 研发, 影响力: 265',
   dist: 2,
@@ -68,7 +69,7 @@ const talent = {
   mobile: '13811100000',
   resume_name: '梅益城的简历.pdf',
   resume_url: 'http://www.baidu.com',
-  source: 2,
+  source: 1,
   is_archive: false,
   target: '考虑机会',
   exp: [
