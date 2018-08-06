@@ -28,3 +28,14 @@ export function cancelStar(payload) {
     },
   })
 }
+
+export function fetchDictionary(query) {
+  return request(`/maimai/const`, {
+    query: {
+      ...query,
+      brief: 0,
+      channel: 'www',
+      version: '1.0.0',
+    },
+  })
+}

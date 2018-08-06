@@ -9,6 +9,22 @@ export default {
   },
   reducers: {},
   effects: {
+    *fetch({payload}, {call}) {
+      const data = yield call(positions.fetch, payload)
+      return data.data
+    },
+    *updateState({payload}, {call}) {
+      const data = yield call(positions.updateState, payload)
+      return data.data
+    },
+    *add({payload}, {call}) {
+      const data = yield call(positions.add, payload)
+      return data.data
+    },
+    *fetchDetailForEdit({payload}, {call}) {
+      const data = yield call(positions.fetchDetailForEdit, payload)
+      return data.data
+    },
     *fetchDetail({payload}, {call}) {
       const data = yield call(positions.fetchDetail, payload)
       return data.data
