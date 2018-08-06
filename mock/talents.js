@@ -52,13 +52,13 @@ export default {
     })
   },
   // 批量联系
-  'POST /api/ent/recruit/v1/batch_send': (req, res) => {
+  'POST /api/ent/connect/v1/batch_send': (req, res) => {
     res.json({
       code: 0,
     })
   },
-  // 单个联系
-  'POST /api/ent/recruit/v1/send': (req, res) => {
+  // 单个联系/api/ent/connect/v1/send
+  'POST /api/ent/connect/v1/send': (req, res) => {
     res.json({
       code: 0,
     })

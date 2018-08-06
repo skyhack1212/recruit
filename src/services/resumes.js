@@ -12,7 +12,7 @@ export function fetch(query) {
 }
 
 export function sendMessage(body) {
-  return request(`/api/ent/recruit/v1/send`, {
+  return request(`/api/ent/connect/v1/send`, {
     method: 'POST',
     query: {
       ...body,
@@ -24,7 +24,7 @@ export function sendMessage(body) {
 }
 
 export function batchSendMessage(body) {
-  return request(`/api/ent/recruit/v1/batch_send`, {
+  return request(`/api/ent/connect/v1/batch_send`, {
     method: 'POST',
     query: {
       ...body,
