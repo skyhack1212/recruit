@@ -21,11 +21,6 @@ class Create extends React.PureComponent {
     this.fetchData()
   }
 
-  fetchDictionary = () =>
-    this.props.dispatch({
-      type: 'global/fetchDictionary',
-    })
-
   fetchData = () => {
     this.props
       .dispatch({
