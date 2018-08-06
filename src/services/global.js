@@ -30,7 +30,7 @@ export function cancelStar(payload) {
 }
 
 export function fetchDictionary(query) {
-  return request(`/maimai/const`, {
+  return request(`https://open.taou.com/maimai/const`, {
     query: {
       ...query,
       brief: 0,

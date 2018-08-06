@@ -42,6 +42,7 @@ export default class PositionList extends React.Component {
       type: 'positions/fetch',
       payload: {
         page: this.state.page,
+        state: 'all',
       },
     })
 
