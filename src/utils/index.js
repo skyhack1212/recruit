@@ -202,3 +202,6 @@ export const downloadFile = url => {
 // 根据后缀名判断是否是图片
 export const isImage = name =>
   /\.(png|jpg|jpeg|gif|webp|svg)/.test(name) || /^data:image\//.test(name)
+
+export const isEmpty = value =>
+  R.isNil(value) || (R.is(String, value) && R.trim(value) === '')

@@ -52,7 +52,7 @@ export default class Resume extends React.Component {
 
   fetchJobs = () =>
     this.props.dispatch({
-      type: 'global/fetchJos',
+      type: 'global/fetchJobs',
     })
 
   loadMore = () =>

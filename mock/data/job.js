@@ -1,23 +1,53 @@
+const commonData = {
+  profession: 'IT互联网',
+  major: '研发',
+  company: '脉脉',
+  email: 'lidong@taou.com',
+  work_time: 1,
+  degree: 1,
+  province: '北京',
+  city: '海淀区',
+  salary: 4,
+  salary_min: '25K',
+  salary_max: '40K',
+  stags: 'Python,Linux开发',
+  custom_text: '股票期权',
+  description: '商业产品技术部招聘项目组',
+  address: '北京海淀区学院路甲5号768创意产业园区B座南区1号门2202',
+  send_rec: 0,
+  sdegree: '本科及以上',
+  worktime: '3-5年',
+  state: 'valid',
+}
+
 export const jobs = [
   {
     jid: 1,
+    webjid: 1,
     position: 'Python 工程师',
+    ...commonData,
   },
   {
     jid: 2,
+    webjid: 3,
     position: 'Java 工程师',
+    ...commonData,
   },
   {
     jid: 3,
+    webjid: 4,
     position: 'PHP 工程师',
+    ...commonData,
   },
   {
     jid: 4,
     position: '运维工程师',
+    ...commonData,
   },
 ]
 
 export const jobDetail = {
+  ...commonData,
   position: 'Python高级研发工程师',
   province: '北京',
   sdegree: '本科及以上',

@@ -5,6 +5,8 @@ import {jobs, jobDetail} from './data/job'
 export default {
   'GET /api/ent/find/v1/search': (req, res) => {
     const {query: {page = 1, keyword}} = req
+    // res.statusCode = 500
+    // res.end()
     if (!keyword) {
       res.json({
         contacts: [],

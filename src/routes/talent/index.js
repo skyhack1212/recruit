@@ -38,7 +38,7 @@ class Talents extends React.Component {
 
   fetchJobs = () => {
     return this.props.dispatch({
-      type: 'global/fetchJos',
+      type: 'global/fetchJobs',
     })
   }
 

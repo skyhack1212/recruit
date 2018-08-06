@@ -27,8 +27,8 @@ const MyHeader = props => {
             <img className={styles.logo} src={logoUrl} alt="logo" />
           </Link>
         </Menu.Item>
-        <Menu.Item key="jobs">
-          <Link to={`${prefix}/jobs`} activeclassname="active">
+        <Menu.Item key="positions">
+          <Link to={`${prefix}/positions`} activeclassname="active">
             职位管理
           </Link>
         </Menu.Item>
