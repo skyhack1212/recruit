@@ -29,6 +29,7 @@ export function add({data, webjid}) {
       brief: 0,
       channel: 'www',
       version: '1.0.0',
+      salary: 7,
       webjid,
       ...data,
     },
