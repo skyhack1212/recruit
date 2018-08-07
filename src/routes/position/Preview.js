@@ -3,8 +3,7 @@ import {connect} from 'dva'
 import qs from 'query-string'
 import * as R from 'ramda'
 import {ActivityIndicator, Modal, List} from 'antd-mobile'
-import {message} from 'antd'
-import {setCookie} from 'tiny-cookie'
+import {setCookie, getCookie} from 'tiny-cookie'
 
 import 'antd-mobile/lib/activity-indicator/style/index.css'
 import 'antd-mobile/lib/modal/style/index.css'
@@ -18,7 +17,16 @@ import styles from './preview.less'
 export default class Preview extends React.Component {
   constructor(props) {
     super(props)
+    const search = qs.parse(window.location.search.slice(1))
+    this.state = {
+      job: {},
+      webuid: search.webuid,
+      webjid: search.webjid,
+      showModal: false,
+    }
+  }
 
+  componentWillMount() {
     window.auth_callback = res => {
       try {
         const {result, ...other} = JSON.parse(res)
@@ -26,20 +34,24 @@ export default class Preview extends React.Component {
           setCookie(key, value)
         }, other)
       } catch (e) {
-        message.error(e)
+        console.log('something is error')
       }
     }
 
-    const searchObj = qs.parse(window.location.search.slice(1))
-    this.state = {
-      job: {},
-      webuid: searchObj.webuid,
-      webjid: searchObj.webjid,
-      showModal: false,
+    if (typeof MaiMai !== 'undefined' && window.MaiMai) {
+      window.MaiMai.auth('0', 'auth_callback')
+    } else {
+      /*
+      this.setState({
+        tokenInfo: {
+          uid         : getCookie('u'),
+          access_token: getCookie('access_token'),
+          channel     : 'Beta',
+          version     : '4.23.88',
+        }
+      }); */
+      setCookie('uid', getCookie('u'))
     }
-  }
-
-  componentWillMount() {
     this.fetchJobDetail()
   }
 
