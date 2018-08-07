@@ -153,7 +153,7 @@ export default class PositionList extends React.Component {
         },
       },
       {
-        key: 'worktime',
+        key: 'work_time',
         type: 'Select',
         options: WORKTIME_OPTIONS,
         formItemConfig: {
