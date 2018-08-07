@@ -83,6 +83,7 @@ class Recommends extends React.Component {
         payload: {
           to_uid: toUid,
           jid: this.state.job,
+          source: 'recommend',
         },
       })
       .then(this.refreshData)

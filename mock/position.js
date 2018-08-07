@@ -34,7 +34,7 @@ export default {
     })
   },
   // 获取常量
-  '/maimai/const': (req, res) => {
+  '/api/ent/common/v1/const': (req, res) => {
     res.json(dictionary)
   },
   // 获取职位详情，用于修改
