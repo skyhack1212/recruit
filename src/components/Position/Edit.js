@@ -252,8 +252,8 @@ export default class PositionList extends React.Component {
     )
     const transformations = {
       stags: R.join(','),
-      salary_min: v => `${v}K`,
-      salary_max: v => `${v}K`,
+      salary_min: v => `${v}`,
+      salary_max: v => `${v}`,
     }
     return R.evolve(transformations, {
       ...R.omit(plainFileds, values),
