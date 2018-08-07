@@ -4,16 +4,16 @@ export const WORKTIME_OPTIONS = [
     key: '1年以下',
   },
   {
-    label: '1 ~ 3 年',
-    key: '1 ~ 3 年',
+    label: '1-3年',
+    key: '1-3年',
   },
   {
-    label: '3 ~ 5 年',
-    key: '3 ~ 5 年',
+    label: '3-5年',
+    key: '3-5年',
   },
   {
-    label: '5 ~ 10 年',
-    key: '5 ~ 10 年',
+    label: '5-10年',
+    key: '5-10年',
   },
   {
     label: '10年以上',

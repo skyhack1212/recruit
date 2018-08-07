@@ -6,7 +6,7 @@ export default class JobSelect extends React.Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.number,
+    value: PropTypes.string,
   }
 
   static defaultProps = {

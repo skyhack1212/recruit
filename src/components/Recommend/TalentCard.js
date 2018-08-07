@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as R from 'ramda'
+import {Button} from 'antd'
 
 import styles from './TalentCard.less'
 
@@ -37,12 +38,14 @@ export default class TalentCard extends React.Component {
           </div>
         </div>
         <div>
-          <button
+          <Button
             className={styles.headerPrimaryButton}
             onClick={this.handleSetFit}
+            disabled={data.is_archive}
+            type="primary"
           >
             加入职位
-          </button>
+          </Button>
           {/*
           <button
             className={styles.headerCommonButton}

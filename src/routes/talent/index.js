@@ -154,6 +154,7 @@ class Talents extends React.Component {
         payload: {
           to_uid: this.state.currentArchiveTalent,
           jid,
+          source: 'search',
         },
       })
       .then(() => {
