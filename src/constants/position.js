@@ -1,42 +1,42 @@
 export const WORKTIME_OPTIONS = [
   {
     label: '1年以下',
-    key: '1年以下',
+    key: '0',
   },
   {
     label: '1-3年',
-    key: '1-3年',
+    key: '1',
   },
   {
     label: '3-5年',
-    key: '3-5年',
+    key: '2',
   },
   {
     label: '5-10年',
-    key: '5-10年',
+    key: '3',
   },
   {
     label: '10年以上',
-    key: '10年以上',
+    key: '4',
   },
 ]
 
 export const DEGREE_OPTIONS = [
   {
     label: '不限',
-    key: '不限',
+    key: '0',
   },
   {
     label: '本科及以上',
-    key: '本科及以上',
+    key: '1',
   },
   {
     label: '硕士及以上',
-    key: '硕士及以上',
+    key: '2',
   },
   {
     label: '博士及以上',
-    key: '博士及以上',
+    key: '3',
   },
 ]
 
