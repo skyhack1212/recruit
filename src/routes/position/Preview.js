@@ -3,7 +3,7 @@ import {connect} from 'dva'
 import qs from 'query-string'
 import * as R from 'ramda'
 import {ActivityIndicator, Modal, List} from 'antd-mobile'
-import {setCookie, getCookie} from 'tiny-cookie'
+import {setCookie} from 'tiny-cookie'
 
 import 'antd-mobile/lib/activity-indicator/style/index.css'
 import 'antd-mobile/lib/modal/style/index.css'
@@ -50,7 +50,7 @@ export default class Preview extends React.Component {
           version     : '4.23.88',
         }
       }); */
-      setCookie('uid', getCookie('u'))
+      // setCookie('uid', getCookie('u'))
     }
     this.fetchJobDetail()
   }
