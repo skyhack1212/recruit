@@ -282,6 +282,7 @@ export default class Resume extends React.Component {
                   <Button
                     type="primary"
                     onClick={this.handleChatting(item.uid || item.id)}
+                    className={item.has_new_message ? styles.hasNewMessage : ''}
                   >
                     开始沟通
                   </Button>

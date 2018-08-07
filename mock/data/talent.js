@@ -89,6 +89,7 @@ const talent = {
       description: '获得各种奖学金',
     },
   ],
+  has_new_message: false,
 }
 
 export default talent
