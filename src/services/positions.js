@@ -35,8 +35,10 @@ export function add({data, webjid, jid}) {
       ...data,
     },
     body: {
+      salary: 7,
       ...data,
       webjid,
+      jid,
     },
   })
 }
