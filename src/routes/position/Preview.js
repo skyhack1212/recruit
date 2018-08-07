@@ -3,7 +3,7 @@ import {connect} from 'dva'
 import qs from 'query-string'
 import * as R from 'ramda'
 import {ActivityIndicator, Modal, List} from 'antd-mobile'
-import {setCookie} from 'tiny-cookie'
+// import {setCookie} from 'tiny-cookie'
 
 import 'antd-mobile/lib/activity-indicator/style/index.css'
 import 'antd-mobile/lib/modal/style/index.css'
@@ -27,16 +27,16 @@ export default class Preview extends React.Component {
   }
 
   componentWillMount() {
-    window.auth_callback = res => {
-      try {
-        const {result, ...other} = JSON.parse(res)
-        R.mapObjIndexed((value, key) => {
-          setCookie(key, value)
-        }, other)
-      } catch (e) {
-        console.log('something is error')
-      }
-    }
+    // window.auth_callback = res => {
+    //   try {
+    //     const {result, ...other} = JSON.parse(res)
+    //     R.mapObjIndexed((value, key) => {
+    //       setCookie(key, value)
+    //     }, other)
+    //   } catch (e) {
+    //     console.log('something is error')
+    //   }
+    // }
 
     if (typeof MaiMai !== 'undefined' && window.MaiMai) {
       window.MaiMai.auth('0', 'auth_callback')
