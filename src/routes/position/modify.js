@@ -43,6 +43,7 @@ class Create extends React.PureComponent {
         payload: {
           data,
           webjid: this.state.webjid,
+          jid: this.state.jid,
         },
       })
       .then(() => {
