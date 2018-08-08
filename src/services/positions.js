@@ -22,23 +22,19 @@ export function updateState(query) {
   })
 }
 
-export function add({data, webjid, jid}) {
+export function add({data, webjid}) {
   return request(`/up_job`, {
     method: 'POST',
     query: {
       brief: 0,
       channel: 'www',
       version: '1.0.0',
-      salary: 7,
       webjid,
-      jid,
       ...data,
     },
     body: {
-      salary: 7,
       ...data,
       webjid,
-      jid,
     },
   })
 }
