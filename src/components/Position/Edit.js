@@ -222,12 +222,12 @@ export default class PositionList extends React.Component {
     const majors = R.propOr(
       [],
       'majors',
-      R.find(R.propEq('id', currentProfession), pfmj)
+      R.find(R.propEq('name', currentProfession), pfmj)
     )
     const stags = R.propOr(
       [],
       'stags',
-      R.find(R.propEq('id', currentMajor), majors)
+      R.find(R.propEq('name', currentMajor), majors)
     )
     const tags = stags.reduce((result, item) => [...result, ...item.tags], [])
     return tags.map(item => ({

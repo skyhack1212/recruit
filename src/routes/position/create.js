@@ -34,7 +34,10 @@ class Create extends React.PureComponent {
       .dispatch({
         type: 'positions/add',
         payload: {
-          data,
+          data: {
+            ...data,
+            salary: 7, // salary 固定在传 7 的情况下，会使用 salary_min 和 salary_max 字段作为薪酬的值
+          },
         },
       })
       .then(() => {
