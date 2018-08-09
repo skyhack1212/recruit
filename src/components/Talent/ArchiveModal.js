@@ -99,14 +99,14 @@ export default class ArchiveModal extends React.Component {
         className={styles.archiveButton}
         disabled={!this.state.value}
       >
-        加入职位
+        关联职位
       </Button>,
     ]
 
     return (
       <Modal
         visible={show}
-        title="加入职位"
+        title="关联职位"
         onCancel={this.handleCancel}
         footer={footer}
         key="archiveModal"
