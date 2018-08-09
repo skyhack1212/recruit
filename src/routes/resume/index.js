@@ -44,7 +44,9 @@ export default class Resume extends React.Component {
   getChattingTalents = ids => {
     const selectedIds = ids || this.state.selectedIds
     return this.state.data.filter(
-      item => selectedIds.includes(item.id) && item.source === 1
+      item =>
+        selectedIds.includes(item.id) &&
+        (item.source === 1 || item.source === 3)
     )
   }
 
@@ -265,7 +267,7 @@ export default class Resume extends React.Component {
           <div className={styles.operationPanel}>
             <p className={styles.operationLine}>
               <span className={styles.operation}>
-                {source === 1 &&
+                {(source === 1 || source === 3) &&
                   state === 'todo' && (
                     <Button type="primary" onClick={this.handleContact(item)}>
                       发出邀请
