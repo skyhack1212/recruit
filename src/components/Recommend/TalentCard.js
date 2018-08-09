@@ -44,7 +44,7 @@ export default class TalentCard extends React.Component {
             disabled={data.is_archive}
             type="primary"
           >
-            加入职位
+            关联职位
           </Button>
           {/*
           <button

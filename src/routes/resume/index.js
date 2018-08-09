@@ -280,13 +280,13 @@ export default class Resume extends React.Component {
                     </Button>
                   )}
 
-                {state === 'follow' && (
+                {(state === 'follow' || state === 'complete') && (
                   <Button
                     type="primary"
                     onClick={this.handleChatting(item.uid || item.id)}
                     className={item.has_new_message ? styles.hasNewMessage : ''}
                   >
-                    开始沟通
+                    脉脉沟通
                   </Button>
                 )}
                 <span className={styles.operateButtonPanel}>

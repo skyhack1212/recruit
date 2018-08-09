@@ -1,6 +1,6 @@
 export const RESUME_STATE_MAP = {
-  todo: '待邀请',
-  follow: '沟通中',
+  todo: '待办',
+  follow: '跟进',
   complete: '合适',
   elimination: '不合适',
 }

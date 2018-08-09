@@ -221,7 +221,7 @@ class Talents extends React.Component {
               }
             >
               <Icon type="folder-open" className={styles.operationIcon} />
-              {item.is_archive ? '已加职位' : '加入职位'}
+              {item.is_archive ? '已关联' : '关联职位'}
             </span>
           </p>
         </div>
