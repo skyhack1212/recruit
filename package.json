@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "CLEAR_CONSOLE=none PORT=80 roadhog server",
-    "build": "roadhog build",
+    "build": "roadhog build && cp -rf static/hr/* dist/ && cp -rf static/intro dist/",
     "build:dll": "roadhog buildDll",
     "test": "jest --coverage",
     "precommit": "lint-staged",
@@ -17,8 +17,10 @@
   },
   "dependencies": {
     "antd": "3.5.1",
+    "antd-mobile": "^2.2.2",
     "babel-jest": "^23.0.1",
     "babel-preset-env": "^1.7.0",
+    "classnames": "^2.2.6",
     "dom-scroll-into-view": "^1.2.1",
     "dva": "^2.0.4",
     "dva-loading": "^1.0.3",
@@ -34,7 +36,8 @@
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
     "subscribe-ui-event": "^2.0.3",
-    "test": "^0.6.0"
+    "test": "^0.6.0",
+    "tiny-cookie": "^2.1.2"
   },
   "devDependencies": {
     "babel-eslint": "8.0.1",

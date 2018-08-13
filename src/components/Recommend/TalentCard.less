@@ -1,0 +1,82 @@
+@import './../../utils/colors.less';
+
+.card {
+  padding: 10px 20px;
+  // box-shadow: 1px 1px 1px 1px #eee;
+  border-bottom: 1px dashed #ccc;
+  margin: 20px 0;
+  font-size: 14px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  &Info {
+    display: flex;
+
+    &Name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
+
+  button {
+    height: 35px;
+    padding: 8px 30px;
+    border-radius: 3px;
+  }
+
+  &PrimaryButton {
+    color: #fff;
+    background: @blue;
+  }
+
+  &CommonButton {
+    border: 1px solid #ccc;
+    color: #888;
+  }
+}
+
+.avatar {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  margin-right: 20px;
+}
+
+.tags {
+  padding: 0;
+
+  li {
+    display: inline-block;
+    list-style: none;
+    padding: 3px 10px;
+    margin: 3px 5px;
+    background: #eee;
+  }
+}
+
+.itemTitle {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.colorBlue {
+  color: @blue;
+  font-weight: 600;
+}
+
+.marginR10 {
+  margin-right: 10px;
+}
+
+.marginT20 {
+  margin-top: 20px;
+}
+
+.colorGreen {
+  color: green;
+  font-weight: 600;
+}

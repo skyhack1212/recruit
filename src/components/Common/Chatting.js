@@ -12,10 +12,12 @@ class Chatting extends React.Component {
     onCancel: PropTypes.func.isRequired,
     show: PropTypes.bool,
     initMessage: PropTypes.string.isRequired,
+    titlePre: PropTypes.string,
   }
 
   static defaultProps = {
     show: false,
+    titlePre: '邀请',
   }
 
   state = {
@@ -56,7 +58,7 @@ class Chatting extends React.Component {
     ))
 
   render() {
-    const {talents} = this.props
+    const {talents, titlePre} = this.props
     const {length} = talents
     const title = R.slice(0, 3, talents)
       .map(R.prop('name'))
@@ -64,7 +66,7 @@ class Chatting extends React.Component {
 
     return (
       <Modal
-        title={`联系 ${title} ${length > 3 ? ` 等${length}人` : ''}`}
+        title={`${titlePre} ${title} ${length > 3 ? ` 等${length}人` : ''}`}
         visible={this.props.show}
         onCancel={this.handleCancel}
         footer={

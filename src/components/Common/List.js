@@ -12,7 +12,7 @@ class List extends React.Component {
     renderList: PropTypes.func.isRequired,
     loadMore: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
-    renderSearch: PropTypes.func,
+    // renderSearch: PropTypes.func,
     renderBatchOperation: PropTypes.func,
     dataLength: PropTypes.number.isRequired,
     remain: PropTypes.number.isRequired,
@@ -21,23 +21,8 @@ class List extends React.Component {
 
   static defaultProps = {
     renderBatchOperation: () => null,
-    renderSearch: () => null,
+    // renderSearch: () => null,
   }
-
-  // componentDidMount() {
-  //   const {remain, loading, loadMore} = this.props
-  //   const callback = () => {
-  //     const {bottom} = this.container.getBoundingClientRect()
-  //     const windowHeight = window.innerHeight
-  //     if (remain && !loading && bottom && bottom < windowHeight) {
-  //       loadMore()
-  //     }
-  //   }
-
-  //   document
-  //     .getElementById('content')
-  //     .addEventListener('scroll', callback, false)
-  // }
 
   renderEmpty = () => {
     return <div className={styles.centerTip}>没有搜索结果</div>
@@ -77,7 +62,7 @@ class List extends React.Component {
   render() {
     const {
       loading,
-      renderSearch,
+      // renderSearch,
       renderList,
       renderBatchOperation,
       dataLength,
@@ -92,7 +77,9 @@ class List extends React.Component {
         target={target}
       >
         <div className={styles.content}>
-          {renderSearch ? renderSearch() : null}
+          {
+            // renderSearch ? renderSearch() : null
+          }
           {dataLength > 0 && renderBatchOperation
             ? renderBatchOperation()
             : null}

@@ -1,0 +1,55 @@
+@import './../../utils/colors.less';
+
+.main {
+  padding: 10px 50px;
+  font-size: 14px;
+
+  :global {
+    .ant-select {
+      width: 100%;
+    }
+
+    .ant-form-item label {
+      margin-right: 10px;
+      font-size: 14px;
+    }
+  }
+}
+
+.header {
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #ccc;
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.submitButton {
+  float: right;
+  height: 40px;
+  padding: 10px 30px;
+  margin-right: 70px;
+  margin-bottom: 30px;
+  color: #fff;
+  background: @blue;
+}
+
+.location,
+.profession {
+  display: flex;
+  justify-content: space-between;
+
+  :global {
+    .ant-select {
+      flex: 1;
+    }
+
+    .ant-select:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.description {
+  min-height: 250px !important;
+}

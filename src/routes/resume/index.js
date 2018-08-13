@@ -7,7 +7,11 @@ import List from 'components/Common/List'
 import Chatting from 'components/Common/Chatting'
 import JobSelect from 'components/Resume/JobSelect'
 import StateSelect from 'components/Resume/StateSelect'
-import {COMMON_INIT_MESSAGE, DEFAULT_STATE} from 'constants/resume'
+import {
+  COMMON_INIT_MESSAGE,
+  DEFAULT_STATE,
+  REPLY_INIT_MESSAGE,
+} from 'constants/resume'
 
 import styles from './index.less'
 
@@ -40,7 +44,9 @@ export default class Resume extends React.Component {
   getChattingTalents = ids => {
     const selectedIds = ids || this.state.selectedIds
     return this.state.data.filter(
-      item => selectedIds.includes(item.id) && item.source === 1
+      item =>
+        selectedIds.includes(item.id) &&
+        (item.source === 1 || item.source === 3)
     )
   }
 
@@ -48,7 +54,7 @@ export default class Resume extends React.Component {
 
   fetchJobs = () =>
     this.props.dispatch({
-      type: 'global/fetchJos',
+      type: 'global/fetchJobs',
     })
 
   loadMore = () =>
@@ -115,6 +121,7 @@ export default class Resume extends React.Component {
         payload: {
           to_uid: this.state.chattingTalents[0].id,
           content,
+          jid: this.state.chattingTalents[0].jid,
         },
       })
       .then(this.showSendMessageSuccess)
@@ -124,7 +131,9 @@ export default class Resume extends React.Component {
       .dispatch({
         type: 'resumes/batchSendMessage',
         payload: {
-          to_uids: this.state.chattingTalents.map(R.prop('id')).join(','),
+          to_uids: this.state.chattingTalents
+            .map(item => `${R.prop('id', item)}|${R.prop('jid', item)}`)
+            .join(','),
           content,
         },
       })
@@ -204,14 +213,14 @@ export default class Resume extends React.Component {
   handleReply = item => () => {
     this.setState({
       showChatting: true,
-      chattingInitMessage: COMMON_INIT_MESSAGE,
+      chattingInitMessage: REPLY_INIT_MESSAGE,
       chattingAction: 'replyMessage',
       chattingTalents: [item],
     })
   }
 
-  handleChatting = () => {
-    window.open('https://maimai.cn/im/', '脉脉聊天')
+  handleChatting = uid => () => {
+    window.open(`https://maimai.cn/im?target=${uid}`, '脉脉聊天')
   }
 
   handleCancelChatting = () =>
@@ -224,7 +233,11 @@ export default class Resume extends React.Component {
     return (
       <div className={styles.search}>
         <span className={styles.searchPosition}>
-          <JobSelect data={this.props.jobs} onChange={this.handleChangeJob} />
+          <JobSelect
+            data={this.props.jobs}
+            onChange={this.handleChangeJob}
+            value={this.state.jid}
+          />
         </span>
         <span className={styles.searchState}>
           <StateSelect
@@ -240,6 +253,7 @@ export default class Resume extends React.Component {
     const {selectedIds, state} = this.state
     const {id, source} = item
     const showOperate = !['complete', 'elimination'].includes(state)
+
     return (
       <TalentCard
         data={item}
@@ -253,10 +267,10 @@ export default class Resume extends React.Component {
           <div className={styles.operationPanel}>
             <p className={styles.operationLine}>
               <span className={styles.operation}>
-                {source === 1 &&
+                {(source === 1 || source === 3) &&
                   state === 'todo' && (
                     <Button type="primary" onClick={this.handleContact(item)}>
-                      联系人才
+                      发出邀请
                     </Button>
                   )}
                 {source === 2 &&
@@ -266,9 +280,13 @@ export default class Resume extends React.Component {
                     </Button>
                   )}
 
-                {state === 'follow' && (
-                  <Button type="primary" onClick={this.handleChatting}>
-                    开始聊天
+                {(state === 'follow' || state === 'complete') && (
+                  <Button
+                    type="primary"
+                    onClick={this.handleChatting(item.uid || item.id)}
+                    className={item.has_new_message ? styles.hasNewMessage : ''}
+                  >
+                    脉脉沟通
                   </Button>
                 )}
                 <span className={styles.operateButtonPanel}>
@@ -278,7 +296,7 @@ export default class Resume extends React.Component {
                     className={styles.operateButton}
                     ghost
                   >
-                    完成
+                    合适
                   </Button>
                   <Button
                     type="primary"
@@ -286,7 +304,7 @@ export default class Resume extends React.Component {
                     className={styles.operateButton}
                     ghost
                   >
-                    淘汰
+                    不合适
                   </Button>
                 </span>
               </span>
@@ -307,7 +325,7 @@ export default class Resume extends React.Component {
 
     const batchButtons = [
       {
-        text: '批量联系',
+        text: '批量邀请',
         op: this.handleContactBatch,
       },
       // finish: '批量完成',
@@ -354,11 +372,12 @@ export default class Resume extends React.Component {
       chattingTalents,
     } = this.state
     return [
+      this.renderSearch(),
       <List
         renderList={this.renderList}
         loadMore={this.loadMore}
         loading={loading}
-        renderSearch={this.renderSearch}
+        // renderSearch={this.renderSearch}
         renderBatchOperation={this.renderBatchOperation}
         dataLength={data.length}
         remain={remain}
@@ -372,6 +391,7 @@ export default class Resume extends React.Component {
         onSend={this[chattingAction]}
         onCancel={this.handleCancelChatting}
         key="chattingModal"
+        titlePre={chattingAction === 'replyMessage' ? '回复' : '邀请'}
       />,
     ]
   }

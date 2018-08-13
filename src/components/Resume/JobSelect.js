@@ -6,14 +6,14 @@ export default class JobSelect extends React.Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
+    value: PropTypes.string,
   }
 
-  state = {
-    jid: '',
+  static defaultProps = {
+    value: '',
   }
 
   handleChange = jid => {
-    this.setState({jid})
     this.props.onChange(jid)
   }
 
@@ -31,8 +31,8 @@ export default class JobSelect extends React.Component {
         style={{width: 200}}
         placeholder="请选择职位"
         optionFilterProp="children"
-        value={this.state.jid}
-        onChange={this.handleChange}
+        value={this.props.value}
+        onChange={this.props.onChange}
         filterOption={(input, option) =>
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }

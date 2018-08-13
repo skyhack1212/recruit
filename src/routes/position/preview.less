@@ -1,0 +1,137 @@
+@import './../../utils/colors.less';
+
+.previewMain {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 10px 20px;
+}
+
+.positionProfile {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+
+  &Salary {
+    color: @blue;
+    font-weight: 600;
+  }
+}
+
+.company {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  margin-top: 10px;
+
+  &Logo {
+    width: 70px;
+    height: 70px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+
+  &Profile {
+    flex: 1;
+    padding: 10px;
+    margin-left: 20px;
+  }
+}
+
+.positionDetail {
+  flex: 1;
+  padding-top: 20px;
+  border-bottom: 1px solid #ccc;
+  overflow: auto;
+
+  &Tags {
+    display: flex;
+    flex-flow: wrap;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  &Tag {
+    padding: 2px 10px;
+    border-radius: 2px;
+    margin: 5px;
+    color: #888;
+    background: #eee;
+    font-size: 13px;
+  }
+
+  &Txt {
+    padding-left: 20px;
+    margin-top: 20px;
+
+    li {
+      line-height: 25px;
+    }
+  }
+}
+
+.tip {
+  padding-bottom: 40px;
+  margin-top: 20px;
+
+  &Title {
+    color: orange;
+  }
+}
+
+.opButtons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 4px solid #fff;
+
+  button {
+    padding: 10px;
+  }
+
+  &Reject {
+    flex: 1;
+    border: none;
+    border-left: 4px solid #fff;
+    color: #aaa;
+    background: #eee;
+  }
+
+  &Mai {
+    flex: 1;
+    border: none;
+    border-left: 4px solid #fff;
+    color: @blue;
+    background: #eee;
+    border-right: 4px solid #fff;
+  }
+
+  &Phone {
+    flex: 3;
+    border: none;
+    color: #fff;
+    background: @blue;
+    border-right: 4px solid #fff;
+
+    &Tip {
+      margin-right: 10px;
+      color: #ddd;
+      opacity: .5;
+      font-size: 8px;
+    }
+  }
+}
+
+.modal {
+  :global {
+    .am-list-item .am-list-line .am-list-content {
+      font-size: 14px;
+      text-align: center;
+    }
+  }
+}

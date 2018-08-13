@@ -10,11 +10,13 @@
   "hash": true,
   "disableCSSModules": false,
   "publicPath": "/ent",
+  "devtool": "source-map",
   "autoprefixer": null,
   "extraBabelPlugins": [
     "transform-runtime",
     "transform-decorators-legacy",
     ["import", { "libraryName": "antd", "style": true }],
+    ["import", { "libraryName": "antd-mobile", "style": "css" }],
     ["module-resolver", {
       "root": ["./src"],
       "alias": {

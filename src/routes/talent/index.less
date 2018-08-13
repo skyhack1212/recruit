@@ -1,9 +1,5 @@
 @import './../../utils/colors.less';
 
-.content {
-  padding: 20px 30px;
-}
-
 .search {
   :global {
     .ant-input-group-addon:last-child {
@@ -33,12 +29,49 @@
   }
 }
 
+.search,
+.jobSearchPanel {
+  margin: 10px 30px;
+}
+
+// job search
+.jobSearchPanel {
+  padding: 20px 10px 10px 20px;
+  margin-top: 20px;
+  background: #f8f9fb;
+  box-shadow: 1px 1px 1px 1px #efefef;
+}
+
+.jobSearchTitle {
+  color: #555;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.jobSearchTip {
+  margin-left: 20px;
+  color: #aaa;
+  font-size: 12px;
+}
+
+.jobSearchList {
+  list-style: none;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 35px;
+  cursor: pointer;
+}
+
+// global
+
 .emptyTip {
   width: 100%;
   height: 100%;
   margin-top: 100px;
   text-align: center;
 }
+
+// operation
 
 .operationPanel {
   display: flex;
@@ -59,10 +92,15 @@
 
 .operation {
   display: inline-block;
-  width: 130px;
+  width: 140px;
   padding: 10px 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  color: #aaa;
+  background: none;
+}
+
+.operationActive {
   color: #fff;
   background: @blue;
 }
@@ -72,18 +110,19 @@
   font-size: 18px;
 }
 
+// batchOperation
 .batchOperation {
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
 }
 
-.previewBatch {
+.batchPreview {
   color: #aaa;
   cursor: pointer;
 }
 
-.previewBatchIcon {
+.batchPreviewIcon {
   margin-right: 10px;
 }
 
