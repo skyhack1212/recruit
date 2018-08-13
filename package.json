@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "CLEAR_CONSOLE=none PORT=80 roadhog server",
-    "build": "roadhog build",
+    "build": "roadhog build && cp -rf static/hr/* dist/",
     "build:dll": "roadhog buildDll",
     "test": "jest --coverage",
     "precommit": "lint-staged",
