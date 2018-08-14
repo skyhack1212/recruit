@@ -1,5 +1,5 @@
 /* 领取福利 */
-window.FuLiUrl = "https://plus.wps.cn/template_maimai";
+window.FuLiUrl = "https://plus.wps.cn/template?utm_source=maimai&utm_medium=818%20H5&utm_content=media%20bonus&utm_campaign=Qixi";
 /* 报名 */
 window.BaoMingUrl = "http://cn.mikecrm.com/XB5xs7w";
 /* 立即参与 */
@@ -39,7 +39,7 @@ window.ShareConfig = {
     title: "七夕这天，我是如何和100个人…",
     desc: "七夕这天，我约了100个人北京、深圳一起含情“脉脉”",
     link: window.location.href,
-    imgUrl: "https://static.mmcai.cn/static/36/lg/imgs/icon.jpg"
+    imgUrl: "https://static.mmcai.cn/static/36/lg/imgs/share.jpg"
 }
 
 
