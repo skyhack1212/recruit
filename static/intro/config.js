@@ -1,7 +1,7 @@
 /* 领取福利 */
 window.FuLiUrl = "https://plus.wps.cn/template_maimai?utm_source=maimai&utm_medium=media%20bonus&utm_content=H5&utm_campaign=QiXi";
 /* 报名 */
-window.BaoMingUrl = "http://cn.mikecrm.com/XB5xs7w";
+window.BaoMingUrl = "https://www.wenjuan.com/s/7Rz2Yn/";
 /* 立即参与 */
 window.CanYuUrl = "http://sj.qq.com/myapp/detail.htm?apkName=com.taou.maimai";
 
