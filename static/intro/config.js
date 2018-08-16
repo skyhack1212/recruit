@@ -1,5 +1,5 @@
 /* 领取福利 */
-window.FuLiUrl = "https://plus.wps.cn/template?utm_source=maimai&utm_medium=818%20H5&utm_content=media%20bonus&utm_campaign=Qixi";
+window.FuLiUrl = "https://plus.wps.cn/template_maimai?utm_source=maimai&utm_medium=media%20bonus&utm_content=H5&utm_campaign=QiXi";
 /* 报名 */
 window.BaoMingUrl = "http://cn.mikecrm.com/XB5xs7w";
 /* 立即参与 */
