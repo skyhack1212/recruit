@@ -23,5 +23,9 @@ export default {
       const data = yield call(talents.archive, payload)
       return data
     },
+    *modifyState({payload}, {call}) {
+      const data = yield call(talents.modifyState, payload)
+      return data
+    },
   },
 }

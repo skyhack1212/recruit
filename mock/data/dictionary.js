@@ -24,19 +24,50 @@ export default {
       province: '河北',
       cities: [
         {
-          city: '石家庄市',
+          city: '保定',
         },
         {
-          city: '石家庄市',
+          city: '唐山',
         },
         {
-          city: '石家庄市',
+          city: '秦皇岛',
         },
         {
-          city: '石家庄市',
+          city: '石家庄',
         },
         {
-          city: '石家庄市',
+          city: '正定',
+        },
+      ],
+    },
+    {
+      province: '广东',
+      cities: [
+        {
+          city: '广州',
+        },
+        {
+          city: '深圳',
+        },
+      ],
+    },
+    {
+      province: '上海',
+      cities: [],
+    },
+    {
+      province: '浙江',
+      cities: [
+        {
+          city: '杭州',
+        },
+      ],
+    },
+    {
+      province: '湖北',
+      cities: [
+        {
+          city: '武汉',
         },
       ],
     },

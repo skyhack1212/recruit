@@ -1,29 +1,49 @@
 import React from 'react'
-import {Input, Icon, Checkbox, message, Popover} from 'antd'
+import {Input, Icon, Checkbox, message} from 'antd'
 import classnames from 'classnames'
 import {connect} from 'dva'
 import * as R from 'ramda'
 
 import TalentCard from 'components/Common/TalentCard'
 import List from 'components/Common/List'
-import ArchiveModal from 'components/Talent/ArchiveModal'
+import {COMMON_INIT_MESSAGE} from 'constants/resume'
+import Chatting from 'components/Common/Chatting'
 
-import styles from './index.less'
+import styles from './search.less'
 
 class Talents extends React.Component {
-  state = {
-    data: [],
-    page: 0,
-    search: '',
-    currentSearch: '',
-    selectedIds: [],
-    showArchiveModal: false,
-    currentArchiveTalent: '',
-    remain: 0,
+  static defaultProps = {
+    advancedSearch: {},
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: [],
+      page: 0,
+      search: '',
+      currentSearch: '',
+      selectedIds: [],
+      showInviteModal: false,
+      inviteTelentIds: [],
+      remain: 0,
+      advancedSearch: R.propOr({}, 'advancedSearch', this.props),
+    }
   }
 
   componentWillMount() {
     this.fetchJobs()
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!R.equals(newProps.advancedSearch, this.props.advancedSearch)) {
+      this.setState(
+        {
+          advancedSearch: newProps.advancedSearch,
+        },
+        this.refreshData
+      )
+    }
   }
 
   setSearch = e => {
@@ -66,6 +86,7 @@ class Talents extends React.Component {
       payload: {
         page: this.state.page,
         keyword: this.state.currentSearch,
+        ...this.state.advancedSearch,
       },
     })
 
@@ -78,19 +99,71 @@ class Talents extends React.Component {
     )
   }
 
-  previewBatch = () => {
-    const {selectedIds, data} = this.state
+  showInviteSuccess = () => {
+    this.handleCancelChatting()
+    this.refreshData()
+    message.success('消息发送成功')
+  }
+
+  handleInviteBatch = () => {
+    const {selectedIds} = this.state
 
     if (selectedIds.length === 0) {
       message.warn('没有选中项')
+      return
     }
 
-    const selectedItems = data.filter(item => selectedIds.includes(item.id))
-    const openDetail = item => {
-      window.open(item.detail_url, '_blank')
-    }
-    R.forEach(openDetail, selectedItems)
+    this.setState({
+      inviteTelentIds: selectedIds,
+      showInviteModal: true,
+    })
   }
+
+  handleSubmitInvite = (content, jid) => {
+    if (this.props.jobs.length === 0) {
+      message.warning('当前您没有发布职位，不能发出职位邀请')
+    }
+
+    const {length} = this.state.inviteTelentIds
+    if (length === 1) {
+      this.sendInviteMessageSingle(content, jid)
+      return
+    }
+    this.sendInviteMessageBatch(content, jid)
+  }
+
+  showSendMessageSuccess = () => {
+    this.handleCancelInvite()
+    this.refreshData()
+    message.success('发送邀请成功')
+  }
+
+  sendInviteMessageSingle = (content, jid) =>
+    this.props
+      .dispatch({
+        type: 'resumes/sendMessage',
+        payload: {
+          to_uid: this.state.inviteTelentIds[0],
+          content,
+          jid,
+          source: 'search',
+        },
+      })
+      .then(this.showSendMessageSuccess)
+
+  sendInviteMessageBatch = (content, jid) =>
+    this.props
+      .dispatch({
+        type: 'resumes/batchSendMessage',
+        payload: {
+          to_uids: this.state.inviteTelentIds
+            .map(uid => `${uid}|${jid}`)
+            .join(','),
+          content,
+          source: 'search',
+        },
+      })
+      .then(this.showSendMessageSuccess)
 
   handleSearch = currentSearch => {
     const {currentSearch: lastSearch} = this.state
@@ -131,37 +204,17 @@ class Talents extends React.Component {
     })
   }
 
-  handleShowArchiveModal = talentId => () =>
+  handleShowInviteModal = talentId => () =>
     this.setState({
-      currentArchiveTalent: talentId,
-      showArchiveModal: true,
+      inviteTelentIds: [talentId],
+      showInviteModal: true,
     })
 
-  handleCancelArchive = () =>
+  handleCancelInvite = () =>
     this.setState({
-      currentArchiveTalent: '',
-      showArchiveModal: false,
+      inviteTelentIds: [],
+      showInviteModal: false,
     })
-
-  handleArchive = jid => {
-    if (this.props.jobs.length === 0) {
-      message.warning('当前您没有发布职位，不能归档!')
-    }
-
-    this.props
-      .dispatch({
-        type: 'talents/archive',
-        payload: {
-          to_uid: this.state.currentArchiveTalent,
-          jid,
-          source: 'search',
-        },
-      })
-      .then(() => {
-        this.refreshData()
-        this.handleCancelArchive()
-      })
-  }
 
   renderSearch = () => {
     const clearButton = <span onClick={this.handleClearSearch}>×</span>
@@ -209,6 +262,7 @@ class Talents extends React.Component {
         key={item.id}
         checked={selectedIds.includes(item.id)}
         onCheck={this.handleSelect(item.id)}
+        showCheckbox
       >
         <div className={styles.operationPanel}>
           <p className={styles.operationLine}>
@@ -217,11 +271,11 @@ class Talents extends React.Component {
                 [styles.operationActive]: !item.is_archive,
               })}
               onClick={
-                item.is_archive ? null : this.handleShowArchiveModal(item.id)
+                item.is_archive ? null : this.handleShowInviteModal(item.id)
               }
             >
               <Icon type="folder-open" className={styles.operationIcon} />
-              {item.is_archive ? '已关联' : '关联职位'}
+              {item.is_archive ? '已关联' : '职位邀请'}
             </span>
           </p>
         </div>
@@ -246,23 +300,22 @@ class Talents extends React.Component {
             全选 [已选中 {selectedIds.length} 项]
           </Checkbox>
         </span>
-        <Popover
-          content="使用本功能，需要将「脉脉」加入白名单，如有问题，请联系客服！"
-          trigger="hover"
-        >
-          <span className={styles.batchPreview} onClick={this.previewBatch}>
-            <Icon type="copy" className={styles.batchPreviewIcon} />
-            批量查看
-          </span>
-        </Popover>
+        <span className={styles.batchPreview} onClick={this.handleInviteBatch}>
+          <Icon type="copy" className={styles.batchPreviewIcon} />
+          批量邀请
+        </span>
       </div>
     )
   }
 
   render() {
     const {loading = false, jobs} = this.props
-    const {data, remain, currentSearch, showArchiveModal} = this.state
+    const {data, remain, currentSearch, showInviteModal} = this.state
     const {length: dataLength} = data
+    const {inviteTelentIds} = this.state
+    const inviteTalents = data.filter(talent =>
+      inviteTelentIds.includes(talent.id)
+    )
 
     return [
       this.renderSearch(),
@@ -271,20 +324,22 @@ class Talents extends React.Component {
         renderList={this.renderList}
         loadMore={this.loadMore}
         loading={loading}
-        // renderSearch={this.renderSearch}
         renderBatchOperation={this.renderBatchOperation}
         dataLength={dataLength}
         remain={remain}
         key="list"
         search={currentSearch}
       />,
-      <ArchiveModal
-        loading={loading}
-        jobs={jobs}
-        onCancel={this.handleCancelArchive}
-        onSubmit={this.handleArchive}
-        show={showArchiveModal}
-        key="archiveModal"
+      <Chatting
+        show={showInviteModal}
+        initMessage={COMMON_INIT_MESSAGE}
+        talents={inviteTalents}
+        onSend={this.handleSubmitInvite}
+        onCancel={this.handleCancelInvite}
+        key="inviteModal"
+        titlePre="邀请"
+        showPosition
+        allJobs={jobs}
       />,
     ]
   }

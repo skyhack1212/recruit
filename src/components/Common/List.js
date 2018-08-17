@@ -16,7 +16,8 @@ class List extends React.Component {
     renderBatchOperation: PropTypes.func,
     dataLength: PropTypes.number.isRequired,
     remain: PropTypes.number.isRequired,
-    search: PropTypes.string.isRequired,
+    search: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
   }
 
   static defaultProps = {

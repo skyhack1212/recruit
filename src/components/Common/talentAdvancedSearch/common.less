@@ -1,0 +1,41 @@
+@import './../../../utils/colors.less';
+
+.city,
+.worktime,
+.degree,
+.companyLevel {
+  margin-bottom: 30px;
+
+  :global {
+    .ant-radio-button-wrapper-checked {
+      color: #fff;
+      background: @blue;
+    }
+
+    .ant-radio-button-wrapper {
+      border-color: #efefef;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.schollLevel {
+  display: flex;
+  justify-content: space-between;
+
+  &Label {
+    font-weight: 600;
+  }
+}
+
+.category,
+.resumeSource {
+  margin-bottom: 30px;
+
+  :global {
+    .ant-checkbox-group-item {
+      display: block;
+      margin: 10px 0;
+    }
+  }
+}

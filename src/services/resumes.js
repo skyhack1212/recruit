@@ -60,8 +60,20 @@ export function elimination(body) {
   })
 }
 
-export function applyMessage(body) {
+export function replyMessage(body) {
   return request('/api/ent/recruit/v1/reply', {
+    method: 'POST',
+    query: {
+      ...body,
+      channel: 'www',
+      version: '1.0.0',
+    },
+    body,
+  })
+}
+
+export function batchReplyMessage(body) {
+  return request('/api/ent/recruit/v1/batch_reply', {
     method: 'POST',
     query: {
       ...body,

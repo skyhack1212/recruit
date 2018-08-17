@@ -6,6 +6,7 @@ export default {
 
   state: {
     jobs: [],
+    dictionary: {},
   },
 
   effects: {
