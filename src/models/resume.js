@@ -29,8 +29,12 @@ export default {
       const data = yield call(resumes.elimination, payload)
       return data.data
     },
-    *applyMessage({payload}, {call}) {
-      const data = yield call(resumes.applyMessage, payload)
+    *replyMessage({payload}, {call}) {
+      const data = yield call(resumes.replyMessage, payload)
+      return data.data
+    },
+    *batchReplyMessage({payload}, {call}) {
+      const data = yield call(resumes.batchReplyMessage, payload)
       return data.data
     },
   },

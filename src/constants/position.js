@@ -1,5 +1,9 @@
 export const WORKTIME_OPTIONS = [
   {
+    label: '不限',
+    key: -1,
+  },
+  {
     label: '1年以下',
     key: 0,
   },
@@ -24,7 +28,7 @@ export const WORKTIME_OPTIONS = [
 export const DEGREE_OPTIONS = [
   {
     label: '不限',
-    key: 0,
+    key: -1,
   },
   {
     label: '本科及以上',
@@ -37,6 +41,10 @@ export const DEGREE_OPTIONS = [
   {
     label: '博士及以上',
     key: 3,
+  },
+  {
+    label: '博士后及以上',
+    key: 4,
   },
 ]
 
@@ -72,5 +80,28 @@ export const SALARY_OPTIONS = [
   {
     label: '自定义',
     key: 7,
+  },
+]
+
+export const COMPANY_LEVEL = [
+  {
+    label: '不限',
+    key: -1,
+  },
+  {
+    label: '1级',
+    key: 1,
+  },
+  {
+    label: '2级',
+    key: 2,
+  },
+  {
+    label: '3级',
+    key: 3,
+  },
+  {
+    label: '4级',
+    key: 4,
   },
 ]

@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'dva'
 import {Button} from 'antd'
 import List from 'components/Common/List'
+import Content from 'components/Layout/Content'
 import * as R from 'ramda'
 
 import styles from './index.less'
@@ -129,17 +130,19 @@ export default class PositionList extends React.Component {
   render() {
     const {loading} = this.props
     const {data, remain} = this.state
-    return [
-      this.renderButton(),
-      <List
-        renderList={this.renderCards}
-        loadMore={this.loadMore}
-        loading={loading}
-        dataLength={data.length}
-        remain={remain}
-        key="list"
-        search="all"
-      />,
-    ]
+    return (
+      <Content>
+        {this.renderButton()}
+        <List
+          renderList={this.renderCards}
+          loadMore={this.loadMore}
+          loading={loading}
+          dataLength={data.length}
+          remain={remain}
+          key="list"
+          search="all"
+        />
+      </Content>
+    )
   }
 }

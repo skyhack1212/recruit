@@ -13,19 +13,21 @@ class TalentCard extends React.Component {
     checked: PropTypes.bool,
     showPhone: PropTypes.bool,
     showResume: PropTypes.bool,
+    showCheckbox: PropTypes.bool,
   }
 
   static defaultProps = {
     checked: false,
     showPhone: false,
     showResume: false,
+    showCheckbox: false,
   }
 
   state = {}
 
   redirectToDetail = e => {
     if (e.target.getAttribute('name') === 'infoLine') {
-      window.open(this.props.data.detail_url, '_blank')
+      window.open(this.props.data.detail_url, '_self')
     }
   }
 
@@ -37,11 +39,13 @@ class TalentCard extends React.Component {
   render() {
     return (
       <div className={styles.cardItem}>
-        <Checkbox
-          checked={this.props.checked}
-          onChange={this.handleCheck}
-          className={styles.checkbox}
-        />
+        {this.props.showCheckbox && (
+          <Checkbox
+            checked={this.props.checked}
+            onChange={this.handleCheck}
+            className={styles.checkbox}
+          />
+        )}
         <div
           className={styles.basicInfo}
           onClick={this.redirectToDetail}

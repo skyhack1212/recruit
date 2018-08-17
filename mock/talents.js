@@ -83,6 +83,12 @@ export default {
       code: 0,
     })
   },
+  // 批量回复消息
+  'POST /api/ent/recruit/v1/batch_reply': (req, res) => {
+    res.json({
+      code: 0,
+    })
+  },
   /* mobile */
   // 获取 job 详情
   'GET /api/ent/job/v1/get': (req, res) => {
@@ -99,6 +105,12 @@ export default {
   },
   // 不同意联系
   'GET /api/ent/connect/v1/disagree': (req, res) => {
+    res.json({
+      code: 0,
+    })
+  },
+  // 修改人才状态
+  'GET /api/ent/recruit/v1/modify_state': (req, res) => {
     res.json({
       code: 0,
     })

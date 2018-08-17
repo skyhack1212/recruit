@@ -239,8 +239,8 @@ export default class PositionList extends React.Component {
   getFormatData = data => {
     const transformations = {
       stags: R.split(','),
-      salary_min: value => (isEmpty(value) ? '' : parseFloat(value)),
-      salary_max: value => (isEmpty(value) ? '' : parseFloat(value)),
+      salary_min: value => (isEmpty(value) ? '' : parseFloat(value) / 1000),
+      salary_max: value => (isEmpty(value) ? '' : parseFloat(value) / 1000),
     }
     return R.evolve(transformations, data)
   }
@@ -252,8 +252,8 @@ export default class PositionList extends React.Component {
     )
     const transformations = {
       stags: R.join(','),
-      salary_min: v => `${v}`,
-      salary_max: v => `${v}`,
+      salary_min: v => parseFloat(v) * 1000,
+      salary_max: v => parseFloat(v) * 1000,
     }
     return R.evolve(transformations, {
       ...R.omit(plainFileds, values),

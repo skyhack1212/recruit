@@ -8,17 +8,17 @@ import styles from './TalentCard.less'
 export default class TalentCard extends React.Component {
   static propTypes = {
     data: PropTypes.object.isRequired,
-    onSetFit: PropTypes.func.isRequired,
-    onSetUnfit: PropTypes.func.isRequired,
+    // onSetFit: PropTypes.func.isRequired,
+    // onSetUnfit: PropTypes.func.isRequired,
   }
 
-  handleSetFit = () => {
-    this.props.onSetFit(this.props.data.id)
+  handleInvite = () => {
+    this.props.onInvite(this.props.data.id)
   }
 
-  handleSetUnfit = () => {
-    this.props.onSetUnfit(this.props.funcdata.id)
-  }
+  // handleSetUnfit = () => {
+  //   this.props.onSetUnfit(this.props.funcdata.id)
+  // }
 
   renderHeader = () => {
     const {data} = this.props
@@ -40,11 +40,11 @@ export default class TalentCard extends React.Component {
         <div>
           <Button
             className={styles.headerPrimaryButton}
-            onClick={this.handleSetFit}
+            onClick={this.handleInvite}
             disabled={data.is_archive}
             type="primary"
           >
-            关联职位
+            职位邀请
           </Button>
           {/*
           <button

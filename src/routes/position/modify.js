@@ -3,6 +3,7 @@ import {connect} from 'dva'
 import PositionEdit from 'components/Position/Edit'
 import {isEmpty} from 'utils'
 import {message} from 'antd'
+import Content from 'components/Layout/Content'
 
 class Create extends React.PureComponent {
   constructor(props) {
@@ -59,14 +60,14 @@ class Create extends React.PureComponent {
   render() {
     const {dictionary, history} = this.props
     return (
-      <div>
+      <Content>
         <PositionEdit
           data={this.state.data}
           onSubmit={this.handleSubmit}
           dictionary={dictionary}
           history={history}
         />
-      </div>
+      </Content>
     )
   }
 }

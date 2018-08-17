@@ -1,0 +1,310 @@
+import React from 'react'
+import {Icon, Checkbox, message, Button} from 'antd'
+import {connect} from 'dva'
+import * as R from 'ramda'
+
+import TalentCard from 'components/Common/TalentCard'
+import List from 'components/Common/List'
+import {REPLY_INIT_MESSAGE} from 'constants/resume'
+import Chatting from 'components/Common/Chatting'
+import JobSelect from 'components/Common/JobSelect'
+
+import styles from './applicant.less'
+
+class Talents extends React.Component {
+  static defaultProps = {
+    advancedSearch: {},
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: [],
+      page: 0,
+      selectedIds: [],
+      remain: 0,
+      // advancedSearch: R.propOr({}, 'advancedSearch', this.props),
+      job: '',
+      showReplyModal: false,
+      replyIds: [],
+    }
+  }
+
+  componentDidMount() {
+    this.fetchJobs()
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!R.equals(newProps.advancedSearch, this.props.advancedSearch)) {
+      this.setState(
+        {
+          // advancedSearch: newProps.advancedSearch,
+        },
+        this.refreshData
+      )
+    }
+  }
+
+  getAllIds = () => this.state.data.map(R.prop('id'))
+
+  fetchJobs = () => {
+    return this.props
+      .dispatch({
+        type: 'global/fetchJobs',
+      })
+      .then(({jobs}) => {
+        const job = R.pathOr('', [0, 'jid'], jobs)
+        this.setState(
+          {
+            job,
+          },
+          this.refreshData
+        )
+      })
+  }
+
+  refreshData = () => {
+    this.loadData().then(data => {
+      this.setState({
+        data: data.list,
+        remain: data.remain,
+      })
+    })
+  }
+
+  appendData = () => {
+    this.loadData().then(data => {
+      this.setState({
+        data: R.uniqBy(R.prop('id'), [...this.state.data, ...data.contacts]),
+        remain: data.remain,
+      })
+    })
+  }
+
+  loadData = () => {
+    const jidParam = this.state.jid ? {jid: this.state.jid} : {}
+    return this.props.dispatch({
+      type: 'resumes/fetch',
+      payload: {
+        page: this.state.page,
+        ...jidParam,
+        state: 'todo',
+        source: 'delivery',
+      },
+    })
+  }
+
+  loadMore = () => {
+    this.setState(
+      {
+        page: this.state.page + 1,
+      },
+      this.appendData
+    )
+  }
+
+  sendReplyMessageSingle = content =>
+    this.props
+      .dispatch({
+        type: 'resumes/replyMessage',
+        payload: {
+          to_uid: this.state.replyIds[0],
+          content,
+        },
+      })
+      .then(this.showSendMessageSuccess)
+
+  sendReplyMessageBatch = content =>
+    this.props
+      .dispatch({
+        type: 'resumes/batchReplyMessage',
+        payload: {
+          to_uids: this.state.replyIds,
+          content,
+        },
+      })
+      .then(this.showSendMessageSuccess)
+
+  showSendMessageSuccess = () => {
+    this.handleCancelReply()
+    this.refreshData()
+    message.success('回复消息成功')
+  }
+
+  handleJobChange = job => {
+    this.setState({job}, this.refreshData)
+  }
+
+  handleSelect = id => selected => {
+    const {selectedIds} = this.state
+    this.setState({
+      selectedIds: selected
+        ? [...selectedIds, id]
+        : R.without([id], selectedIds),
+    })
+  }
+
+  handleSelectAll = e => {
+    this.setState({
+      selectedIds: e.target.checked ? this.getAllIds() : [],
+    })
+  }
+
+  handleCancelReply = () => {
+    this.setState({
+      showReplyModal: false,
+    })
+  }
+
+  handleReplyBatch = () => {
+    if (this.state.selectedIds.length === 0) {
+      message.warn('没有选中项')
+      return
+    }
+
+    this.setState({
+      showReplyModal: true,
+      replyIds: this.state.selectedIds,
+    })
+  }
+
+  handleReply = talentId => () => {
+    this.setState({
+      showReplyModal: true,
+      replyIds: [talentId],
+    })
+  }
+
+  handleSendReplyMessage = content => {
+    if (this.state.replyIds.length === 1) {
+      this.sendReplyMessageSingle(content)
+      return
+    }
+    this.sendReplyMessageBatch(content)
+  }
+
+  handleModifyState = (talentId, state) => () => {
+    this.props.dispatch({
+      type: 'talents/modifyState',
+      payload: {
+        to_uids: talentId,
+        state,
+      },
+    })
+  }
+
+  renderSearch = () => (
+    <div style={{padding: '10px 30px'}} key="search">
+      <JobSelect
+        data={this.props.jobs}
+        onChange={this.handleJobChange}
+        value={this.state.job}
+      />
+    </div>
+  )
+
+  renderTalentItem = item => {
+    const {selectedIds} = this.state
+    return (
+      <TalentCard
+        data={item}
+        key={item.id}
+        checked={selectedIds.includes(item.id)}
+        onCheck={this.handleSelect(item.id)}
+        showCheckbox
+      >
+        <div className={styles.operationPanel}>
+          <p className={styles.operationLine}>
+            <span className={styles.operation}>
+              <Button type="primary" onClick={this.handleReply(item.id)}>
+                回复申请
+              </Button>
+
+              <span className={styles.operateButtonPanel}>
+                <Button
+                  type="primary"
+                  onClick={this.handleModifyState(item.id, 'interview')}
+                  className={styles.operateButton}
+                  ghost
+                >
+                  待约面
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={this.handleModifyState(item.id, 'elimination')}
+                  className={styles.operateButton}
+                  ghost
+                >
+                  不合适
+                </Button>
+              </span>
+            </span>
+          </p>
+        </div>
+      </TalentCard>
+    )
+  }
+
+  renderList = () => {
+    const {data} = this.state
+    return <div>{data.map(this.renderTalentItem)}</div>
+  }
+
+  renderBatchOperation = () => {
+    const {selectedIds} = this.state
+    const allIds = this.getAllIds()
+    const allSelected =
+      selectedIds.length > 0 && selectedIds.length === allIds.length
+    return (
+      <div className={styles.batchOperation}>
+        <span className={styles.checkAll}>
+          <Checkbox checked={allSelected} onChange={this.handleSelectAll}>
+            全选 [已选中 {selectedIds.length} 项]
+          </Checkbox>
+        </span>
+        <span className={styles.batchPreview} onClick={this.handleReplyBatch}>
+          <Icon type="copy" className={styles.batchPreviewIcon} />
+          批量回复
+        </span>
+      </div>
+    )
+  }
+
+  render() {
+    const {loading = false} = this.props
+    const {data, remain, job, showReplyModal} = this.state
+    const {length: dataLength} = data
+    const {replyIds} = this.state
+    const applyTalents = data.filter(talent => replyIds.includes(talent.id))
+
+    return [
+      this.renderSearch(),
+      <List
+        renderList={this.renderList}
+        loadMore={this.loadMore}
+        loading={loading}
+        renderBatchOperation={this.renderBatchOperation}
+        dataLength={dataLength}
+        remain={remain}
+        key="list"
+        search={`${job}`}
+      />,
+      <Chatting
+        show={showReplyModal}
+        initMessage={REPLY_INIT_MESSAGE}
+        talents={applyTalents}
+        onSend={this.handleSendReplyMessage}
+        onCancel={this.handleCancelReply}
+        key="replyModal"
+        titlePre="回复"
+      />,
+    ]
+  }
+}
+
+const mapStateToProps = state => ({
+  loading: state.loading.models.talents,
+  jobs: state.global.jobs,
+})
+
+export default connect(mapStateToProps)(Talents)

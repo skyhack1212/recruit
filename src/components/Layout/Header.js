@@ -1,19 +1,16 @@
 import React from 'react'
 import {Menu} from 'antd'
 import {withRouter, Link} from 'react-router-dom'
-import * as R from 'ramda'
 import logoUrl from 'images/logo.png'
 
 import styles from './header.less'
 
+const menuKeys = ['/talents/discover', '/talents/admin', '/positions']
+
 const MyHeader = props => {
   const {location: {pathname}} = props
-  const path = pathname.split('/')
-  const currentMenu =
-    path.length > 1 && path[1] === 'ent'
-      ? R.propOr('talents', '2', path) || 'talents'
-      : R.propOr('talents', '1', path) || 'talents'
-  const prefix = path.length > 1 && path[1] === 'ent' ? '/ent' : ''
+  const currentMenu = menuKeys.find(key => pathname.indexOf(key) > -1)
+  const prefix = '/ent'
   return (
     <header className={styles.header}>
       <Menu
@@ -23,28 +20,29 @@ const MyHeader = props => {
         style={{lineHeight: '64px'}}
       >
         <Menu.Item key="logo">
-          <Link to={`${prefix}/talents`} activeclassname="active">
+          <Link to={`${prefix}/talents/discover`} activeclassname="active">
             <img className={styles.logo} src={logoUrl} alt="logo" />
           </Link>
         </Menu.Item>
-        <Menu.Item key="positions">
+        <Menu.Item key="/positions">
           <Link to={`${prefix}/positions`} activeclassname="active">
             职位管理
           </Link>
         </Menu.Item>
-        <Menu.Item key="talents">
-          <Link to={`${prefix}/talents`} activeclassname="active">
-            人才搜索
+        <Menu.Item key="/talents/discover">
+          <Link
+            to={`${prefix}/talents/discover/search`}
+            activeclassname="active"
+          >
+            发现人才
           </Link>
         </Menu.Item>
-        <Menu.Item key="recommends">
-          <Link to={`${prefix}/recommends`} activeclassname="active">
-            人才推荐
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="resumes">
-          <Link to={`${prefix}/resumes`} activeclassname="active">
-            简历筛选
+        <Menu.Item key="/talents/admin">
+          <Link
+            to={`${prefix}/talents/admin/following`}
+            activeclassname="active"
+          >
+            人才跟进
           </Link>
         </Menu.Item>
       </Menu>

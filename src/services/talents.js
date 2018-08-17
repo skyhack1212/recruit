@@ -23,3 +23,14 @@ export function archive(payload) {
     body: payload,
   })
 }
+
+// 修改状态
+export function modifyState(payload) {
+  return request('/api/ent/recruit/v1/modify_state', {
+    query: {
+      ...payload,
+      channel: 'www',
+      version: '1.0.0',
+    },
+  })
+}

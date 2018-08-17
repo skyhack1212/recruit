@@ -1,13 +1,16 @@
 import React from 'react'
-import Route from 'common/Route'
+
+import {Layout} from 'antd'
 
 import styles from './content.less'
 
-const MyContent = () => {
+const {Content} = Layout
+
+const MyContent = props => {
   return (
-    <div className={styles.content}>
-      <Route />
-    </div>
+    <Content className={styles.contentMain}>
+      {props.content || props.children}
+    </Content>
   )
 }
 
