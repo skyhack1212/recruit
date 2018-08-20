@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tabs} from 'antd'
+import {Menu} from 'antd'
 import {connect} from 'dva'
 import {Link} from 'react-router-dom'
 import * as R from 'ramda'
@@ -15,12 +15,16 @@ import Applicant from './Applicant'
 
 import styles from './index.less'
 
-const {TabPane} = Tabs
-
-const tagAdvancedSearch = {
+const advancedSearchCompMap = {
   search: TalentAdvancedSearch,
   recommend: RecommendAdvancedSearch,
   applicant: ApplicantAdvancedSearch,
+}
+
+const contentCompMap = {
+  search: Search,
+  recommend: Recommend,
+  applicant: Applicant,
 }
 
 const initialState = {
@@ -50,6 +54,14 @@ class Index extends React.Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    const {tab} = newProps.match.params
+    this.setState({
+      tab,
+      advancedSearch: R.propOr({}, tab, initialState),
+    })
+  }
+
   handleTabChange = tab => {
     this.setState({
       tab,
@@ -63,11 +75,27 @@ class Index extends React.Component {
   }
 
   render() {
-    const AdvancedSearchPanel = tagAdvancedSearch[this.state.tab]
-    const {advancedSearch} = this.state
+    const {tab, advancedSearch} = this.state
+    const AdvancedSearchPanel = advancedSearchCompMap[tab]
+    const Content = contentCompMap[tab]
     return (
       <ContentSider key="content">
         <div key="content" className={styles.discoverMain}>
+          <Menu style={{width: 200}} defaultSelectedKeys={[tab]} mode="inline">
+            <Menu.Item key="search">
+              <Link to="/ent/talents/discover/search">搜索人才</Link>
+            </Menu.Item>
+            <Menu.Item key="recommend">
+              <Link to="/ent/talents/discover/recommend">人才推荐</Link>
+            </Menu.Item>
+            <Menu.Item key="applicant">
+              <Link to="/ent/talents/discover/applicant">主动投递</Link>
+            </Menu.Item>
+          </Menu>
+          <div className={styles.discoverContent}>
+            <Content advancedSearch={advancedSearch} />
+          </div>
+          {/* 
           <Tabs
             tabPosition="left"
             activeKey={this.state.tab}
@@ -95,6 +123,7 @@ class Index extends React.Component {
               <Applicant advancedSearch={advancedSearch} />
             </TabPane>
           </Tabs>
+          */}
         </div>
         <div key="sider">
           <AdvancedSearchPanel

@@ -41,6 +41,14 @@ class Index extends React.Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    const {tab} = newProps.match.params
+    this.setState({
+      tab,
+      advancedSearch: R.propOr({}, tab, initialSearch),
+    })
+  }
+
   handleTabChange = tab => {
     this.setState({
       tab,
