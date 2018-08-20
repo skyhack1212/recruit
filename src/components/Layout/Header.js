@@ -9,7 +9,10 @@ const menuKeys = ['/talents/discover', '/talents/admin', '/positions']
 
 const MyHeader = props => {
   const {location: {pathname}} = props
-  const currentMenu = menuKeys.find(key => pathname.indexOf(key) > -1)
+  const currentMenu =
+    pathname === '/ent' || pathname === '/ent/'
+      ? '/positions'
+      : menuKeys.find(key => pathname.indexOf(key) > -1)
   const prefix = '/ent'
   return (
     <header className={styles.header}>
@@ -29,7 +32,7 @@ const MyHeader = props => {
             职位管理
           </Link>
         </Menu.Item>
-        <Menu.Item key="/talents/discover">
+        <Menu.Item key="/talents/discover" activeclassname="active">
           <Link
             to={`${prefix}/talents/discover/search`}
             activeclassname="active"
@@ -37,7 +40,7 @@ const MyHeader = props => {
             发现人才
           </Link>
         </Menu.Item>
-        <Menu.Item key="/talents/admin">
+        <Menu.Item key="/talents/admin" activeclassname="active">
           <Link
             to={`${prefix}/talents/admin/following`}
             activeclassname="active"
