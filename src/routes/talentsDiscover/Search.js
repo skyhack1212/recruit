@@ -63,6 +63,10 @@ class Talents extends React.Component {
   }
 
   refreshData = () => {
+    if (this.state.search === '') {
+      return
+    }
+
     this.loadData().then(data => {
       this.setState({
         data: data.contacts,

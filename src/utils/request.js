@@ -25,6 +25,7 @@ const isSuccess = ({status}) => status >= 200 && status < 300
 const getMessage = data =>
   R.path(['msg'], data) || R.path(['error'], data) || data
 
+/* eslint-disable */
 const parseError = async (status, data) => {
   const msg = getMessage(data)
   if (status >= 500) {
@@ -42,9 +43,14 @@ const parseError = async (status, data) => {
     throw data
   } else if (status >= 300) {
     throw new Error(msg || '未知错误')
+  } else if (status === 200) {
+    if (status.code !== undefined && status.code !== 0) {
+      throw new Error(msg || '未知错误')
+    }
   }
   return data
 }
+/* eslint-disable */
 
 const parseUrl = (url, options) => {
   if (typeof options.query === 'object') {
