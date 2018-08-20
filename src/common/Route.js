@@ -13,7 +13,7 @@ import ModifyPosition from 'routes/position/modify'
 const myRoute = () => {
   return (
     <Switch>
-      <Route path="/" exact component={Positions} />
+      <Route path="/ent" exact component={Positions} />
 
       <Route
         path="/ent/talents/discover/:tab"

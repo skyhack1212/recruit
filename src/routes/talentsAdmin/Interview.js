@@ -66,7 +66,7 @@ export default class Interview extends React.Component {
       payload: {
         ...jidParam,
         page: this.state.page,
-        state: 'follow',
+        state: 'interview',
       },
     })
   }
