@@ -78,7 +78,7 @@ export default class Resume extends React.Component {
     }
     const advancedSearch = R.mapObjIndexed(
       (v, key) =>
-        transformAdvancedSearch[key] ? transformAdvancedSearch[key]() : v,
+        transformAdvancedSearch[key] ? transformAdvancedSearch[key](v) : v,
       this.state.advancedSearch
     )
     return this.props.dispatch({
@@ -87,7 +87,7 @@ export default class Resume extends React.Component {
         ...jidParam,
         page: this.state.page,
         state: 'follow',
-        advancedSearch,
+        ...advancedSearch,
       },
     })
   }
