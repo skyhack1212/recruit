@@ -20,7 +20,9 @@ const isJson = response => {
   return type && type.indexOf('application/json') !== -1
 }
 
-const isSuccess = ({status}) => status >= 200 && status < 300
+// const isSuccess = (status, data) =>
+//   ((status >= 200 && status < 300) || status === 304) &&
+//   (data.code === undefined || data.code === 0)
 
 const getMessage = data =>
   R.path(['msg'], data) || R.path(['error'], data) || data
@@ -41,12 +43,12 @@ const parseError = async (status, data) => {
     window.location = `${SIGN_IN_URL}?to=${currentUrl}`
   } else if (status >= 400 && status < 500) {
     throw data
-  } else if (status >= 300) {
-    throw new Error(msg || '未知错误')
-  } else if (status === 200) {
-    if (status.code !== undefined && status.code !== 0) {
+  } else if (status === 200 || status === 304) {
+    if (data.code !== undefined && data.code !== 0) {
       throw new Error(msg || '未知错误')
     }
+  } else if (status >= 300) {
+    throw new Error(msg || '未知错误')
   }
   return data
 }
@@ -119,10 +121,9 @@ export default async function request(url, options = {}) {
   const data = isJson(response) ? await response.json() : await response.text()
 
   const ret = {
-    data: isSuccess(response) ? data : await parseError(response.status, data),
+    data: await parseError(response.status, data),
     headers: response.headers,
   }
-
   if (response.headers.get('x-total-count')) {
     ret.headers['x-total-count'] = response.headers.get('x-total-count')
   }
