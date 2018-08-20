@@ -73,13 +73,21 @@ export default class Resume extends React.Component {
 
   loadData = () => {
     const jidParam = this.state.jid ? {jid: this.state.jid} : {}
+    const transformAdvancedSearch = {
+      source: R.join(','),
+    }
+    const advancedSearch = R.mapObjIndexed(
+      (v, key) =>
+        transformAdvancedSearch[key] ? transformAdvancedSearch[key]() : v,
+      this.state.advancedSearch
+    )
     return this.props.dispatch({
       type: 'resumes/fetch',
       payload: {
         ...jidParam,
-        source: this.state.advancedSearch.source.join(','),
         page: this.state.page,
         state: 'follow',
+        advancedSearch,
       },
     })
   }
@@ -112,13 +120,15 @@ export default class Resume extends React.Component {
   }
 
   handleModifyState = (talentId, state) => () => {
-    this.props.dispatch({
-      type: 'talents/modifyState',
-      payload: {
-        to_uids: talentId,
-        state,
-      },
-    })
+    this.props
+      .dispatch({
+        type: 'talents/modifyState',
+        payload: {
+          to_uids: talentId,
+          state,
+        },
+      })
+      .then(this.refreshData)
   }
 
   handleBatchModifyState = state => () => {

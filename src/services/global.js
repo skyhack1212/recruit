@@ -33,7 +33,6 @@ export function fetchDictionary(query) {
   return request(`/api/ent/common/v1/const`, {
     query: {
       ...query,
-      brief: 0,
       channel: 'www',
       version: '1.0.0',
     },

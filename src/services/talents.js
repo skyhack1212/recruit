@@ -4,7 +4,6 @@ export function fetch(query) {
   return request(`/api/ent/find/v1/search`, {
     query: {
       ...query,
-      brief: 0,
       channel: 'www',
       version: '1.0.0',
     },

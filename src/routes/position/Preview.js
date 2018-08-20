@@ -201,7 +201,7 @@ export default class Preview extends React.Component {
           <p>以担保或任何理由索取财物，扣押证照，均涉嫌违法，请提高警惕！</p>
         </div>
 
-        {job.is_show && (
+        {!!job.is_show && (
           <div className={styles.opButtons}>
             <button
               className={styles.opButtonsReject}
