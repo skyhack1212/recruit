@@ -24,6 +24,8 @@ export default {
       remain: 1, // 是否还有数据
       result: 'ok',
       total: 1000, // 可拉数据的总数
+      // code: -10,   // 测试错误提示时使用
+      // msg: 'server error',
     })
   },
   'GET /api/ent/recruit/v1/list': (req, res) => {

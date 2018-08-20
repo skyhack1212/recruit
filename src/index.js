@@ -15,6 +15,7 @@ const app = dva({
   onError(e) {
     if (Object.prototype.toString.call(e) === '[object Error]') {
       message.error(e.message, ERROR_MSG_DURATION)
+      e.preventDefault()
     }
   },
 })
