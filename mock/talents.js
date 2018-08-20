@@ -112,7 +112,7 @@ export default {
     })
   },
   // 修改人才状态
-  'GET /api/ent/recruit/v1/modify_state': (req, res) => {
+  'GET /api/ent/recruit/v1/batch_modify_state': (req, res) => {
     res.json({
       code: 0,
     })

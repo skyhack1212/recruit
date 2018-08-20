@@ -14,7 +14,9 @@ const MyContent = props => {
     <Sider key="sider" className={styles.sider} width={300}>
       <div className={styles.siderHeader}>
         权益余额：尚无数据
-        <Button className={styles.siderHeaderRecharge}>充值</Button>
+        <Button className={styles.siderHeaderRecharge} disabled>
+          充值
+        </Button>
       </div>
       <div className={styles.siderContent}>
         {props.children.find(R.propEq('key', 'sider'))}

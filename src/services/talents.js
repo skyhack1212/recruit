@@ -26,7 +26,7 @@ export function archive(payload) {
 
 // 修改状态
 export function modifyState(payload) {
-  return request('/api/ent/recruit/v1/modify_state', {
+  return request('/api/ent/recruit/v1/batch_modify_state', {
     query: {
       ...payload,
       channel: 'www',
