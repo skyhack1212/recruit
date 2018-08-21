@@ -8,6 +8,10 @@ import TalentCard from 'components/Common/TalentCard'
 import List from 'components/Common/List'
 import {COMMON_INIT_MESSAGE} from 'constants/resume'
 import Chatting from 'components/Common/Chatting'
+import AdvancedSearch from 'components/TalentsDiscover/Search/AdvancedSearch'
+import Layout from 'components/Layout/MenuContentSider.js'
+import Menu from 'components/TalentsDiscover/Common/Menu'
+import Sider from 'components/Layout/CommonRightSider'
 
 import styles from './search.less'
 
@@ -27,7 +31,13 @@ class Talents extends React.Component {
       showInviteModal: false,
       inviteTelentIds: [],
       remain: 0,
-      advancedSearch: R.propOr({}, 'advancedSearch', this.props),
+      advancedSearch: {
+        city: '北京',
+        work_time: -1,
+        degree: -1,
+        company_level: -1,
+        is_211_985: 0,
+      },
     }
   }
 
@@ -35,16 +45,16 @@ class Talents extends React.Component {
     this.fetchJobs()
   }
 
-  componentWillReceiveProps(newProps) {
-    if (!R.equals(newProps.advancedSearch, this.props.advancedSearch)) {
-      this.setState(
-        {
-          advancedSearch: newProps.advancedSearch,
-        },
-        this.refreshData
-      )
-    }
-  }
+  // componentWillReceiveProps(newProps) {
+  //   if (!R.equals(newProps.advancedSearch, this.props.advancedSearch)) {
+  //     this.setState(
+  //       {
+  //         advancedSearch: newProps.advancedSearch,
+  //       },
+  //       this.refreshData
+  //     )
+  //   }
+  // }
 
   setSearch = e => {
     const {value} = e.target
@@ -190,7 +200,7 @@ class Talents extends React.Component {
   handleJobSearch = position => () => this.handleSearch(position)
 
   handleClearSearch = () => {
-    this.setState({search: '', page: 0, currentSearch: ''}, this.refreshData)
+    this.setState({search: '', page: 0, currentSearch: '', data: []})
   }
 
   handleSelect = id => selected => {
@@ -220,6 +230,9 @@ class Talents extends React.Component {
       showInviteModal: false,
     })
 
+  handleAdvancedSearchChange = advancedSearch =>
+    this.setState({advancedSearch}, this.refreshData)
+
   renderSearch = () => {
     const clearButton = <span onClick={this.handleClearSearch}>×</span>
     return (
@@ -241,7 +254,7 @@ class Talents extends React.Component {
   renderJobSearch = () => {
     const {jobs} = this.props
     const renderJob = job => (
-      <li key={job.jid}>
+      <li key={job.jid} className={styles.jobSearchPanelItem}>
         <span onClick={this.handleJobSearch(job.position)}>{job.position}</span>
       </li>
     )
@@ -314,38 +327,55 @@ class Talents extends React.Component {
 
   render() {
     const {loading = false, jobs} = this.props
-    const {data, remain, currentSearch, showInviteModal} = this.state
+    const {
+      data,
+      remain,
+      currentSearch,
+      showInviteModal,
+      advancedSearch,
+    } = this.state
     const {length: dataLength} = data
     const {inviteTelentIds} = this.state
     const inviteTalents = data.filter(talent =>
       inviteTelentIds.includes(talent.id)
     )
 
-    return [
-      this.renderSearch(),
-      dataLength === 0 ? this.renderJobSearch() : null,
-      <List
-        renderList={this.renderList}
-        loadMore={this.loadMore}
-        loading={loading}
-        renderBatchOperation={this.renderBatchOperation}
-        dataLength={dataLength}
-        remain={remain}
-        key="list"
-        search={currentSearch}
-      />,
-      <Chatting
-        show={showInviteModal}
-        initMessage={COMMON_INIT_MESSAGE}
-        talents={inviteTalents}
-        onSend={this.handleSubmitInvite}
-        onCancel={this.handleCancelInvite}
-        key="inviteModal"
-        titlePre="邀请"
-        showPosition
-        allJobs={jobs}
-      />,
-    ]
+    return (
+      <Layout>
+        <Menu activeMenu="search" key="menu" />,
+        <div key="content">
+          {this.renderSearch()}
+          {dataLength === 0 ? this.renderJobSearch() : null}
+          <List
+            renderList={this.renderList}
+            loadMore={this.loadMore}
+            loading={loading}
+            renderBatchOperation={this.renderBatchOperation}
+            dataLength={dataLength}
+            remain={remain}
+            key="list"
+            search={currentSearch}
+          />,
+          <Chatting
+            show={showInviteModal}
+            initMessage={COMMON_INIT_MESSAGE}
+            talents={inviteTalents}
+            onSend={this.handleSubmitInvite}
+            onCancel={this.handleCancelInvite}
+            key="inviteModal"
+            titlePre="邀请"
+            showPosition
+            allJobs={jobs}
+          />
+        </div>
+        <Sider key="sider">
+          <AdvancedSearch
+            data={advancedSearch}
+            onChange={this.handleAdvancedSearchChange}
+          />
+        </Sider>
+      </Layout>
+    )
   }
 }
 

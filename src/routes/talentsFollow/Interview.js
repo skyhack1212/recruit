@@ -5,8 +5,12 @@ import * as R from 'ramda'
 import TalentCard from 'components/Common/TalentCard'
 import List from 'components/Common/List'
 import JobSelect from 'components/Common/JobSelect'
+import AdvancedSearch from 'components/TalentsFollow/Interview/AdvancedSearch'
+import Layout from 'components/Layout/MenuContentSider.js'
+import Menu from 'components/TalentsFollow/Common/Menu'
+import Sider from 'components/Layout/CommonRightSider'
 
-import styles from './following.less'
+import styles from './interview.less'
 
 @connect(state => ({
   loading: state.loading.models.resumes,
@@ -19,6 +23,10 @@ export default class Interview extends React.Component {
     page: 0,
     jid: '',
     selectedIds: [],
+    advancedSearch: {
+      work_time: -1,
+      degree: -1,
+    },
   }
 
   componentWillMount() {
@@ -67,6 +75,7 @@ export default class Interview extends React.Component {
         ...jidParam,
         page: this.state.page,
         state: 'interview',
+        source: 'delivery,search,recommend',
       },
     })
   }
@@ -117,6 +126,9 @@ export default class Interview extends React.Component {
       },
     })
   }
+
+  handleAdvancedSearchChange = advancedSearch =>
+    this.setState({advancedSearch}, this.refreshData)
 
   renderSearch = () => {
     return (
@@ -170,18 +182,29 @@ export default class Interview extends React.Component {
 
   render() {
     const {loading = false} = this.props
-    const {data, remain} = this.state
-    return [
-      this.renderSearch(),
-      <List
-        renderList={this.renderList}
-        loadMore={this.loadMore}
-        loading={loading}
-        dataLength={data.length}
-        remain={remain}
-        key="list"
-        search="flowing"
-      />,
-    ]
+    const {data, remain, advancedSearch} = this.state
+    return (
+      <Layout>
+        <Menu activeMenu="interview" key="menu" />
+        <div key="content">
+          {this.renderSearch()}
+          <List
+            renderList={this.renderList}
+            loadMore={this.loadMore}
+            loading={loading}
+            dataLength={data.length}
+            remain={remain}
+            key="list"
+            search="flowing"
+          />
+        </div>
+        <Sider key="sider">
+          <AdvancedSearch
+            data={advancedSearch}
+            onChange={this.handleAdvancedSearchChange}
+          />
+        </Sider>
+      </Layout>
+    )
   }
 }
