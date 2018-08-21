@@ -1,57 +1,80 @@
-@menuBackground: #172033;
+@import './../../utils/colors.less';
 
 .header {
-  width: 1000px;
+  width: 100%;
   margin: 0 auto;
-  background: @menuBackground;
+  background: @headerBackground;
+
+  :global {
+    .ant-layout-header {
+      padding: 0 100px;
+      background: @headerBackground;
+    }
+
+    .ant-menu-dark,
+    .ant-menu-dark .ant-menu-sub {
+      background: @headerBackground;
+    }
+
+    .ant-menu-horizontal {
+      border-bottom: none;
+    }
+
+    .ant-menu.ant-menu-dark .ant-menu-item-selected {
+      // border-bottom: 2px solid #1890ff;
+      color: rgba(255, 255, 255, 1);
+      background: none;
+    }
+
+    .ant-menu.ant-menu-dark .ant-menu-item-selected::after {
+      display: block;
+      width: 0;
+      height: 0;
+      border-width: 0 7px 7px;
+      border-style: solid;
+      border-color: transparent transparent #fff;
+      margin: -7px auto;
+      content: "";
+    }
+
+    .ant-menu-dark .ant-menu-item {
+      color: rgba(255, 255, 255, .45);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .ant-menu-dark .ant-menu-item:first-child {
+      padding-left: 0;
+    }
+  }
 }
 
-.logo {
-  width: 35px;
-  height: 35px;
-  margin: 0;
+.logoItem {
+  display: inline-block;
+  width: 200px;
+  padding: 0;
+  vertical-align: bottom;
+  text-align: center;
+
+  &Logo {
+    width: 35px;
+    height: 35px;
+    margin: 0 15px 0 0;
+  }
+
+  &Font {
+    display: inline-block;
+    margin-bottom: -1px;
+    color: #fff;
+    vertical-align: bottom;
+    font-size: 23px;
+  }
 }
 
 :global {
   .ant-layout-header {
-    padding: 0 100px;
-    background: @menuBackground;
-  }
-
-  .ant-menu-dark,
-  .ant-menu-dark .ant-menu-sub {
-    background: @menuBackground;
-  }
-
-  .ant-menu-horizontal {
-    border-bottom: none;
-  }
-
-  .ant-menu.ant-menu-dark .ant-menu-item-selected {
-    // border-bottom: 2px solid #1890ff;
-    color: rgba(255, 255, 255, 1);
-    background: none;
-  }
-
-  .ant-menu.ant-menu-dark .ant-menu-item-selected::after {
-    display: block;
-    width: 0;
-    height: 0;
-    border-width: 0 7px 7px;
-    border-style: solid;
-    border-color: transparent transparent #fff;
-    margin: -7px auto;
-    content: "";
-  }
-
-  .ant-menu-dark .ant-menu-item {
-    color: rgba(255, 255, 255, .45);
-    font-weight: 300;
-    font-size: 14px;
-    letter-spacing: 1px;
-  }
-
-  .ant-menu-dark .ant-menu-item:first-child {
-    padding-left: 0;
+    padding: 0;
+    background: @headerBackground;
   }
 }

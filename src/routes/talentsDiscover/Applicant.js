@@ -8,6 +8,10 @@ import List from 'components/Common/List'
 import {REPLY_INIT_MESSAGE} from 'constants/resume'
 import Chatting from 'components/Common/Chatting'
 import JobSelect from 'components/Common/JobSelect'
+import AdvancedSearch from 'components/TalentsDiscover/Applicant/AdvancedSearch'
+import Layout from 'components/Layout/MenuContentSider.js'
+import Menu from 'components/TalentsDiscover/Common/Menu'
+import Sider from 'components/Layout/CommonRightSider'
 
 import styles from './applicant.less'
 
@@ -23,7 +27,9 @@ class Talents extends React.Component {
       page: 0,
       selectedIds: [],
       remain: 0,
-      // advancedSearch: R.propOr({}, 'advancedSearch', this.props),
+      advancedSearch: {
+        filter: [],
+      },
       job: '',
       showReplyModal: false,
       replyIds: [],
@@ -119,7 +125,7 @@ class Talents extends React.Component {
       .dispatch({
         type: 'resumes/batchReplyMessage',
         payload: {
-          to_uids: this.state.replyIds,
+          to_uids: this.state.replyIds.join(','),
           content,
         },
       })
@@ -192,6 +198,9 @@ class Talents extends React.Component {
       },
     })
   }
+
+  handleAdvancedSearchChange = advancedSearch =>
+    this.setState({advancedSearch}, this.refreshData)
 
   renderSearch = () => (
     <div style={{padding: '10px 30px'}} key="search">
@@ -272,33 +281,43 @@ class Talents extends React.Component {
 
   render() {
     const {loading = false} = this.props
-    const {data, remain, job, showReplyModal} = this.state
+    const {data, remain, job, showReplyModal, advancedSearch} = this.state
     const {length: dataLength} = data
     const {replyIds} = this.state
     const applyTalents = data.filter(talent => replyIds.includes(talent.id))
-
-    return [
-      this.renderSearch(),
-      <List
-        renderList={this.renderList}
-        loadMore={this.loadMore}
-        loading={loading}
-        renderBatchOperation={this.renderBatchOperation}
-        dataLength={dataLength}
-        remain={remain}
-        key="list"
-        search={`${job}`}
-      />,
-      <Chatting
-        show={showReplyModal}
-        initMessage={REPLY_INIT_MESSAGE}
-        talents={applyTalents}
-        onSend={this.handleSendReplyMessage}
-        onCancel={this.handleCancelReply}
-        key="replyModal"
-        titlePre="回复"
-      />,
-    ]
+    return (
+      <Layout>
+        <Menu activeMenu="applicant" key="menu" />
+        <div key="content">
+          {this.renderSearch()}
+          <List
+            renderList={this.renderList}
+            loadMore={this.loadMore}
+            loading={loading}
+            renderBatchOperation={this.renderBatchOperation}
+            dataLength={dataLength}
+            remain={remain}
+            key="list"
+            search={`${job}`}
+          />
+          <Chatting
+            show={showReplyModal}
+            initMessage={REPLY_INIT_MESSAGE}
+            talents={applyTalents}
+            onSend={this.handleSendReplyMessage}
+            onCancel={this.handleCancelReply}
+            key="replyModal"
+            titlePre="回复"
+          />
+        </div>
+        <Sider key="sider">
+          <AdvancedSearch
+            data={advancedSearch}
+            onChange={this.handleAdvancedSearchChange}
+          />
+        </Sider>
+      </Layout>
+    )
   }
 }
 

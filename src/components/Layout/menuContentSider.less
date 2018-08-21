@@ -1,0 +1,54 @@
+@import './../../utils/colors.less';
+
+.main {
+  display: flex;
+  height: 100%;
+  // padding-right: 300px;
+}
+
+.menu {
+  padding-top: 10px;
+  margin-right: 5px;
+
+  :global {
+    .ant-menu-inline {
+      border-right: none;
+    }
+
+    .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+      background: none;
+    }
+
+    .ant-menu-inline > .ant-menu-item {
+      width: auto;
+      height: 50px;
+      margin-right: -4px;
+      line-height: 50px;
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  min-width: 700px;
+  background: #fff;
+}
+
+.sider {
+  margin-left: 5px;
+  background: #fff;
+
+  :global {
+    .ant-layout-sider-children {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 350px;
+      height: 100%;
+      padding-top: 74px;
+      background: #fff;
+      // box-shadow: 0 10px 10px 10px #eee;
+      overflow: auto;
+    }
+  }
+}

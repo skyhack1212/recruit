@@ -17,6 +17,7 @@ import SchollLevelOption from 'components/Common/talentAdvancedSearch/schollLeve
 class AdvancedSearch extends React.PureComponent {
   static propTypes = {
     data: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired,
   }
 
   constructor(props) {

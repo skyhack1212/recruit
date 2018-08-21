@@ -5,9 +5,13 @@ import {message} from 'antd'
 
 import JobSelect from 'components/Common/JobSelect'
 import List from 'components/Common/List'
-import TalentCard from 'components/Recommend/TalentCard'
+import TalentCard from 'components/TalentsDiscover/Recommend/TalentCard'
 import {COMMON_INIT_MESSAGE} from 'constants/resume'
 import Chatting from 'components/Common/Chatting'
+import AdvancedSearch from 'components/TalentsDiscover/Recommend/AdvancedSearch'
+import Layout from 'components/Layout/MenuContentSider.js'
+import Menu from 'components/TalentsDiscover/Common/Menu'
+import Sider from 'components/Layout/CommonRightSider'
 
 class Recommends extends React.Component {
   constructor(props) {
@@ -17,7 +21,10 @@ class Recommends extends React.Component {
       page: 0,
       job: '',
       remain: 0,
-      advancedSearch: props.advancedSearch,
+      advancedSearch: {
+        // work_time: -1,
+        // degree: -1,
+      },
       showInviteModal: false,
       inviteTelentIds: [],
     }
@@ -136,6 +143,9 @@ class Recommends extends React.Component {
     })
   }
 
+  handleAdvancedSearchChange = advancedSearch =>
+    this.setState({advancedSearch}, this.refreshData)
+
   showSendMessageSuccess = () => {
     this.handleCancelInvite()
     this.refreshData()
@@ -167,34 +177,51 @@ class Recommends extends React.Component {
 
   render() {
     const {loading = false, jobs} = this.props
-    const {data, remain, showInviteModal, inviteTelentIds} = this.state
+    const {
+      data,
+      remain,
+      showInviteModal,
+      inviteTelentIds,
+      advancedSearch,
+    } = this.state
     const inviteTalents = data.filter(talent =>
       inviteTelentIds.includes(talent.id)
     )
 
-    return [
-      this.renderSearch(),
-      <List
-        renderList={this.renderList}
-        loadMore={this.loadMore}
-        loading={loading}
-        dataLength={data.length}
-        remain={remain}
-        key="list"
-        search={this.state.job}
-      />,
-      <Chatting
-        show={showInviteModal}
-        initMessage={COMMON_INIT_MESSAGE}
-        talents={inviteTalents}
-        onSend={this.handleSubmitInvite}
-        onCancel={this.handleCancelInvite}
-        key="inviteModal"
-        titlePre="邀请"
-        showPosition
-        allJobs={jobs}
-      />,
-    ]
+    return (
+      <Layout>
+        <Menu activeMenu="recommend" key="menu" />
+        <div key="content">
+          {this.renderSearch()}
+          <List
+            renderList={this.renderList}
+            loadMore={this.loadMore}
+            loading={loading}
+            dataLength={data.length}
+            remain={remain}
+            key="list"
+            search={this.state.job}
+          />
+          <Chatting
+            show={showInviteModal}
+            initMessage={COMMON_INIT_MESSAGE}
+            talents={inviteTalents}
+            onSend={this.handleSubmitInvite}
+            onCancel={this.handleCancelInvite}
+            key="inviteModal"
+            titlePre="邀请"
+            showPosition
+            allJobs={jobs}
+          />
+        </div>
+        <Sider key="sider">
+          <AdvancedSearch
+            data={advancedSearch}
+            onChange={this.handleAdvancedSearchChange}
+          />
+        </Sider>
+      </Layout>
+    )
   }
 }
 
