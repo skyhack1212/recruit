@@ -37,5 +37,13 @@ export default {
       const data = yield call(positions.disAgree, payload)
       return data.data
     },
+    *fetchExposureStatus({payload}, {call}) {
+      const data = yield call(positions.fetchExposureStatus, payload)
+      return data.data
+    },
+    *addExposure({payload}, {call}) {
+      const data = yield call(positions.addExposure, payload)
+      return data.data
+    },
   },
 }

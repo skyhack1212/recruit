@@ -1,0 +1,65 @@
+@import './../../../utils/colors.less';
+
+.title {
+  font-size: 18px;
+  text-align: center;
+}
+
+.tip {
+  color: #aaa;
+  text-align: center;
+}
+
+.statisticContent {
+  padding: 30px;
+  margin-top: 50px;
+  box-shadow: 1px 1px 1px 1px #aaa;
+
+  &Title {
+    display: flex;
+    margin-bottom: 30px;
+    color: @blue;
+    font-size: 16px;
+  }
+
+  &Title::before,
+  &Title::after {
+    display: inline-block;
+    flex: 1;
+    height: 0;
+    border: .5px solid @blue;
+    margin-top: 10px;
+    content: '';
+  }
+
+  &Title::before {
+    margin-right: 10px;
+  }
+
+  &Title::after {
+    margin-left: 10px;
+  }
+
+  ul > li {
+    font-size: 14px;
+    line-height: 30px;
+  }
+}
+
+.emphasizeFont {
+  margin: 0 10px;
+  color: @blue;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.submitButton {
+  padding: 3px 30px;
+  margin-bottom: 10px;
+  color: #fff;
+  background: @blue;
+}
+
+.textCenter {
+  text-align: center;
+}
