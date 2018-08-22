@@ -77,3 +77,23 @@ export function disAgree(body) {
     },
   })
 }
+
+export function fetchExposureStatus(body) {
+  return request('/api/ent/exposure/v1/status', {
+    query: {
+      ...body,
+      channel: 'www',
+      version: '1.0.0',
+    },
+  })
+}
+
+export function addExposure(body) {
+  return request('/api/ent/exposure/v1/add', {
+    query: {
+      ...body,
+      channel: 'www',
+      version: '1.0.0',
+    },
+  })
+}

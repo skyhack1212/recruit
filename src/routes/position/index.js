@@ -8,6 +8,7 @@ import AdvancedSearch from 'components/Position/List/AdvancedSearch'
 import Layout from 'components/Layout/MenuContentSider.js'
 import Menu from 'components/Position/Common/Menu'
 import Sider from 'components/Layout/CommonRightSider'
+import ExposureModal from 'components/Position/List/ExposureModal'
 
 import styles from './index.less'
 
@@ -22,6 +23,9 @@ export default class PositionList extends React.Component {
     advancedSearch: {
       state: ['valid'],
     },
+    showExposureModal: false,
+    exposureData: {},
+    currentOpJid: '',
   }
 
   componentWillMount() {
@@ -63,6 +67,14 @@ export default class PositionList extends React.Component {
     )
   }
 
+  fetchExposureStatus = jid =>
+    this.props.dispatch({
+      type: 'positions/fetchExposureStatus',
+      payload: {
+        jid,
+      },
+    })
+
   handleRedirectCreate = () => {
     this.props.history.push('/ent/positions/create')
   }
@@ -86,6 +98,34 @@ export default class PositionList extends React.Component {
   handleAdvancedSearchChange = advancedSearch =>
     this.setState({advancedSearch}, this.refreshData)
 
+  handleShowExposureModal = jid => () =>
+    this.fetchExposureStatus(jid).then(exposureData => {
+      this.setState({
+        currentOpJid: jid,
+        exposureData,
+        showExposureModal: true,
+      })
+    })
+
+  handleHideExposureModal = () => this.setState({showExposureModal: false})
+
+  handleAddExposure = () => {
+    this.props
+      .dispatch({
+        type: 'positions/addExposure',
+        payload: {
+          jid: this.state.currentOpJid,
+        },
+      })
+      .then(() => this.fetchExposureStatus(this.state.currentOpJid))
+      .then(exposureData => {
+        this.setState({
+          exposureData,
+          showExposureModal: true,
+        })
+      })
+  }
+
   renderCard = data => {
     const infoField = ['province', 'worktime', 'sdegree', 'salary']
     const info = Object.values(R.pickAll(infoField, data)).join(`  |  `)
@@ -98,27 +138,37 @@ export default class PositionList extends React.Component {
         </div>
         <div className={styles.opButtons}>
           <Button
-            onClick={this.handleRedirectEdit(data.webjid)}
-            className={styles.commonButton}
+            type="primary"
+            onClick={this.handleShowExposureModal(data.jid)}
+            className={styles.activeButton}
+            disabled={data.state === 'close'}
           >
-            编辑
+            极速曝光
           </Button>
-          {data.state === 'valid' && (
+          <span className={styles.mrt10}>
             <Button
-              onClick={this.handleUpdateState(data.webjid, 'close')}
+              onClick={this.handleRedirectEdit(data.webjid)}
               className={styles.commonButton}
             >
-              关闭
+              编辑
             </Button>
-          )}
-          {data.state === 'close' && (
-            <Button
-              onClick={this.handleUpdateState(data.webjid, 'valid')}
-              className={styles.commonButton}
-            >
-              打开
-            </Button>
-          )}
+            {data.state === 'valid' && (
+              <Button
+                onClick={this.handleUpdateState(data.webjid, 'close')}
+                className={styles.commonButton}
+              >
+                关闭
+              </Button>
+            )}
+            {data.state === 'close' && (
+              <Button
+                onClick={this.handleUpdateState(data.webjid, 'valid')}
+                className={styles.commonButton}
+              >
+                打开
+              </Button>
+            )}
+          </span>
         </div>
       </div>
     )
@@ -139,10 +189,16 @@ export default class PositionList extends React.Component {
 
   render() {
     const {loading} = this.props
-    const {data, remain, advancedSearch} = this.state
+    const {
+      data,
+      remain,
+      advancedSearch,
+      showExposureModal,
+      exposureData,
+    } = this.state
 
-    return (
-      <Layout>
+    return [
+      <Layout key="layout">
         <Menu activeMenu="list" key="menu" />
         <div key="content">
           {this.renderButton()}
@@ -162,7 +218,14 @@ export default class PositionList extends React.Component {
             onChange={this.handleAdvancedSearchChange}
           />
         </Sider>
-      </Layout>
-    )
+      </Layout>,
+      <ExposureModal
+        visible={showExposureModal}
+        onSubmit={this.handleAddExposure}
+        onCancel={this.handleHideExposureModal}
+        data={exposureData}
+        key="modal"
+      />,
+    ]
   }
 }
