@@ -2,8 +2,12 @@ import React from 'react'
 import {connect} from 'dva'
 import {Button} from 'antd'
 import List from 'components/Common/List'
-import Content from 'components/Layout/Content'
 import * as R from 'ramda'
+
+import AdvancedSearch from 'components/Position/List/AdvancedSearch'
+import Layout from 'components/Layout/MenuContentSider.js'
+import Menu from 'components/Position/Common/Menu'
+import Sider from 'components/Layout/CommonRightSider'
 
 import styles from './index.less'
 
@@ -15,6 +19,9 @@ export default class PositionList extends React.Component {
     data: [],
     remain: 0,
     page: 0,
+    advancedSearch: {
+      state: ['valid'],
+    },
   }
 
   componentWillMount() {
@@ -43,7 +50,7 @@ export default class PositionList extends React.Component {
       type: 'positions/fetch',
       payload: {
         page: this.state.page,
-        state: 'all',
+        state: this.state.advancedSearch.state.join(','),
       },
     })
 
@@ -75,6 +82,9 @@ export default class PositionList extends React.Component {
       })
       .then(this.refreshData)
   }
+
+  handleAdvancedSearchChange = advancedSearch =>
+    this.setState({advancedSearch}, this.refreshData)
 
   renderCard = data => {
     const infoField = ['province', 'worktime', 'sdegree', 'salary']
@@ -129,20 +139,30 @@ export default class PositionList extends React.Component {
 
   render() {
     const {loading} = this.props
-    const {data, remain} = this.state
+    const {data, remain, advancedSearch} = this.state
+
     return (
-      <Content>
-        {this.renderButton()}
-        <List
-          renderList={this.renderCards}
-          loadMore={this.loadMore}
-          loading={loading}
-          dataLength={data.length}
-          remain={remain}
-          key="list"
-          search="all"
-        />
-      </Content>
+      <Layout>
+        <Menu activeMenu="list" key="menu" />
+        <div key="content">
+          {this.renderButton()}
+          <List
+            renderList={this.renderCards}
+            loadMore={this.loadMore}
+            loading={loading}
+            dataLength={data.length}
+            remain={remain}
+            key="list"
+            search="all"
+          />
+        </div>
+        <Sider key="sider">
+          <AdvancedSearch
+            data={advancedSearch}
+            onChange={this.handleAdvancedSearchChange}
+          />
+        </Sider>
+      </Layout>
     )
   }
 }

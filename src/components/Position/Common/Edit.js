@@ -11,9 +11,10 @@ import {
 import {isEmpty} from 'utils'
 import * as R from 'ramda'
 import MForm from 'components/Common/MForm'
-import LocationInput from 'components/Position/LocationInput'
-import SalaryInput from 'components/Position/SalaryInput'
-import ProfessionInput from 'components/Position/ProfessionInput'
+
+import LocationInput from './LocationInput'
+import SalaryInput from './SalaryInput'
+import ProfessionInput from './ProfessionInput'
 
 import styles from './edit.less'
 
@@ -372,19 +373,18 @@ export default class PositionList extends React.Component {
 
   render() {
     const {form} = this.props
-    const {formatData} = this.state
     return (
       <div className={styles.main}>
         <header className={styles.header}>发布职位</header>
         <MForm
           form={form}
-          dataSource={formatData}
+          dataSource={this.state.formatData}
           fields={this.getBaseFields()}
           title="基本信息"
         />
         <MForm
           form={form}
-          dataSource={formatData}
+          dataSource={this.state.formatData}
           fields={this.getPositionFileds()}
           title="职位要求"
         />

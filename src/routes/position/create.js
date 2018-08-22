@@ -1,12 +1,17 @@
 import React from 'react'
 import {connect} from 'dva'
-import PositionEdit from 'components/Position/Edit'
+import PositionEdit from 'components/Position/Common/Edit'
 import {message} from 'antd'
-import Content from 'components/Layout/Content'
+
+import AdvancedSearch from 'components/Position/Create/AdvancedSearch'
+import Layout from 'components/Layout/MenuContentSider.js'
+import Menu from 'components/Position/Common/Menu'
+import Sider from 'components/Layout/CommonRightSider'
 
 class Create extends React.PureComponent {
   state = {
     data: {},
+    advancedSearch: {},
   }
 
   componentDidMount() {
@@ -46,17 +51,30 @@ class Create extends React.PureComponent {
         setTimeout(() => this.props.history.push('/ent/positions'), 2000)
       })
 
+  handleAdvancedSearchChange = advancedSearch =>
+    this.setState({advancedSearch}, this.refreshData)
+
   render() {
     const {dictionary, history} = this.props
+    const {advancedSearch} = this.state
     return (
-      <Content>
-        <PositionEdit
-          data={this.state.data}
-          onSubmit={this.handleSubmit}
-          dictionary={dictionary}
-          history={history}
-        />
-      </Content>
+      <Layout>
+        <Menu activeMenu="create" key="menu" />
+        <div key="content">
+          <PositionEdit
+            data={this.state.data}
+            onSubmit={this.handleSubmit}
+            dictionary={dictionary}
+            history={history}
+          />
+        </div>
+        <Sider key="sider">
+          <AdvancedSearch
+            data={advancedSearch}
+            onChange={this.handleAdvancedSearchChange}
+          />
+        </Sider>
+      </Layout>
     )
   }
 }
