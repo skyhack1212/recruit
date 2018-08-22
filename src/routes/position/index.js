@@ -67,11 +67,11 @@ export default class PositionList extends React.Component {
     )
   }
 
-  fetchExposureStatus = jid =>
+  fetchExposureStatus = webjid =>
     this.props.dispatch({
       type: 'positions/fetchExposureStatus',
       payload: {
-        jid,
+        webjid,
       },
     })
 
@@ -98,10 +98,10 @@ export default class PositionList extends React.Component {
   handleAdvancedSearchChange = advancedSearch =>
     this.setState({advancedSearch}, this.refreshData)
 
-  handleShowExposureModal = jid => () =>
-    this.fetchExposureStatus(jid).then(exposureData => {
+  handleShowExposureModal = webjid => () =>
+    this.fetchExposureStatus(webjid).then(exposureData => {
       this.setState({
-        currentOpJid: jid,
+        currentOpJid: webjid,
         exposureData,
         showExposureModal: true,
       })
@@ -114,7 +114,7 @@ export default class PositionList extends React.Component {
       .dispatch({
         type: 'positions/addExposure',
         payload: {
-          jid: this.state.currentOpJid,
+          webjid: this.state.currentOpJid,
         },
       })
       .then(() => this.fetchExposureStatus(this.state.currentOpJid))
@@ -139,7 +139,7 @@ export default class PositionList extends React.Component {
         <div className={styles.opButtons}>
           <Button
             type="primary"
-            onClick={this.handleShowExposureModal(data.jid)}
+            onClick={this.handleShowExposureModal(data.webjid)}
             className={styles.activeButton}
             disabled={data.state === 'close'}
           >
