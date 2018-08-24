@@ -82,53 +82,23 @@
 }
 
 // operation
-
-.operationPanel {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  cursor: pointer;
-}
-
-.operationLine {
-  display: flex;
-}
-
-.operationLine::before {
-  flex: 1;
-  content: "";
-}
-
 .operation {
-  display: inline-block;
-  width: 140px;
-  padding: 10px 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  color: #aaa;
-  background: none;
-}
-
-.operationActive {
-  color: #fff;
-  background: @blue;
-}
-
-.operationIcon {
-  margin-right: 10px;
-  font-size: 18px;
+  padding: 5px 20px;
+  // color: #fff;
+  // background: @blue;
+  color: @blue;
 }
 
 // batchOperation
 .batchOperation {
   display: flex;
   justify-content: space-between;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .batchPreview {
-  color: #aaa;
+  color: #fff;
+  background: @blue;
   cursor: pointer;
 }
 

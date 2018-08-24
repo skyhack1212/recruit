@@ -40,73 +40,147 @@ class TalentBasicInfo extends React.Component {
       })
   }
 
-  renderPhone = phone => (
-    <Popover content={phone} trigger="hover">
-      <Icon type="phone" className={styles.phoneIcon} />
+  PopLine = props => (
+    <Popover content={props.content} trigger="hover">
+      {this.props.children}
     </Popover>
   )
 
-  renderResume = (resumeUrl, resumeName) => (
-    <Popover
-      content={<a href={resumeUrl}>{resumeName || '点击下载简历'}</a>}
-      trigger="hover"
-    >
-      <Icon type="file-text" className={styles.resumeIcon} />
-    </Popover>
+  renderPhone = phone => (
+    <span className={styles.phone}>
+      <Icon type="phone" className={styles.phoneIcon} /> {phone}
+    </span>
   )
+
+  renderResume = (resumeUrl, resumeName) => (
+    <span>
+      <a href={resumeUrl}>{resumeName}</a>
+    </span>
+  )
+
+  renderTags = (tags = '') =>
+    tags.split(',').map(item => (
+      <span key={item} className={styles.baseInfoBriefTag}>
+        {item}
+      </span>
+    ))
+
+  renderExp = (exp = []) => {
+    const renderItem = (item, index) => [
+      index !== 0 ? (
+        <span className={styles.baseInfoBriefSpt} key="seprator">
+          {' '}
+          |{' '}
+        </span>
+      ) : null,
+      <font key="company">{item.company}</font>,
+      ' - ',
+      <font key="position">{item.position}</font>,
+      <font key="workexp">（{item.v}）</font>,
+      <font className={styles.colorBlue} key="worktime">
+        {item.worktime}
+      </font>,
+    ]
+    return exp.map(renderItem)
+  }
+
+  renderEdu = (edu = []) => {
+    const renderItem = item => [
+      <span key="scholl">{item.school}</span>,
+      ' - ',
+      <span className={styles.colorLightBlack} key="sdegree">
+        {item.sdegree}
+      </span>,
+      ' - ',
+      <span key="worktime">（{item.v}）</span>,
+    ]
+    return edu.map(renderItem)
+  }
+
+  renderBrief = () => {
+    const {
+      data: {
+        name,
+        city = '',
+        gender_str: gender = '',
+        age = '',
+        sdegree = '',
+        worktime = '',
+        active_state: activeState = '',
+        intention = '',
+        tags = '',
+      },
+    } = this.props
+    return (
+      <div className={styles.baseInfoBrief}>
+        <div className={styles.baseInfoBriefHeader}>
+          <span>
+            <h4>{name}</h4>
+            <span className={styles.baseInfoBriefIdent}>{activeState}</span>
+            <span className={styles.baseInfoBriefIdent}>{intention}</span>
+          </span>
+          <span className={styles.baseInfoBriefInfo}>
+            {`${city} | ${gender} | ${age}岁 | ${sdegree} | ${worktime}`}
+          </span>
+        </div>
+        <div>{this.renderTags(tags)}</div>
+      </div>
+    )
+  }
+
+  renderDetail = () => {
+    const {data: {exp = [], edu = []}} = this.props
+    return (
+      <div key="detail">
+        <p>
+          <span>履历：</span>
+          {this.renderExp(exp)}
+        </p>
+        <p>
+          <span>学历：</span>
+          {this.renderEdu(edu)}
+        </p>
+      </div>
+    )
+  }
+
+  renderBaseInfo = () => {
+    const {data: {avatar = ''}} = this.props
+    return (
+      <div className={styles.baseInfo} key="baseInfo">
+        <div className={styles.baseInfoContent}>
+          <img
+            src={avatar}
+            alt="avatar"
+            className={styles.baseInfoAvatar}
+            key="avatar"
+          />
+          {this.renderBrief()}
+        </div>
+        <div>{this.props.buttons}</div>
+      </div>
+    )
+  }
 
   render() {
     const {data, showPhone, showResume} = this.props
     const {
       // id,
-      name,
-      gender_str: gender,
-      major = '未知专业',
-      city = '未知城市',
-      large_comps: company = '未知公司',
-      worktime = '未知工作年限',
-      province = '未知省份',
-      tags = '未知标签',
-      avatar,
-      sdegree = '未知学历',
-      school = '未知学校',
       mobile,
       resume_url: resumeUrl,
       resume_name: resumeName,
     } = data
+
     // const {isStar} = this.state
 
     // const starType = isStar ? 'star' : 'star-o'
 
     return [
-      <img src={avatar} alt="avatar" className={styles.avatar} key="avatar" />,
-      <div key="info" className={styles.info}>
-        <div name="infoLine">
-          <span className={styles.title}>{name}</span>
-          {major}
-          {/* <Icon
-            type={starType}
-            onClick={this.handleStarChange(!isStar, id)}
-            className={styles.starIcon}
-          /> */}
-          {showPhone && mobile ? this.renderPhone(mobile) : null}
-          {showResume && resumeUrl
-            ? this.renderResume(resumeUrl, resumeName)
-            : null}
-        </div>
-        <div className={styles.infoLine} name="infoLine">
-          {`${province} - ${city}/${gender}/${sdegree}/${worktime}`}
-        </div>
-        <div className={styles.infoLine} name="infoLine">
-          曾任职于：{company}
-        </div>
-        <div className={styles.infoLine} name="infoLine">
-          曾就读于：{school}
-        </div>
-        <div className={styles.infoLine} name="infoLine">
-          {' '}
-          技能标签：{tags}
-        </div>
+      this.renderBaseInfo(),
+      this.renderDetail(),
+      <div key="phone">
+        {showPhone && this.renderPhone(mobile)}
+        {showResume && this.renderResume(resumeUrl, resumeName)}
       </div>,
     ]
   }

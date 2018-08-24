@@ -4,11 +4,7 @@ import {Link} from 'react-router-dom'
 
 export default function(props) {
   return (
-    <Menu
-      style={{width: 200}}
-      defaultSelectedKeys={[props.activeMenu]}
-      mode="inline"
-    >
+    <Menu defaultSelectedKeys={[props.activeMenu]} mode="inline">
       <Menu.Item key="list">
         <Link to="/ent/positions">
           <Icon type="contacts" />职位列表

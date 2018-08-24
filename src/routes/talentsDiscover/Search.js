@@ -1,6 +1,5 @@
 import React from 'react'
-import {Input, Icon, Checkbox, message} from 'antd'
-import classnames from 'classnames'
+import {Input, Icon, Checkbox, message, Button} from 'antd'
 import {connect} from 'dva'
 import * as R from 'ramda'
 
@@ -218,11 +217,15 @@ class Talents extends React.Component {
     })
   }
 
-  handleShowInviteModal = talentId => () =>
+  handleShowInviteModal = talentId => e => {
     this.setState({
       inviteTelentIds: [talentId],
       showInviteModal: true,
     })
+    e.nativeEvent.stopImmediatePropagation()
+    e.preventDefault()
+    e.stopPropagation()
+  }
 
   handleCancelInvite = () =>
     this.setState({
@@ -279,24 +282,21 @@ class Talents extends React.Component {
         key={item.id}
         checked={selectedIds.includes(item.id)}
         onCheck={this.handleSelect(item.id)}
-        showCheckbox
-      >
-        <div className={styles.operationPanel}>
-          <p className={styles.operationLine}>
-            <span
-              className={classnames(styles.operation, {
-                [styles.operationActive]: !item.is_archive,
-              })}
-              onClick={
-                item.is_archive ? null : this.handleShowInviteModal(item.id)
-              }
+        buttons={[
+          !item.is_archive ? (
+            <Button
+              onClick={this.handleShowInviteModal(item.id)}
+              className={styles.operation}
+              // type="primary"
             >
-              <Icon type="folder-open" className={styles.operationIcon} />
-              {item.is_archive ? '已邀请' : '职位邀请'}
-            </span>
-          </p>
-        </div>
-      </TalentCard>
+              <Icon type="plus" />职位邀请
+            </Button>
+          ) : (
+            <Button disabled>已邀请</Button>
+          ),
+        ]}
+        showCheckbox
+      />
     )
   }
 
@@ -317,10 +317,14 @@ class Talents extends React.Component {
             全选 [已选中 {selectedIds.length} 项]
           </Checkbox>
         </span>
-        <span className={styles.batchPreview} onClick={this.handleInviteBatch}>
+        <Button
+          className={styles.batchPreview}
+          onClick={this.handleInviteBatch}
+          disabled={this.state.selectedIds.length === 0}
+        >
           <Icon type="copy" className={styles.batchPreviewIcon} />
           批量邀请
-        </span>
+        </Button>
       </div>
     )
   }

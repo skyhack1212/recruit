@@ -4,24 +4,20 @@ import {Link} from 'react-router-dom'
 
 export default function(props) {
   return (
-    <Menu
-      style={{width: 200}}
-      defaultSelectedKeys={[props.activeMenu]}
-      mode="inline"
-    >
+    <Menu defaultSelectedKeys={[props.activeMenu]} mode="inline">
       <Menu.Item key="search">
         <Link to="/ent/talents/discover/search">
-          <Icon type="filter" />搜索人才
+          <Icon type="search" />搜索人才
         </Link>
       </Menu.Item>
       <Menu.Item key="recommend">
         <Link to="/ent/talents/discover/recommend">
-          <Icon type="trademark" />人才推荐
+          <Icon type="like" />人才推荐
         </Link>
       </Menu.Item>
       <Menu.Item key="applicant">
         <Link to="/ent/talents/discover/applicant">
-          <Icon type="contacts" />主动投递
+          <Icon type="heart-o" />主动投递
         </Link>
       </Menu.Item>
     </Menu>

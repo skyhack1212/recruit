@@ -25,10 +25,8 @@ class TalentCard extends React.Component {
 
   state = {}
 
-  redirectToDetail = e => {
-    if (e.target.getAttribute('name') === 'infoLine') {
-      window.open(this.props.data.detail_url, '_self')
-    }
+  redirectToDetail = () => {
+    window.open(this.props.data.detail_url, '_self')
   }
 
   handleCheck = e => {
@@ -55,9 +53,9 @@ class TalentCard extends React.Component {
             data={this.props.data}
             showPhone={this.props.showPhone}
             showResume={this.props.showResume}
+            buttons={this.props.buttons}
           />
         </div>
-        <div className={styles.operation}>{this.props.children}</div>
       </div>
     )
   }

@@ -12,13 +12,16 @@ const {Content, Sider} = Layout
 const MyContent = props => {
   const getContent = () => (
     <div className={styles.main}>
-      <Sider key="menu" className={styles.menu} width={200}>
+      <Sider key="menu" className={styles.menu} width={150}>
+        <div className={styles.menuHeader}>
+          <span className={styles.menuHeaderLogo}>脉脉招聘</span>
+        </div>
         {props.children.find(R.propEq('key', 'menu')) || null}
       </Sider>
       <Content key="content" className={styles.content}>
         {props.children.find(R.propEq('key', 'content')) || null}
       </Content>
-      <Sider key="sider" className={styles.sider} width={350}>
+      <Sider key="sider" className={styles.sider} width={300}>
         {props.children.find(R.propEq('key', 'sider')) || null}
       </Sider>
     </div>

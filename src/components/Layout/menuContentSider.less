@@ -3,27 +3,68 @@
 .main {
   display: flex;
   height: 100%;
-  // padding-right: 300px;
 }
 
 .menu {
   padding-top: 10px;
   margin-right: 5px;
 
+  &Header {
+    height: 140px;
+    padding: 20px;
+    // border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+    font-size: 20px;
+
+    &Logo {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      padding: 35px 0;
+      border: 1px solid #ccc;
+      border-radius: 60px;
+      color: #fff;
+      background: @blue;
+      text-align: center;
+    }
+  }
+
   :global {
+    .anticon {
+      font-weight: 500;
+      font-size: 20px;
+    }
+
+    .ant-layout-sider-children {
+      position: fixed;
+      width: 150px;
+    }
+
     .ant-menu-inline {
+      width: 100%;
       border-right: none;
     }
 
+    .ant-menu-item > a {
+      color: rgba(88, 88, 88, .35);
+    }
+
+    .ant-menu-item-selected > a,
+    .ant-menu-item-selected > a:hover {
+      color: @blue;
+    }
+
     .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-      background: none;
+      color: @blue;
+      background: #f3f6f9;
     }
 
     .ant-menu-inline > .ant-menu-item {
       width: auto;
-      height: 50px;
-      margin-right: -4px;
-      line-height: 50px;
+      height: 70px;
+      // margin-right: -4px;
+      font-size: 15px;
+      line-height: 70px;
     }
   }
 }
@@ -42,8 +83,9 @@
     .ant-layout-sider-children {
       position: fixed;
       top: 0;
-      right: 0;
-      width: 350px;
+      // right: 0;
+      bottom: 0;
+      width: 300px;
       height: 100%;
       padding-top: 74px;
       background: #fff;
