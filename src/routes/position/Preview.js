@@ -135,7 +135,7 @@ export default class Preview extends React.Component {
 
   handleHideAgreeModal = e => {
     e.preventDefault()
-    this.setState({showAgreeModal: false}, this.close())
+    this.setState({showAgreeModal: false})
   }
 
   renderJobTags = () => {
@@ -263,7 +263,7 @@ export default class Preview extends React.Component {
           footer={[
             {
               text: '确定',
-              onPress: () => this.handleHideAgreeModal,
+              onPress: this.close(),
             },
           ]}
         >
