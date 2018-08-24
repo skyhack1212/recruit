@@ -90,17 +90,18 @@ export default class Preview extends React.Component {
       .then(this.close())
   }
 
-  agreeConnect = state => () => {
-    this.props
-      .dispatch({
-        type: 'positions/agreeConnect',
-        payload: {
-          webuid: this.state.webuid,
-          webjid: this.state.webjid,
-          state,
-        },
-      })
-      .then(this.close())
+  agreeConnect = state => () =>
+    this.props.dispatch({
+      type: 'positions/agreeConnect',
+      payload: {
+        webuid: this.state.webuid,
+        webjid: this.state.webjid,
+        state,
+      },
+    })
+
+  handleSetIntrerested = () => {
+    this.agreeConnect('i')().then(this.close())
   }
 
   fetchJobDetail = () =>
@@ -225,7 +226,7 @@ export default class Preview extends React.Component {
             </button>
             <button
               className={styles.opButtonsMai}
-              onClick={this.agreeConnect('i')}
+              onClick={this.handleSetIntrerested}
             >
               感兴趣
             </button>
