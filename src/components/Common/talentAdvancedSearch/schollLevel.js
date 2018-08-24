@@ -23,7 +23,7 @@ export default class Worktime extends React.PureComponent {
 
     return (
       <div className={styles.schollLevel}>
-        <span className={styles.schollLevelLabel}>211/985院校</span>
+        <h3 className={styles.schollLevelLabel}>211/985院校</h3>
         <Switch
           checkedChildren="是"
           unCheckedChildren="否"

@@ -22,6 +22,8 @@ export default class City extends React.PureComponent {
       '广东-广州',
       '广东-深圳',
       '浙江-杭州',
+      '重庆-重庆',
+      '四川-成都',
       '湖北-武汉',
     ],
     allCities: [],
@@ -83,7 +85,7 @@ export default class City extends React.PureComponent {
           </Radio.Group>
           <Select
             showSearch
-            style={{width: 200}}
+            style={{width: 230}}
             placeholder="按城市名称或省份搜索"
             optionFilterProp="value"
             onChange={this.handleExtraCityChange}

@@ -78,6 +78,14 @@ const talent = {
       position: '高级Java研发工程师',
       v: '2016-11至今',
       description: '百度本地广告部结算中心',
+      worktime: '2年',
+    },
+    {
+      company: '头条',
+      position: '高级Java研发工程师',
+      v: '2015-11至2016-11',
+      description: '百度本地广告部结算中心',
+      worktime: '3年',
     },
   ],
   edu: [
@@ -89,7 +97,10 @@ const talent = {
       description: '获得各种奖学金',
     },
   ],
+  active_state: '刚刚活跃',
+  intention: '离职-随时入职',
   has_new_message: false,
+  age: 23,
 }
 
 export default talent

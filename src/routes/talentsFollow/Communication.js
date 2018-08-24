@@ -1,6 +1,7 @@
 import React from 'react'
-import {Checkbox, Button, message} from 'antd'
+import {Checkbox, Button, message, Popover, Icon} from 'antd'
 import {connect} from 'dva'
+import classnames from 'classnames'
 import * as R from 'ramda'
 import TalentCard from 'components/Common/TalentCard'
 import List from 'components/Common/List'
@@ -111,11 +112,14 @@ export default class Resume extends React.Component {
   handleChangeJob = jid =>
     this.setState({jid, selectedIds: [], page: 0, data: []}, this.refreshData)
 
-  handleChatting = uid => () => {
+  handleChatting = uid => e => {
     window.open(`https://maimai.cn/im?target=${uid}`, '脉脉聊天')
+    e.stopPropagation()
   }
 
-  handleModifyState = (talentId, state) => () => {
+  handleShowMorePop = e => e.stopPropagation()
+
+  handleModifyState = (talentId, state) => e => {
     this.props
       .dispatch({
         type: 'talents/modifyState',
@@ -125,16 +129,22 @@ export default class Resume extends React.Component {
         },
       })
       .then(this.refreshData)
+
+    e.stopPropagation()
   }
 
-  handleBatchModifyState = state => () => {
-    this.props.dispatch({
-      type: 'talents/modifyState',
-      payload: {
-        to_uids: this.state.selectedIds.join(','),
-        state,
-      },
-    })
+  handleBatchModifyState = state => e => {
+    this.props
+      .dispatch({
+        type: 'talents/modifyState',
+        payload: {
+          to_uids: this.state.selectedIds.join(','),
+          state,
+        },
+      })
+      .then(this.refreshData)
+
+    e.stopPropagation()
   }
 
   handleAdvancedSearchChange = advancedSearch =>
@@ -155,9 +165,45 @@ export default class Resume extends React.Component {
   }
 
   renderTalentItem = item => {
-    const {selectedIds, state} = this.state
+    const {selectedIds} = this.state
     const {id} = item
-    const showOperate = !['complete', 'elimination'].includes(state)
+
+    const morePop = (
+      <ul className={styles.morePop}>
+        <li>
+          <span onClick={this.handleModifyState(item.id, 'interview')}>
+            <Icon type="smile-o" className={styles.myIcon} /> 待约面
+          </span>
+        </li>
+        <li>
+          <span onClick={this.handleModifyState(item.id, 'elimination')}>
+            <Icon type="close" className={styles.myIcon} /> 不合适
+          </span>
+        </li>
+      </ul>
+    )
+    const buttons = (
+      <span>
+        <Button
+          onClick={this.handleChatting(item.uid || item.id)}
+          className={classnames({
+            [styles.hasNewMessage]: item.has_new_message,
+            [styles.operation]: true,
+          })}
+        >
+          脉脉沟通
+        </Button>
+        <Popover
+          content={morePop}
+          trigger="click"
+          className={styles.moreButton}
+          placement="bottom"
+          onClick={this.handleShowMorePop}
+        >
+          <Icon type="ellipsis" />
+        </Popover>
+      </span>
+    )
 
     return (
       <TalentCard
@@ -165,44 +211,11 @@ export default class Resume extends React.Component {
         key={id}
         checked={selectedIds.includes(id)}
         onCheck={this.handleSelect(id)}
+        buttons={buttons}
         showPhone
         showResume
         showCheckbox
-      >
-        {showOperate && (
-          <div className={styles.operationPanel}>
-            <p className={styles.operationLine}>
-              <span className={styles.operation}>
-                <Button
-                  type="primary"
-                  onClick={this.handleChatting(item.uid || item.id)}
-                  className={item.has_new_message ? styles.hasNewMessage : ''}
-                >
-                  脉脉沟通
-                </Button>
-                <span className={styles.operateButtonPanel}>
-                  <Button
-                    type="primary"
-                    onClick={this.handleModifyState(item.id, 'interview')}
-                    className={styles.operateButton}
-                    ghost
-                  >
-                    待约面
-                  </Button>
-                  <Button
-                    type="primary"
-                    onClick={this.handleModifyState(item.id, 'elimination')}
-                    className={styles.operateButton}
-                    ghost
-                  >
-                    不合适
-                  </Button>
-                </span>
-              </span>
-            </p>
-          </div>
-        )}
-      </TalentCard>
+      />
     )
   }
 

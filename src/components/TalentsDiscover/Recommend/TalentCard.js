@@ -24,7 +24,7 @@ export default class TalentCard extends React.Component {
     const {data} = this.props
     const profileData = Object.values(
       R.pickAll(
-        ['province', 'gender_str', 'age', 'sdegree', 'worktime', 'target'],
+        ['province', 'gender_str', 'sdegree', 'worktime', 'target'],
         data
       )
     )

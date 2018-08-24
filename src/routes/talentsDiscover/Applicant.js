@@ -1,5 +1,5 @@
 import React from 'react'
-import {Icon, Checkbox, message, Button} from 'antd'
+import {Icon, Checkbox, message, Button, Popover} from 'antd'
 import {connect} from 'dva'
 import * as R from 'ramda'
 
@@ -174,11 +174,12 @@ class Talents extends React.Component {
     })
   }
 
-  handleReply = talentId => () => {
+  handleReply = talentId => e => {
     this.setState({
       showReplyModal: true,
       replyIds: [talentId],
     })
+    e.stopPropagation()
   }
 
   handleSendReplyMessage = content => {
@@ -189,15 +190,33 @@ class Talents extends React.Component {
     this.sendReplyMessageBatch(content)
   }
 
-  handleModifyState = (talentId, state) => () => {
-    this.props.dispatch({
-      type: 'talents/modifyState',
-      payload: {
-        to_uids: talentId,
-        state,
-      },
-    })
+  handleModifyState = (talentId, state) => e => {
+    e.stopPropagation()
+
+    this.props
+      .dispatch({
+        type: 'talents/modifyState',
+        payload: {
+          to_uids: talentId,
+          state,
+        },
+      })
+      .then(this.refreshData)
   }
+
+  handleBatchModifyState = state => () => {
+    this.props
+      .dispatch({
+        type: 'talents/modifyState',
+        payload: {
+          to_uids: this.state.selectedIds.join(','),
+          state,
+        },
+      })
+      .then(this.refreshData)
+  }
+
+  handleShowMorePop = e => e.stopPropagation()
 
   handleAdvancedSearchChange = advancedSearch =>
     this.setState({advancedSearch}, this.refreshData)
@@ -214,43 +233,49 @@ class Talents extends React.Component {
 
   renderTalentItem = item => {
     const {selectedIds} = this.state
+    const morePop = (
+      <ul className={styles.morePop}>
+        <li>
+          <span onClick={this.handleModifyState(item.id, 'interview')}>
+            <Icon type="smile-o" className={styles.myIcon} /> 待约面
+          </span>
+        </li>
+        <li>
+          <span onClick={this.handleModifyState(item.id, 'elimination')}>
+            <Icon type="close" className={styles.myIcon} /> 不合适
+          </span>
+        </li>
+      </ul>
+    )
+    const buttons = (
+      <span>
+        <Button
+          onClick={this.handleReply(item.id)}
+          key="reply"
+          className={styles.operation}
+        >
+          回复申请
+        </Button>
+        <Popover
+          content={morePop}
+          trigger="click"
+          className={styles.moreButton}
+          placement="bottom"
+          onClick={this.handleShowMorePop}
+        >
+          <Icon type="ellipsis" />
+        </Popover>
+      </span>
+    )
     return (
       <TalentCard
         data={item}
         key={item.id}
         checked={selectedIds.includes(item.id)}
         onCheck={this.handleSelect(item.id)}
+        buttons={buttons}
         showCheckbox
-      >
-        <div className={styles.operationPanel}>
-          <p className={styles.operationLine}>
-            <span className={styles.operation}>
-              <Button type="primary" onClick={this.handleReply(item.id)}>
-                回复申请
-              </Button>
-
-              <span className={styles.operateButtonPanel}>
-                <Button
-                  type="primary"
-                  onClick={this.handleModifyState(item.id, 'interview')}
-                  className={styles.operateButton}
-                  ghost
-                >
-                  待约面
-                </Button>
-                <Button
-                  type="primary"
-                  onClick={this.handleModifyState(item.id, 'elimination')}
-                  className={styles.operateButton}
-                  ghost
-                >
-                  不合适
-                </Button>
-              </span>
-            </span>
-          </p>
-        </div>
-      </TalentCard>
+      />
     )
   }
 
@@ -271,10 +296,18 @@ class Talents extends React.Component {
             全选 [已选中 {selectedIds.length} 项]
           </Checkbox>
         </span>
-        <span className={styles.batchPreview} onClick={this.handleReplyBatch}>
+        {/* <span className={styles.batchPreview} onClick={this.handleReplyBatch}>
           <Icon type="copy" className={styles.batchPreviewIcon} />
           批量回复
-        </span>
+        </span> */}
+        <Button
+          onClick={this.handleBatchModifyState('elimination')}
+          className={styles.batchOpButton}
+          type="primary"
+          disabled={this.state.selectedIds.length === 0}
+        >
+          <Icon type="close" className={styles.myIcon} />批量不合适
+        </Button>
       </div>
     )
   }
