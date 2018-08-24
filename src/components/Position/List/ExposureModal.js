@@ -128,7 +128,7 @@ export default class MModal extends React.PureComponent {
         ),
       ],
       [
-        () => data.status === 1,
+        () => data.status === 1 && data.days < 4,
         () => (
           <Button
             onClick={this.props.onCancel}
@@ -136,6 +136,30 @@ export default class MModal extends React.PureComponent {
             className={styles.submitButton}
           >
             持续曝光中...
+          </Button>
+        ),
+      ],
+      [
+        () => data.status === 1 && data.days > 3 && data.days < 15,
+        () => (
+          <Button
+            onClick={this.props.onCancel}
+            type="primary"
+            className={styles.submitButton}
+          >
+            曝光结束
+          </Button>
+        ),
+      ],
+      [
+        () => data.status === 1 && data.days > 14,
+        () => (
+          <Button
+            onClick={this.props.onSubmit}
+            type="primary"
+            className={styles.submitButton}
+          >
+            再次曝光
           </Button>
         ),
       ],
