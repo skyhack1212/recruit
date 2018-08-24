@@ -275,6 +275,7 @@ class Talents extends React.Component {
         onCheck={this.handleSelect(item.id)}
         buttons={buttons}
         showCheckbox
+        showPosition
       />
     )
   }

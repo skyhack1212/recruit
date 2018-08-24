@@ -215,6 +215,7 @@ export default class Resume extends React.Component {
         showPhone
         showResume
         showCheckbox
+        showPosition
       />
     )
   }
