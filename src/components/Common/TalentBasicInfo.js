@@ -178,14 +178,16 @@ class TalentBasicInfo extends React.Component {
     // const {isStar} = this.state
 
     // const starType = isStar ? 'star' : 'star-o'
-
+    const hasPhone = showPhone && mobile
+    const hasResume = showResume && resumeUrl
+    const hasPosition = showPosition && position
     return [
       this.renderBaseInfo(),
       this.renderDetail(),
       <div key="phone">
-        {showPhone && this.renderPhone(mobile)}
-        {showResume && this.renderResume(resumeUrl, resumeName)}
-        {showPosition && this.renderPosition(position)}
+        {hasPhone && this.renderPhone(mobile)}
+        {hasResume && this.renderResume(resumeUrl, resumeName)}
+        {hasPosition && this.renderPosition(position)}
       </div>,
     ]
   }
