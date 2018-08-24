@@ -91,18 +91,16 @@ export default class Preview extends React.Component {
   }
 
   agreeConnect = state => () =>
-    this.props.dispatch({
-      type: 'positions/agreeConnect',
-      payload: {
-        webuid: this.state.webuid,
-        webjid: this.state.webjid,
-        state,
-      },
-    })
-
-  handleSetIntrerested = () => {
-    this.agreeConnect('i')().then(this.close())
-  }
+    this.props
+      .dispatch({
+        type: 'positions/agreeConnect',
+        payload: {
+          webuid: this.state.webuid,
+          webjid: this.state.webjid,
+          state,
+        },
+      })
+      .then(this.close())
 
   fetchJobDetail = () =>
     this.props
@@ -129,7 +127,7 @@ export default class Preview extends React.Component {
 
   handleShowAgreeModal = e => {
     e.preventDefault()
-    this.agreeConnect('iam')()
+    // this.agreeConnect('iam')()
     this.setState({showAgreeModal: true})
   }
 
@@ -226,7 +224,7 @@ export default class Preview extends React.Component {
             </button>
             <button
               className={styles.opButtonsMai}
-              onClick={this.handleSetIntrerested}
+              onClick={this.agreeConnect('i')}
             >
               感兴趣
             </button>
@@ -263,7 +261,7 @@ export default class Preview extends React.Component {
           footer={[
             {
               text: '确定',
-              onPress: this.close(),
+              onPress: this.agreeConnect('iam'),
             },
           ]}
         >
