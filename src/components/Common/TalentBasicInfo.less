@@ -67,6 +67,25 @@
       margin: 0 10px;
     }
   }
+
+  &Exp {
+    display: flex;
+
+    &Title {
+      width: 43px;
+    }
+
+    &Content {
+      display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    &Pop {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }
 
 .colorRed {
@@ -77,8 +96,9 @@
   color: @blue;
 }
 
-.phone {
-  margin-right: 15px;
+.phone,
+.position {
+  margin-right: 30px;
 }
 
 .phoneIcon,
