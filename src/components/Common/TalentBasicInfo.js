@@ -136,7 +136,7 @@ class TalentBasicInfo extends React.Component {
             {`${city} | ${gender} | ${age}岁 | ${sdegree} | ${worktime}`}
           </span>
         </div>
-        <div>{this.renderTags(tags)}</div>
+        <div>{tags && this.renderTags(tags)}</div>
       </div>
     )
   }
