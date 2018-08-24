@@ -22,7 +22,8 @@ export default class Preview extends React.Component {
       job: {},
       webuid: search.webuid,
       webjid: search.webjid,
-      showModal: false,
+      showRejectModal: false,
+      showAgreeModal: false,
     }
   }
 
@@ -115,12 +116,25 @@ export default class Preview extends React.Component {
         this.setState({job})
       })
 
-  handleShowModal = () => {
-    this.setState({showModal: true})
+  handleShowRejectModal = e => {
+    e.preventDefault()
+    this.setState({showRejectModal: true})
   }
 
-  handleHideModal = () => {
-    this.setState({showModal: false})
+  handleHideRejectModal = e => {
+    e.preventDefault()
+    this.setState({showRejectModal: false})
+  }
+
+  handleShowAgreeModal = e => {
+    e.preventDefault()
+    this.agreeConnect('iam')()
+    this.setState({showAgreeModal: true})
+  }
+
+  handleHideAgreeModal = e => {
+    e.preventDefault()
+    this.setState({showAgreeModal: false}, this.close())
   }
 
   renderJobTags = () => {
@@ -149,7 +163,7 @@ export default class Preview extends React.Component {
   }
 
   render() {
-    const {job, showModal} = this.state
+    const {job, showRejectModal, showAgreeModal} = this.state
     const {loading} = this.props
     if (loading) {
       return (
@@ -205,7 +219,7 @@ export default class Preview extends React.Component {
           <div className={styles.opButtons}>
             <button
               className={styles.opButtonsReject}
-              onClick={this.handleShowModal}
+              onClick={this.handleShowRejectModal}
             >
               不感兴趣
             </button>
@@ -213,11 +227,12 @@ export default class Preview extends React.Component {
               className={styles.opButtonsMai}
               onClick={this.agreeConnect('i')}
             >
-              脉脉沟通
+              感兴趣
             </button>
             <button
               className={styles.opButtonsPhone}
-              onClick={this.agreeConnect('iam')}
+              // onClick={this.agreeConnect('iam')}
+              onClick={this.handleShowAgreeModal}
             >
               同意电话沟通
             </button>
@@ -225,10 +240,10 @@ export default class Preview extends React.Component {
         )}
         <Modal
           popup
-          visible={showModal}
-          onClose={this.handleHideModal}
+          visible={showRejectModal}
+          onClose={this.handleHideRejectModal}
           animationType="slide-up"
-          className={styles.modal}
+          className={styles.rejectModal}
         >
           <List
             renderHeader={() => <div>不感兴趣原因?</div>}
@@ -236,6 +251,25 @@ export default class Preview extends React.Component {
           >
             {this.renderReasons()}
           </List>
+        </Modal>
+
+        <Modal
+          visible={showAgreeModal}
+          onClose={this.handleHideAgreeModal}
+          animationType="slide-up"
+          className={styles.agreeModal}
+          transparent
+          footer={[
+            {
+              text: '确定',
+              onPress: () => this.handleHideAgreeModal,
+            },
+          ]}
+        >
+          <p>亲爱的小伙伴:</p>
+          <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;HR 会尽快与您取得联系，请保持手机畅通~~~
+          </p>
         </Modal>
       </div>
     )
