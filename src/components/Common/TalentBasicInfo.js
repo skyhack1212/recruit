@@ -91,7 +91,6 @@ class TalentBasicInfo extends React.Component {
       <span className={styles.colorLightBlack} key="sdegree">
         {item.sdegree}
       </span>,
-      ' - ',
       <span key="worktime">（{item.v}）</span>,
     ]
     return edu.map(renderItem)
@@ -162,13 +161,18 @@ class TalentBasicInfo extends React.Component {
     )
   }
 
+  renderPosition = position => (
+    <span className={`${styles.position} ${styles.colorBlue}`}>{position}</span>
+  )
+
   render() {
-    const {data, showPhone, showResume} = this.props
+    const {data, showPhone, showResume, showPosition} = this.props
     const {
       // id,
       mobile,
       resume_url: resumeUrl,
       resume_name: resumeName,
+      position,
     } = data
 
     // const {isStar} = this.state
@@ -181,6 +185,7 @@ class TalentBasicInfo extends React.Component {
       <div key="phone">
         {showPhone && this.renderPhone(mobile)}
         {showResume && this.renderResume(resumeUrl, resumeName)}
+        {showPosition && this.renderPosition(position)}
       </div>,
     ]
   }

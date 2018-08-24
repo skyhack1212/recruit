@@ -88,7 +88,7 @@ class Talents extends React.Component {
   }
 
   loadData = () => {
-    const jidParam = this.state.jid ? {jid: this.state.jid} : {}
+    const jidParam = this.state.job ? {jid: this.state.job} : {}
     return this.props.dispatch({
       type: 'resumes/fetch',
       payload: {
