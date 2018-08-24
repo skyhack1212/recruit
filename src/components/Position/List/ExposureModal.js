@@ -93,7 +93,7 @@ export default class MModal extends React.PureComponent {
   renderContent = () => {
     const {data} = this.props
     const renderCondition = R.cond([
-      [() => data.status === 0 && !data.pre_comment, this.renderUnstartContent],
+      [() => !data.id, this.renderUnstartContent],
       [() => data.status === 0 && data.pre_comment, this.renderTipContent],
       [() => data.status === 1, this.renderStatisticContent],
     ])
@@ -104,7 +104,7 @@ export default class MModal extends React.PureComponent {
     const {data} = this.props
     const renderCondition = R.cond([
       [
-        () => data.status === 0 && !data.pre_comment,
+        () => !data.id,
         () => (
           <Button
             onClick={this.props.onSubmit}
