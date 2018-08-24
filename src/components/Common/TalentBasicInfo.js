@@ -66,22 +66,36 @@ class TalentBasicInfo extends React.Component {
     ))
 
   renderExp = (exp = []) => {
-    const renderItem = (item, index) => [
-      index !== 0 ? (
+    const renderItem = item => (
+      <span>
+        {/* index !== 0 ? (
+          <span className={styles.baseInfoBriefSpt} key="seprator">
+            {' '}
+            |{' '}
+          </span>
+        ) : null */}
+        <font key="company">{item.company}</font>
+        {' - '}
+        <font key="position">{item.position}</font>
+        <font key="workexp">（{item.v}）</font>
+        <font className={styles.colorBlue} key="worktime">
+          {item.worktime}
+        </font>
         <span className={styles.baseInfoBriefSpt} key="seprator">
-          {' '}
-          |{' '}
+          |
         </span>
-      ) : null,
-      <font key="company">{item.company}</font>,
-      ' - ',
-      <font key="position">{item.position}</font>,
-      <font key="workexp">（{item.v}）</font>,
-      <font className={styles.colorBlue} key="worktime">
-        {item.worktime}
-      </font>,
-    ]
-    return exp.map(renderItem)
+      </span>
+    )
+    return (
+      <Popover
+        content={
+          <span className={styles.baseInfoExpPop}>{exp.map(renderItem)}</span>
+        }
+        className={styles.baseInfoExpContent}
+      >
+        {exp.slice(0, 3).map(renderItem)}
+      </Popover>
+    )
   }
 
   renderEdu = (edu = []) => {
@@ -131,8 +145,8 @@ class TalentBasicInfo extends React.Component {
     const {data: {exp = [], edu = []}} = this.props
     return (
       <div key="detail">
-        <p>
-          <span>履历：</span>
+        <p className={styles.baseInfoExp}>
+          <span className={styles.baseInfoExpTitle}>履历：</span>
           {this.renderExp(exp)}
         </p>
         <p>
@@ -162,7 +176,9 @@ class TalentBasicInfo extends React.Component {
   }
 
   renderPosition = position => (
-    <span className={`${styles.position} ${styles.colorBlue}`}>{position}</span>
+    <span className={styles.position}>
+      沟通职位： <font className={styles.colorBlue}>{position}</font>
+    </span>
   )
 
   render() {
@@ -181,13 +197,14 @@ class TalentBasicInfo extends React.Component {
     const hasPhone = showPhone && mobile
     const hasResume = showResume && resumeUrl
     const hasPosition = showPosition && position
+
     return [
       this.renderBaseInfo(),
       this.renderDetail(),
       <div key="phone">
+        {hasPosition && this.renderPosition(position)}
         {hasPhone && this.renderPhone(mobile)}
         {hasResume && this.renderResume(resumeUrl, resumeName)}
-        {hasPosition && this.renderPosition(position)}
       </div>,
     ]
   }

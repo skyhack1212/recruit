@@ -53,6 +53,7 @@ class TalentCard extends React.Component {
             data={this.props.data}
             showPhone={this.props.showPhone}
             showResume={this.props.showResume}
+            showPosition={this.props.showPosition}
             buttons={this.props.buttons}
           />
         </div>

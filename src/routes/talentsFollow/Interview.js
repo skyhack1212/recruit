@@ -158,6 +158,7 @@ export default class Interview extends React.Component {
         showPhone
         showResume
         showSource
+        showPosition
       >
         {showOperate && (
           <div className={styles.operationPanel}>

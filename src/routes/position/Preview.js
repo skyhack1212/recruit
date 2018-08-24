@@ -219,7 +219,7 @@ export default class Preview extends React.Component {
               className={styles.opButtonsPhone}
               onClick={this.agreeConnect('iam')}
             >
-              <span className={styles.opButtonsPhoneTip}>可以</span>电话沟通
+              同意电话沟通
             </button>
           </div>
         )}
