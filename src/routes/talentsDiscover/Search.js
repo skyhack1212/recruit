@@ -322,7 +322,7 @@ class Talents extends React.Component {
           onClick={this.handleInviteBatch}
           disabled={this.state.selectedIds.length === 0}
         >
-          <Icon type="copy" className={styles.batchPreviewIcon} />
+          <Icon type="plus" className={styles.batchPreviewIcon} />
           批量邀请
         </Button>
       </div>
