@@ -103,7 +103,8 @@ export default class Interview extends React.Component {
   handleChangeJob = jid =>
     this.setState({jid, selectedIds: [], page: 0, data: []}, this.refreshData)
 
-  handleChatting = uid => () => {
+  handleChatting = uid => e => {
+    e.stopPropagation()
     window.open(`https://maimai.cn/im?target=${uid}`, '脉脉聊天')
   }
 
@@ -149,10 +150,9 @@ export default class Interview extends React.Component {
     const {id} = item
     const buttons = [
       <Button
-        type="primary"
         key="communication"
         onClick={this.handleChatting(item.uid || item.id)}
-        className={item.has_new_message ? styles.hasNewMessage : ''}
+        className={styles.operation}
       >
         脉脉沟通
       </Button>,

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, message} from 'antd'
+import {Button, message, Checkbox, Icon} from 'antd'
 import {connect} from 'dva'
 import * as R from 'ramda'
 import TalentCard from 'components/Common/TalentCard'
@@ -131,6 +131,19 @@ export default class Interview extends React.Component {
       .then(this.refreshData)
   }
 
+  handleBatchAddTalentPool = () => {
+    this.props
+      .dispatch({
+        type: 'talentPool/add',
+        payload: {
+          to_uid: this.state.selectedIds.join(','),
+          join_source: 'recruit',
+          join_reason: 'reject',
+        },
+      })
+      .then(this.refreshData)
+  }
+
   renderSearch = () => {
     return (
       <div className={styles.search}>
@@ -147,14 +160,15 @@ export default class Interview extends React.Component {
 
   renderTalentItem = item => {
     const {selectedIds} = this.state
-    const {id} = item
+    const {id, in_pool: inPool} = item
     const buttons = [
       <Button
         key="communication"
         onClick={this.handleAddTalentPool(item.uid || item.id)}
         className={styles.operation}
+        disabled={!!inPool}
       >
-        加入人才库
+        {inPool ? '已在人才库' : '加入人才库'}
       </Button>,
     ]
     return (
@@ -175,6 +189,46 @@ export default class Interview extends React.Component {
 
   renderList = () => <div>{this.state.data.map(this.renderTalentItem)}</div>
 
+  renderBatchOperation = () => {
+    const {selectedIds, data} = this.state
+    const allIds = this.getAllIds()
+    const allSelected =
+      selectedIds.length > 0 && selectedIds.length === allIds.length
+
+    const batchButtons = [
+      {
+        text: '批量加入人才库',
+        op: this.handleBatchAddTalentPool,
+      },
+      // finish: '批量完成',
+      // fail: '批量淘汰',
+    ]
+    return (
+      data.length > 0 && (
+        <div className={styles.batchOperation}>
+          <span className={styles.checkAll}>
+            <Checkbox checked={allSelected} onChange={this.handleSelectAll}>
+              全选 [已选中 {selectedIds.length} 项]
+            </Checkbox>
+          </span>
+          <span className={styles.previewBatch}>
+            {batchButtons.map(item => (
+              <Button
+                type="primary"
+                key={item.key || item.text}
+                onClick={item.op}
+                className={styles.batchOperateButton}
+                disabled={selectedIds.length === 0}
+              >
+                <Icon type="database" /> {item.text}
+              </Button>
+            ))}
+          </span>
+        </div>
+      )
+    )
+  }
+
   render() {
     const {loading = false} = this.props
     const {data, remain, advancedSearch} = this.state
@@ -188,6 +242,7 @@ export default class Interview extends React.Component {
             loadMore={this.loadMore}
             loading={loading}
             dataLength={data.length}
+            renderBatchOperation={this.renderBatchOperation}
             remain={remain}
             key="list"
             search="rejected"

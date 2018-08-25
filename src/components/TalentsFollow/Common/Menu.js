@@ -17,7 +17,7 @@ export default function(props) {
       </Menu.Item>
       <Menu.Item key="rejected">
         <Link to="/ent/talents/follow/rejected">
-          <Icon type="inbox" />已拒绝
+          <Icon type="close-circle-o" />已拒绝
         </Link>
       </Menu.Item>
     </Menu>

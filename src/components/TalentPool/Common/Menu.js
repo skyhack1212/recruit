@@ -7,7 +7,7 @@ export default function(props) {
     <Menu defaultSelectedKeys={[props.activeMenu]} mode="inline">
       <Menu.Item key="list">
         <Link to="/ent/talents/pool">
-          <Icon type="message" />人才库管理
+          <Icon type="database" />人才库管理
         </Link>
       </Menu.Item>
     </Menu>
