@@ -16,6 +16,9 @@ import TalentsDiscoverApplicant from 'routes/talentsDiscover/Applicant'
 
 import TalentsFollowCommunication from 'routes/talentsFollow/Communication'
 import TalentsFollowInterview from 'routes/talentsFollow/Interview'
+import TalentsFollowRejected from 'routes/talentsFollow/Rejected'
+
+import TalentPoolList from 'routes/talentPool'
 
 const myRoute = () => {
   return (
@@ -50,6 +53,11 @@ const myRoute = () => {
         exact
         component={TalentsFollowInterview}
       />
+      <Route
+        path="/ent/talents/follow/rejected"
+        exact
+        component={TalentsFollowRejected}
+      />
 
       {/*  职位管理 */}
       <Route path="/ent/positions" exact component={Positions} />
@@ -59,6 +67,9 @@ const myRoute = () => {
         exact
         component={ModifyPosition}
       />
+
+      {/* 人才库 */}
+      <Route path="/ent/talents/pool" exact component={TalentPoolList} />
     </Switch>
   )
 }

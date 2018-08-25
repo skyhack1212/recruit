@@ -5,12 +5,12 @@ import * as R from 'ramda'
 import TalentCard from 'components/Common/TalentCard'
 import List from 'components/Common/List'
 import JobSelect from 'components/Common/JobSelect'
-import AdvancedSearch from 'components/TalentsFollow/Interview/AdvancedSearch'
+import AdvancedSearch from 'components/TalentsFollow/Rejected/AdvancedSearch'
 import Layout from 'components/Layout/MenuContentSider.js'
 import Menu from 'components/TalentsFollow/Common/Menu'
 import Sider from 'components/Layout/CommonRightSider'
 
-import styles from './interview.less'
+import styles from './rejected.less'
 
 @connect(state => ({
   loading: state.loading.models.resumes,
@@ -74,7 +74,7 @@ export default class Interview extends React.Component {
       payload: {
         ...jidParam,
         page: this.state.page,
-        state: 'interview',
+        state: 'reject',
         source: 'delivery,search,recommend',
       },
     })
@@ -103,10 +103,6 @@ export default class Interview extends React.Component {
   handleChangeJob = jid =>
     this.setState({jid, selectedIds: [], page: 0, data: []}, this.refreshData)
 
-  handleChatting = uid => () => {
-    window.open(`https://maimai.cn/im?target=${uid}`, '脉脉聊天')
-  }
-
   handleModifyState = (talentId, state) => () => {
     this.props.dispatch({
       type: 'talents/modifyState',
@@ -117,18 +113,23 @@ export default class Interview extends React.Component {
     })
   }
 
-  handleBatchModifyState = state => () => {
-    this.props.dispatch({
-      type: 'talents/modifyState',
-      payload: {
-        to_uids: this.state.selectedIds.join(','),
-        state,
-      },
-    })
-  }
-
   handleAdvancedSearchChange = advancedSearch =>
     this.setState({advancedSearch}, this.refreshData)
+
+  handleAddTalentPool = uid => e => {
+    e.stopPropagation()
+
+    this.props
+      .dispatch({
+        type: 'talentPool/add',
+        payload: {
+          to_uid: uid,
+          join_source: 'recruit',
+          join_reason: 'reject',
+        },
+      })
+      .then(this.refreshData)
+  }
 
   renderSearch = () => {
     return (
@@ -149,12 +150,11 @@ export default class Interview extends React.Component {
     const {id} = item
     const buttons = [
       <Button
-        type="primary"
         key="communication"
-        onClick={this.handleChatting(item.uid || item.id)}
-        className={item.has_new_message ? styles.hasNewMessage : ''}
+        onClick={this.handleAddTalentPool(item.uid || item.id)}
+        className={styles.operation}
       >
-        脉脉沟通
+        加入人才库
       </Button>,
     ]
     return (
@@ -163,11 +163,12 @@ export default class Interview extends React.Component {
         key={id}
         checked={selectedIds.includes(id)}
         onCheck={this.handleSelect(id)}
+        buttons={buttons}
         showPhone
         showResume
         showSource
         showPosition
-        buttons={buttons}
+        showCheckbox
       />
     )
   }
@@ -179,7 +180,7 @@ export default class Interview extends React.Component {
     const {data, remain, advancedSearch} = this.state
     return (
       <Layout>
-        <Menu activeMenu="interview" key="menu" />
+        <Menu activeMenu="rejected" key="menu" />
         <div key="content">
           {this.renderSearch()}
           <List
@@ -189,7 +190,7 @@ export default class Interview extends React.Component {
             dataLength={data.length}
             remain={remain}
             key="list"
-            search="flowing"
+            search="rejected"
           />
         </div>
         <Sider key="sider">
