@@ -5,7 +5,12 @@ import logoUrl from 'images/logo.png'
 
 import styles from './header.less'
 
-const menuKeys = ['/talents/discover', '/talents/follow', '/positions']
+const menuKeys = [
+  '/talents/discover',
+  '/talents/follow',
+  '/positions',
+  '/talents/pool',
+]
 
 const MyHeader = props => {
   const {location: {pathname}} = props
@@ -47,6 +52,11 @@ const MyHeader = props => {
             activeclassname="active"
           >
             人才跟进
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="/talents/pool" activeclassname="active">
+          <Link to={`${prefix}/talents/pool`} activeclassname="active">
+            人才库
           </Link>
         </Menu.Item>
       </Menu>

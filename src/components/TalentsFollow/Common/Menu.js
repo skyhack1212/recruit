@@ -15,6 +15,11 @@ export default function(props) {
           <Icon type="inbox" />待约面
         </Link>
       </Menu.Item>
+      <Menu.Item key="rejected">
+        <Link to="/ent/talents/follow/rejected">
+          <Icon type="inbox" />已拒绝
+        </Link>
+      </Menu.Item>
     </Menu>
   )
 }

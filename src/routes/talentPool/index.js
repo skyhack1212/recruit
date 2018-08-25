@@ -4,24 +4,22 @@ import {connect} from 'dva'
 import * as R from 'ramda'
 import TalentCard from 'components/Common/TalentCard'
 import List from 'components/Common/List'
-import JobSelect from 'components/Common/JobSelect'
 import AdvancedSearch from 'components/TalentsFollow/Interview/AdvancedSearch'
 import Layout from 'components/Layout/MenuContentSider.js'
-import Menu from 'components/TalentsFollow/Common/Menu'
+import Menu from 'components/TalentPool/Common/Menu'
 import Sider from 'components/Layout/CommonRightSider'
 
-import styles from './interview.less'
+import styles from './index.less'
 
 @connect(state => ({
   loading: state.loading.models.resumes,
   jobs: state.global.jobs,
 }))
-export default class Interview extends React.Component {
+export default class TalentPool extends React.Component {
   state = {
     data: [],
     remain: 0,
     page: 0,
-    jid: '',
     selectedIds: [],
     advancedSearch: {
       work_time: -1,
@@ -31,17 +29,11 @@ export default class Interview extends React.Component {
 
   componentWillMount() {
     this.refreshData()
-    this.fetchJobs()
   }
 
   getAllIds = () => this.state.data.map(R.prop('id'))
 
   empty = () => {}
-
-  fetchJobs = () =>
-    this.props.dispatch({
-      type: 'global/fetchJobs',
-    })
 
   loadMore = () =>
     this.setState(
@@ -54,7 +46,7 @@ export default class Interview extends React.Component {
   refreshData = () =>
     this.loadData().then(data => {
       this.setState({
-        data: data.list,
+        data: data.contacts,
         remain: data.remain,
       })
     })
@@ -62,20 +54,16 @@ export default class Interview extends React.Component {
   appendData = () =>
     this.loadData().then(data => {
       this.setState({
-        data: R.uniqBy(R.prop('id'), [...this.state.data, ...data.list]),
+        data: R.uniqBy(R.prop('id'), [...this.state.data, ...data.contacts]),
         remain: data.remain,
       })
     })
 
   loadData = () => {
-    const jidParam = this.state.jid ? {jid: this.state.jid} : {}
     return this.props.dispatch({
-      type: 'resumes/fetch',
+      type: 'talentPool/fetch',
       payload: {
-        ...jidParam,
         page: this.state.page,
-        state: 'interview',
-        source: 'delivery,search,recommend',
       },
     })
   }
@@ -100,59 +88,22 @@ export default class Interview extends React.Component {
     })
   }
 
-  handleChangeJob = jid =>
-    this.setState({jid, selectedIds: [], page: 0, data: []}, this.refreshData)
-
-  handleChatting = uid => () => {
+  handleChatting = uid => e => {
+    e.stopPropagation()
     window.open(`https://maimai.cn/im?target=${uid}`, '脉脉聊天')
-  }
-
-  handleModifyState = (talentId, state) => () => {
-    this.props.dispatch({
-      type: 'talents/modifyState',
-      payload: {
-        to_uids: talentId,
-        state,
-      },
-    })
-  }
-
-  handleBatchModifyState = state => () => {
-    this.props.dispatch({
-      type: 'talents/modifyState',
-      payload: {
-        to_uids: this.state.selectedIds.join(','),
-        state,
-      },
-    })
   }
 
   handleAdvancedSearchChange = advancedSearch =>
     this.setState({advancedSearch}, this.refreshData)
-
-  renderSearch = () => {
-    return (
-      <div className={styles.search}>
-        <span className={styles.searchPosition}>
-          <JobSelect
-            data={this.props.jobs}
-            onChange={this.handleChangeJob}
-            value={this.state.jid}
-          />
-        </span>
-      </div>
-    )
-  }
 
   renderTalentItem = item => {
     const {selectedIds} = this.state
     const {id} = item
     const buttons = [
       <Button
-        type="primary"
         key="communication"
         onClick={this.handleChatting(item.uid || item.id)}
-        className={item.has_new_message ? styles.hasNewMessage : ''}
+        className={styles.operation}
       >
         脉脉沟通
       </Button>,
@@ -163,10 +114,7 @@ export default class Interview extends React.Component {
         key={id}
         checked={selectedIds.includes(id)}
         onCheck={this.handleSelect(id)}
-        showPhone
-        showResume
         showSource
-        showPosition
         buttons={buttons}
       />
     )
@@ -179,9 +127,8 @@ export default class Interview extends React.Component {
     const {data, remain, advancedSearch} = this.state
     return (
       <Layout>
-        <Menu activeMenu="interview" key="menu" />
+        <Menu activeMenu="list" key="menu" />
         <div key="content">
-          {this.renderSearch()}
           <List
             renderList={this.renderList}
             loadMore={this.loadMore}
