@@ -66,6 +66,10 @@
     &Spt {
       margin: 0 10px;
     }
+
+    &More {
+      margin-left: 10px;
+    }
   }
 
   &Exp {
@@ -84,6 +88,16 @@
     &Pop {
       display: flex;
       flex-direction: column;
+    }
+
+    &Item::after {
+      margin: 0 5px;
+      vertical-align: text-bottom;
+      content: ' | ';
+    }
+
+    &Item:last-child::after {
+      content: '';
     }
   }
 }

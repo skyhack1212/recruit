@@ -2,6 +2,7 @@ import React from 'react'
 import {Icon, Popover} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from 'dva'
+import * as R from 'ramda'
 
 import styles from './TalentBasicInfo.less'
 
@@ -66,14 +67,9 @@ class TalentBasicInfo extends React.Component {
     ))
 
   renderExp = (exp = []) => {
-    const renderItem = item => (
-      <span>
-        {/* index !== 0 ? (
-          <span className={styles.baseInfoBriefSpt} key="seprator">
-            {' '}
-            |{' '}
-          </span>
-        ) : null */}
+    const {length} = exp
+    const renderItem = (item, index) => (
+      <span className={styles.baseInfoExpItem}>
         <font key="company">{item.company}</font>
         {' - '}
         <font key="position">{item.position}</font>
@@ -81,9 +77,12 @@ class TalentBasicInfo extends React.Component {
         <font className={styles.colorBlue} key="worktime">
           {item.worktime}
         </font>
-        <span className={styles.baseInfoBriefSpt} key="seprator">
-          |
-        </span>
+        {length > 3 &&
+          index === 2 && (
+            <span className={styles.baseInfoBriefMore} key="more">
+              ...
+            </span>
+          )}
       </span>
     )
     return (
@@ -112,18 +111,18 @@ class TalentBasicInfo extends React.Component {
 
   renderBrief = () => {
     const {
-      data: {
-        name,
-        city = '',
-        gender_str: gender = '',
-        age = '',
-        sdegree = '',
-        worktime = '',
-        active_state: activeState = '',
-        intention = '',
-        tags = '',
-      },
+      data: {name, active_state: activeState = '', intention = '', tags = ''},
     } = this.props
+
+    const briefInfoData = R.evolve(
+      {
+        age: v => `${v}岁`,
+      },
+      R.compose(
+        R.pickBy(v => !R.isNil(v) && !R.isEmpty(v)),
+        R.pickAll(['city', 'gender_str', 'age', 'sdegree', 'worktime'])
+      )(this.props.data)
+    )
     return (
       <div className={styles.baseInfoBrief}>
         <div className={styles.baseInfoBriefHeader}>
@@ -133,7 +132,7 @@ class TalentBasicInfo extends React.Component {
             <span className={styles.baseInfoBriefIdent}>{intention}</span>
           </span>
           <span className={styles.baseInfoBriefInfo}>
-            {`${city} | ${gender} | ${age}岁 | ${sdegree} | ${worktime}`}
+            {Object.values(briefInfoData).join(' | ')}
           </span>
         </div>
         <div>{tags && this.renderTags(tags)}</div>
