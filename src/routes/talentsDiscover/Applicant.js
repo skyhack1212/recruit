@@ -221,6 +221,8 @@ class Talents extends React.Component {
   handleAdvancedSearchChange = advancedSearch =>
     this.setState({advancedSearch}, this.refreshData)
 
+  handleStopPropagation = e => e.stopPropagation()
+
   renderSearch = () => (
     <div style={{padding: '10px 30px'}} key="search">
       <JobSelect
@@ -236,12 +238,18 @@ class Talents extends React.Component {
     const morePop = (
       <ul className={styles.morePop}>
         <li>
-          <span onClick={this.handleModifyState(item.id, 'interview')}>
-            <Icon type="smile-o" className={styles.myIcon} /> 待约面
+          <span
+            onClick={this.handleReply(item.id)}
+            className={styles.morePopSpan}
+          >
+            <Icon type="rollback" className={styles.myIcon} /> 回复申请
           </span>
         </li>
         <li>
-          <span onClick={this.handleModifyState(item.id, 'elimination')}>
+          <span
+            onClick={this.handleModifyState(item.id, 'elimination')}
+            className={styles.morePopSpan}
+          >
             <Icon type="close" className={styles.myIcon} /> 不合适
           </span>
         </li>
@@ -250,11 +258,11 @@ class Talents extends React.Component {
     const buttons = (
       <span>
         <Button
-          onClick={this.handleReply(item.id)}
-          key="reply"
+          onClick={this.handleModifyState(item.id, 'interview')}
+          key="interview"
           className={styles.operation}
         >
-          回复申请
+          待约面
         </Button>
         <Popover
           content={morePop}
