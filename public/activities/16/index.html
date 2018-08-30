@@ -162,55 +162,58 @@
 <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>  
 function isWeiXin() {
-var ua = window.navigator.userAgent.toLowerCase();
-if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-return true;
-} else {
-return false;
-}
+  var ua = window.navigator.userAgent.toLowerCase();
+  if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+    return true;
+  } else {
+    return false;
+  }
 }
 if(isWeiXin() && window.location.host!='maimai.cn'){
-window.location.href=""
+  window.location.href=""
 }
 var url = location.href.split('#')[0];
-url = encodeURIComponent(url);  
-  $.ajax({  
-    type : "get",  
-    url : "http://a3.digoo.cn/wx/jssdk.php?url="+url,
-    dataType : "jsonp",  
-    jsonp: "callback",  
-    jsonpCallback:"success_jsonpCallback",  
-    success : function(data){
-        wx.config({ 
-        debug:false, 
-appId: data.appId,  
-timestamp: data.timestamp,  
-nonceStr: data.nonceStr,  
-signature: data.signature,  
-jsApiList: [  
-       "onMenuShareTimeline", //分享给好友  
-       "onMenuShareAppMessage", //分享到朋友圈  
-       "onMenuShareQQ",  //分享到QQ  
-       "onMenuShareWeibo" //分享到微博  
-]  
+
+url = encodeURIComponent(url);
+console.log('ajax')
+$.ajax({  
+  type : "get",
+  url : "https://maimai.cn/api/ent/web/get?url="+url,
+  // dataType : "jsonp",  
+  // jsonp: "callback",  
+  // jsonpCallback:"success_jsonpCallback",  
+  success : function(data){
+    wx.config(Object.assign({}, data.data, {debug: false}));
+      /* wx.config({ 
+      debug:false, 
+        appId: data.appId,  
+        timestamp: data.timestamp,  
+        nonceStr: data.nonceStr,  
+        signature: data.signature,  
+        jsApiList: [  
+              "onMenuShareTimeline", //分享给好友  
+              "onMenuShareAppMessage", //分享到朋友圈  
+              "onMenuShareQQ",  //分享到QQ  
+              "onMenuShareWeibo" //分享到微博  
+        ]
+      }); */ 
+  },  
+  error:function(data){  
+    // alert("连接失败！");
+  }  
 });  
-},  
-                error:function(data){  
-//                    alert("连接失败！"); 
-                }  
-});  
-  wx.ready(function (){  
+wx.ready(function (){
   var shareData = {  
-"imgUrl": "http://img.digoo.cn/16/img/16.jpg",
-"desc": '感谢你，把最美的自己留在工作中。',
-"title": '工作中你最美',
-"link": "",
-  };  
+    "imgUrl": "http://img.digoo.cn/16/img/16.jpg",
+    "desc": '感谢你，把最美的自己留在工作中。',
+    "title": '工作中你最美',
+    "link": "",
+  };
   wx.onMenuShareAppMessage(shareData);  
   wx.onMenuShareTimeline(shareData);  
   wx.onMenuShareQQ(shareData);  
   wx.onMenuShareWeibo(shareData);  
-    });  
+});
 </script>
 <div style="display: none;"><script type="text/javascript" src="//js.users.51.la/19632615.js"></script></div>
 </body>
