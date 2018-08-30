@@ -187,7 +187,7 @@ class TalentBasicInfo extends React.Component {
       mobile,
       resume_url: resumeUrl,
       resume_name: resumeName,
-      position,
+      intend_position: position,
     } = data
 
     // const {isStar} = this.state
