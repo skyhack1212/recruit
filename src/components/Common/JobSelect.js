@@ -23,16 +23,17 @@ export default class JobSelect extends React.Component {
         {item.position}
       </Select.Option>
     ))
+    const {value} = this.props
 
     return (
       <Select
         showSearch
         allowClear
         style={{width: 200}}
-        placeholder="请选择职位"
+        placeholder="按照职位筛选"
         optionFilterProp="children"
-        value={this.props.value}
         onChange={this.props.onChange}
+        value={!value ? undefined : value}
         filterOption={(input, option) =>
           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
