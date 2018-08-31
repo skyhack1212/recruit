@@ -12,13 +12,16 @@ import ModifyPosition from 'routes/position/modify'
 
 import TalentsDiscoverSearch from 'routes/talentsDiscover/Search'
 import TalentsDiscoverRecommend from 'routes/talentsDiscover/Recommend'
-import TalentsDiscoverApplicant from 'routes/talentsDiscover/Applicant'
 
+import TalentsFollowApplicant from 'routes/talentsFollow/Applicant'
 import TalentsFollowCommunication from 'routes/talentsFollow/Communication'
 import TalentsFollowInterview from 'routes/talentsFollow/Interview'
 import TalentsFollowRejected from 'routes/talentsFollow/Rejected'
 
 import TalentPoolList from 'routes/talentPool'
+
+// import StaffList from 'routes/account/Staff'
+// import Rights from 'routes/account/Rights'
 
 const myRoute = () => {
   return (
@@ -36,13 +39,13 @@ const myRoute = () => {
         exact
         component={TalentsDiscoverRecommend}
       />
-      <Route
-        path="/ent/talents/discover/applicant"
-        exact
-        component={TalentsDiscoverApplicant}
-      />
 
       {/*  跟进人才  */}
+      <Route
+        path="/ent/talents/follow/applicant"
+        exact
+        component={TalentsFollowApplicant}
+      />
       <Route
         path="/ent/talents/follow/communication"
         exact
@@ -70,6 +73,10 @@ const myRoute = () => {
 
       {/* 人才库 */}
       <Route path="/ent/talents/pool" exact component={TalentPoolList} />
+
+      {/*  账户管理  */}
+      {/* <Route path="/ent/account/staff" exact component={StaffList} /> */}
+      {/* <Route path="/ent/account/rights" exact component={Rights} /> */}
     </Switch>
   )
 }

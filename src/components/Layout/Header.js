@@ -10,6 +10,7 @@ const menuKeys = [
   '/talents/follow',
   '/positions',
   '/talents/pool',
+  '/account',
 ]
 
 const MyHeader = props => {
@@ -48,7 +49,7 @@ const MyHeader = props => {
         </Menu.Item>
         <Menu.Item key="/talents/follow" activeclassname="active">
           <Link
-            to={`${prefix}/talents/follow/communication`}
+            to={`${prefix}/talents/follow/applicant`}
             activeclassname="active"
           >
             人才跟进
@@ -59,6 +60,11 @@ const MyHeader = props => {
             人才库
           </Link>
         </Menu.Item>
+        {/* <Menu.Item key="/account" activeclassname="active">
+          <Link to={`${prefix}/account/staff`} activeclassname="active">
+            账号管理
+          </Link>
+        </Menu.Item> */}
       </Menu>
     </header>
   )

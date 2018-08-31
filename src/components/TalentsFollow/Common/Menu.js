@@ -5,6 +5,11 @@ import {Link} from 'react-router-dom'
 export default function(props) {
   return (
     <Menu defaultSelectedKeys={[props.activeMenu]} mode="inline">
+      <Menu.Item key="applicant">
+        <Link to="/ent/talents/follow/applicant">
+          <Icon type="heart-o" />新简历
+        </Link>
+      </Menu.Item>
       <Menu.Item key="communication">
         <Link to="/ent/talents/follow/communication">
           <Icon type="message" />沟通中
