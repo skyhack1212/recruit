@@ -1,5 +1,4 @@
 import * as global from 'services/global'
-import * as R from 'ramda'
 
 export default {
   namespace: 'global',
@@ -7,6 +6,7 @@ export default {
   state: {
     jobs: [],
     dictionary: {},
+    currentUser: {},
   },
 
   effects: {
@@ -34,6 +34,14 @@ export default {
       })
       return data
     },
+    *fetchCurrentUser(payload, {call, put}) {
+      const {data} = yield call(global.fetchUser, {})
+      yield put({
+        type: 'setUser',
+        payload: data,
+      })
+      return data
+    },
   },
 
   reducers: {
@@ -49,22 +57,35 @@ export default {
         dictionary: payload,
       }
     },
+    setUser(state, {payload}) {
+      return {
+        ...state,
+        currentUser: payload,
+      }
+    },
   },
 
   subscriptions: {
-    setup({history, dispatch}) {
+    setup({history}) {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
       return history.listen(({pathname, search}) => {
         if (typeof window.ga !== 'undefined') {
           window.ga('send', 'pageview', pathname + search)
         }
 
-        R.once(() => {
-          dispatch({
-            type: 'fetchDictionary',
-            payload: {},
-          })
-        })()
+        // R.once(() => {
+        //   dispatch({
+        //     type: 'fetchDictionary',
+        //     payload: {},
+        //   })
+        // })()
+
+        // R.once(() => {
+        //   dispatch({
+        //     type: 'fetchDictionary',
+        //     payload: {},
+        //   })
+        // })()
       })
     },
   },

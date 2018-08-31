@@ -7,15 +7,27 @@ import styles from './index.less'
 
 const {Header, Content} = Layout
 
-const MyLayout = () => (
-  <Layout className={styles.layout}>
-    <Header className={styles.header}>
-      <MyHeader />
-    </Header>
-    <Content className={styles.content}>
-      <Route />
-    </Content>
-  </Layout>
-)
+export default class MyLayout extends React.Component {
+  componentDidMount() {
+    // this.props.dispatch({
+    //   type: 'global/fetchCurrentUser',
+    // })
+    // this.props.dispatch({
+    //   type: 'global/fetchDictionary',
+    //   payload: {},
+    // })
+  }
 
-export default MyLayout
+  render() {
+    return (
+      <Layout className={styles.layout}>
+        <Header className={styles.header}>
+          <MyHeader />
+        </Header>
+        <Content className={styles.content}>
+          <Route />
+        </Content>
+      </Layout>
+    )
+  }
+}

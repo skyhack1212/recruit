@@ -38,3 +38,13 @@ export function fetchDictionary(query) {
     },
   })
 }
+
+export function fetchUser(query = {}) {
+  return request(`/api/ent/user/v1/get`, {
+    query: {
+      ...query,
+      channel: 'www',
+      version: '1.0.0',
+    },
+  })
+}

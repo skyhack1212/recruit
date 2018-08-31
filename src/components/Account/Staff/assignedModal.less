@@ -1,0 +1,54 @@
+@import './../../../utils/colors.less';
+
+.form {
+  display: flex;
+  padding-left: 20px;
+}
+
+.inputPanel {
+  min-width: 300px;
+  padding-right: 40px;
+  border-right: 1px solid #ccc;
+
+  :global {
+    .ant-input-number {
+      width: 200px;
+    }
+
+    .ant-form-item-label {
+      text-align: left;
+    }
+  }
+
+  ul {
+    padding: 0;
+
+    li {
+      line-height: 30px;
+    }
+  }
+
+  :global {
+    .ant-form-item:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.leftValuesPanel {
+  li {
+    list-style: none;
+    margin-bottom: 24px;
+    line-height: 39px;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.button {
+  padding: 0 50px;
+  color: #fff;
+  background: @blue;
+}

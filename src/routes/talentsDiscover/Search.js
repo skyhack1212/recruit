@@ -80,6 +80,7 @@ class Talents extends React.Component {
       this.setState({
         data: data.contacts,
         remain: data.remain,
+        selectedIds: [],
       })
     })
   }
